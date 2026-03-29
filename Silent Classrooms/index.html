@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0f2a1a"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="description" content="Silent Classrooms – Multi-Grade Single-Teacher Support System"/>
+<link rel="manifest" href="manifest.json"/>
+<title>Silent Classrooms | Mateen Yousuf</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+/* ========== DESIGN TOKENS ========== */
+:root {
+  --forest:  #0d2818;
+  --deep:    #091e12;
+  --emerald: #1a6b3c;
+  --lime:    #4caf50;
+  --gold:    #d4a843;
+  --amber:   #f0c04a;
+  --cream:   #f5ead8;
+  --paper:   #faf4e8;
+  --ink:     #1c1a14;
+  --mist:    rgba(255,255,255,0.07);
+  --glow:    rgba(76,175,80,0.15);
+  --shadow:  0 8px 40px rgba(0,0,0,0.6);
+  --r:       12px;
+}
+
+/* ========== RESET & BASE ========== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Crimson Pro',Georgia,serif;
+  background:var(--deep);
+  color:var(--cream);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ========== SPLASH SCREEN ========== */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--forest);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:1.5rem;
+  transition:opacity 0.8s ease, transform 0.8s ease;
+}
+#splash.hide{opacity:0;transform:scale(1.05);pointer-events:none}
+.splash-logo{
+  width:100px;height:100px;
+  background:radial-gradient(circle, var(--emerald), var(--forest));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;
+  box-shadow:0 0 60px rgba(26,107,60,0.6);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 40px rgba(26,107,60,0.4)}50%{box-shadow:0 0 80px rgba(26,107,60,0.8)}}
+.splash-title{
+  font-family:'Cinzel',serif;
+  font-size:1.6rem;font-weight:700;
+  color:var(--amber);
+  text-align:center;letter-spacing:0.05em;
+}
+.splash-sub{font-size:1rem;color:var(--cream);opacity:0.7;text-align:center}
+.splash-bar{
+  width:200px;height:3px;
+  background:rgba(255,255,255,0.1);
+  border-radius:99px;overflow:hidden;
+}
+.splash-fill{
+  height:100%;background:linear-gradient(90deg,var(--emerald),var(--amber));
+  border-radius:99px;width:0%;
+  animation:load 2.2s ease-out forwards;
+}
+@keyframes load{to{width:100%}}
+
+/* ========== MAIN LAYOUT ========== */
+#app{display:none;flex-direction:column;min-height:100vh}
+#app.visible{display:flex}
+
+/* ========== HEADER ========== */
+header{
+  background:linear-gradient(135deg,var(--forest) 0%,#0d2818 60%,#091e12 100%);
+  border-bottom:1px solid rgba(76,175,80,0.2);
+  padding:0 1rem;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 30px rgba(0,0,0,0.5);
+}
+.header-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:0.8rem;
+  padding:0.7rem 0;
+}
+.header-logo{
+  width:44px;height:44px;
+  background:radial-gradient(circle,var(--emerald),var(--forest));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;
+  box-shadow:0 0 20px rgba(26,107,60,0.4);
+}
+.header-text{flex:1;min-width:0}
+.header-title{
+  font-family:'Cinzel',serif;
+  font-size:1rem;font-weight:700;
+  color:var(--amber);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.header-sub{font-size:0.75rem;color:var(--cream);opacity:0.6}
+.author-chip{
+  display:flex;align-items:center;gap:0.5rem;
+  background:var(--mist);
+  border:1px solid rgba(212,168,67,0.3);
+  border-radius:99px;
+  padding:0.3rem 0.7rem;
+  cursor:pointer;flex-shrink:0;
+  transition:all 0.2s;
+}
+.author-chip:hover{background:rgba(212,168,67,0.1);border-color:var(--gold)}
+.author-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--emerald);
+  object-fit:cover;
+  border:2px solid var(--gold);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;
+}
+.author-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.author-name{font-size:0.7rem;color:var(--amber);font-family:'Cinzel',serif;font-weight:600}
+
+/* ========== NAV TABS ========== */
+nav{
+  background:rgba(9,30,18,0.95);
+  border-bottom:1px solid rgba(76,175,80,0.15);
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+.nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;gap:0;
+  min-width:max-content;
+  padding:0 1rem;
+}
+.nav-btn{
+  padding:0.75rem 1.1rem;
+  font-family:'Cinzel',serif;
+  font-size:0.72rem;font-weight:600;
+  letter-spacing:0.04em;
+  color:rgba(245,234,216,0.5);
+  background:none;border:none;
+  border-bottom:2px solid transparent;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all 0.2s;
+  display:flex;align-items:center;gap:0.4rem;
+}
+.nav-btn:hover{color:var(--cream);background:rgba(255,255,255,0.04)}
+.nav-btn.active{color:var(--amber);border-bottom-color:var(--amber)}
+.nav-icon{font-size:1rem}
+
+/* ========== MAIN CONTENT ========== */
+main{
+  flex:1;
+  max-width:1200px;margin:0 auto;
+  width:100%;padding:1.2rem 1rem 5rem;
+}
+
+/* ========== SECTION HEADER ========== */
+.section-header{
+  margin-bottom:1.5rem;
+  padding-bottom:0.8rem;
+  border-bottom:1px solid rgba(76,175,80,0.2);
+}
+.section-title{
+  font-family:'Cinzel',serif;
+  font-size:1.4rem;font-weight:700;
+  color:var(--amber);
+  display:flex;align-items:center;gap:0.6rem;
+}
+.section-desc{
+  font-size:0.95rem;
+  color:var(--cream);opacity:0.7;
+  margin-top:0.3rem;
+}
+
+/* ========== CARDS ========== */
+.card{
+  background:linear-gradient(135deg,rgba(13,40,24,0.8),rgba(9,30,18,0.9));
+  border:1px solid rgba(76,175,80,0.15);
+  border-radius:var(--r);
+  padding:1.2rem;
+  margin-bottom:1rem;
+  transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.4);
+  border-color:rgba(76,175,80,0.35);
+}
+.card-title{
+  font-family:'Cinzel',serif;
+  font-size:1rem;font-weight:600;
+  color:var(--amber);
+  margin-bottom:0.5rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.card-body{font-size:0.9rem;line-height:1.65;color:var(--cream);opacity:0.85}
+
+/* ========== GRID ========== */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+
+/* ========== CLASSROOM 3-PANEL ========== */
+.classroom-panels{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1rem;
+  margin:1.2rem 0;
+}
+@media(max-width:700px){.classroom-panels{grid-template-columns:1fr}}
+.panel{
+  border-radius:var(--r);
+  padding:1rem;
+  min-height:180px;
+  display:flex;flex-direction:column;gap:0.8rem;
+}
+.panel-teacher{
+  background:linear-gradient(135deg,#1a3a20,#0d2818);
+  border:2px solid var(--emerald);
+}
+.panel-selflearn{
+  background:linear-gradient(135deg,#1a2a3a,#0d1828);
+  border:2px solid #2a7bc0;
+}
+.panel-peerlearn{
+  background:linear-gradient(135deg,#2a1a3a,#1a0d28);
+  border:2px solid #8a4fc0;
+}
+.panel-label{
+  font-family:'Cinzel',serif;
+  font-size:0.75rem;font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+}
+.panel-teacher .panel-label{color:#4caf50}
+.panel-selflearn .panel-label{color:#64b5f6}
+.panel-peerlearn .panel-label{color:#ce93d8}
+.panel-group-list{display:flex;flex-direction:column;gap:0.4rem}
+.student-chip{
+  background:rgba(255,255,255,0.06);
+  border-radius:6px;
+  padding:0.3rem 0.6rem;
+  font-size:0.78rem;
+  display:flex;align-items:center;gap:0.4rem;
+}
+
+/* ========== STUDENTS TABLE ========== */
+.student-form{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  gap:0.6rem;
+  margin-bottom:1rem;
+  align-items:end;
+}
+@media(max-width:600px){.student-form{grid-template-columns:1fr 1fr;}}
+.form-group{display:flex;flex-direction:column;gap:0.3rem}
+label{font-size:0.78rem;color:var(--amber);font-family:'Cinzel',serif;font-weight:600}
+input,select{
+  background:rgba(13,40,24,0.9);
+  border:1px solid rgba(76,175,80,0.3);
+  border-radius:8px;
+  padding:0.5rem 0.7rem;
+  color:var(--cream);
+  font-family:'Crimson Pro',serif;
+  font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.2s;
+}
+input:focus,select:focus{border-color:var(--lime)}
+input::placeholder{color:rgba(245,234,216,0.3)}
+
+/* ========== BUTTONS ========== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.4rem;
+  padding:0.55rem 1.1rem;
+  border-radius:8px;
+  font-family:'Cinzel',serif;
+  font-size:0.78rem;font-weight:700;
+  letter-spacing:0.04em;
+  cursor:pointer;border:none;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--emerald),#0d4a24);
+  color:#fff;
+  box-shadow:0 4px 15px rgba(26,107,60,0.3);
+}
+.btn-primary:hover{background:linear-gradient(135deg,#22884d,var(--emerald));transform:translateY(-1px)}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold),#b8860b);
+  color:var(--ink);
+  box-shadow:0 4px 15px rgba(212,168,67,0.3);
+}
+.btn-gold:hover{background:linear-gradient(135deg,var(--amber),var(--gold));transform:translateY(-1px)}
+.btn-danger{background:rgba(180,40,40,0.3);color:#ff8080;border:1px solid rgba(180,40,40,0.4)}
+.btn-danger:hover{background:rgba(180,40,40,0.5)}
+.btn-sm{padding:0.35rem 0.7rem;font-size:0.7rem}
+
+/* ========== TABLE ========== */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid rgba(76,175,80,0.15)}
+table{width:100%;border-collapse:collapse}
+thead{background:rgba(26,107,60,0.2)}
+th{
+  font-family:'Cinzel',serif;
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.06em;
+  color:var(--amber);
+  padding:0.7rem 1rem;
+  text-align:left;
+  border-bottom:1px solid rgba(76,175,80,0.2);
+}
+td{
+  padding:0.65rem 1rem;
+  font-size:0.88rem;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--cream);
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(76,175,80,0.05)}
+.badge{
+  display:inline-block;
+  padding:0.15rem 0.55rem;
+  border-radius:99px;
+  font-size:0.7rem;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:600;
+}
+.badge-beginner{background:rgba(244,67,54,0.2);color:#ff8a80;border:1px solid rgba(244,67,54,0.3)}
+.badge-intermediate{background:rgba(255,152,0,0.2);color:#ffcc80;border:1px solid rgba(255,152,0,0.3)}
+.badge-advanced{background:rgba(76,175,80,0.2);color:#a5d6a7;border:1px solid rgba(76,175,80,0.3)}
+
+/* ========== PROGRESS BAR ========== */
+.progress-wrap{background:rgba(255,255,255,0.08);border-radius:99px;height:6px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;transition:width 0.6s ease}
+.progress-green{background:linear-gradient(90deg,var(--emerald),var(--lime))}
+.progress-amber{background:linear-gradient(90deg,#e65100,var(--amber))}
+.progress-blue{background:linear-gradient(90deg,#1565c0,#64b5f6)}
+
+/* ========== ASSESSMENT ========== */
+.question-card{
+  background:rgba(13,40,24,0.6);
+  border:1px solid rgba(76,175,80,0.2);
+  border-radius:var(--r);
+  padding:1.2rem;
+  margin-bottom:1rem;
+}
+.question-text{
+  font-size:1rem;
+  color:var(--cream);
+  line-height:1.6;
+  margin-bottom:0.8rem;
+}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
+@media(max-width:500px){.options-grid{grid-template-columns:1fr}}
+.option-btn{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(76,175,80,0.2);
+  border-radius:8px;
+  padding:0.6rem 0.8rem;
+  text-align:left;
+  color:var(--cream);
+  font-family:'Crimson Pro',serif;
+  font-size:0.88rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.option-btn:hover{background:rgba(76,175,80,0.1);border-color:var(--lime)}
+.option-btn.correct{background:rgba(76,175,80,0.2);border-color:var(--lime);color:#a5d6a7}
+.option-btn.wrong{background:rgba(244,67,54,0.15);border-color:#f44336;color:#ff8a80}
+.option-btn:disabled{cursor:default}
+.score-display{
+  font-family:'Cinzel',serif;
+  font-size:2rem;font-weight:700;
+  color:var(--amber);
+  text-align:center;
+  padding:1rem;
+}
+
+/* ========== SCHEDULE ========== */
+.schedule-grid{display:flex;flex-direction:column;gap:0.6rem}
+.time-block{
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:0.8rem;
+  align-items:stretch;
+}
+.time-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.75rem;color:var(--amber);
+  display:flex;align-items:center;justify-content:flex-end;
+  padding-right:0.5rem;
+  border-right:2px solid rgba(212,168,67,0.3);
+}
+.block-content{
+  border-radius:8px;
+  padding:0.7rem 1rem;
+  display:flex;align-items:center;gap:0.7rem;
+  font-size:0.88rem;
+}
+.block-teacher{background:rgba(26,107,60,0.25);border-left:3px solid var(--emerald)}
+.block-self{background:rgba(21,101,192,0.2);border-left:3px solid #64b5f6}
+.block-peer{background:rgba(106,27,154,0.2);border-left:3px solid #ce93d8}
+.block-break{background:rgba(255,255,255,0.04);border-left:3px solid rgba(255,255,255,0.2)}
+
+/* ========== ACTIVITY BANK ========== */
+.activity-tag{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:rgba(76,175,80,0.1);
+  border:1px solid rgba(76,175,80,0.25);
+  border-radius:99px;
+  padding:0.2rem 0.6rem;
+  font-size:0.72rem;
+  color:var(--lime);
+  margin:0.2rem;
+}
+
+/* ========== NOTES ========== */
+textarea{
+  width:100%;
+  background:rgba(9,30,18,0.95);
+  border:1px solid rgba(76,175,80,0.3);
+  border-radius:10px;
+  padding:0.8rem 1rem;
+  color:var(--cream);
+  font-family:'Crimson Pro',serif;
+  font-size:0.95rem;
+  line-height:1.6;
+  resize:vertical;
+  min-height:120px;
+  outline:none;
+  transition:border-color 0.2s;
+}
+textarea:focus{border-color:var(--lime)}
+
+/* ========== AUTHOR MODAL ========== */
+.modal-overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:linear-gradient(135deg,#0d2818,#091e12);
+  border:1px solid rgba(212,168,67,0.3);
+  border-radius:16px;
+  padding:1.5rem;
+  max-width:400px;width:100%;
+  box-shadow:0 20px 80px rgba(0,0,0,0.8);
+  transform:scale(0.9);
+  transition:transform 0.3s;
+}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-title{
+  font-family:'Cinzel',serif;
+  font-size:1.1rem;font-weight:700;
+  color:var(--amber);
+  margin-bottom:1rem;
+  text-align:center;
+}
+.author-profile-pic{
+  width:100px;height:100px;
+  border-radius:50%;
+  border:3px solid var(--gold);
+  object-fit:cover;
+  display:block;margin:0 auto 1rem;
+  box-shadow:0 0 40px rgba(212,168,67,0.3);
+}
+.author-bio{font-size:0.88rem;line-height:1.6;text-align:center;opacity:0.8;margin-bottom:1rem}
+.upload-area{
+  border:2px dashed rgba(76,175,80,0.4);
+  border-radius:10px;
+  padding:1rem;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+  margin-bottom:1rem;
+}
+.upload-area:hover{border-color:var(--lime);background:rgba(76,175,80,0.05)}
+#fileInput{display:none}
+
+/* ========== STATS WIDGETS ========== */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0.8rem;margin-bottom:1.2rem}
+.stat-card{
+  background:linear-gradient(135deg,rgba(26,107,60,0.15),rgba(13,40,24,0.8));
+  border:1px solid rgba(76,175,80,0.2);
+  border-radius:var(--r);
+  padding:1rem;
+  text-align:center;
+}
+.stat-value{
+  font-family:'Cinzel',serif;
+  font-size:1.8rem;font-weight:700;
+  color:var(--amber);
+  line-height:1;
+}
+.stat-label{font-size:0.75rem;color:var(--cream);opacity:0.6;margin-top:0.3rem}
+
+/* ========== TOAST ========== */
+#toast{
+  position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--emerald);
+  color:#fff;
+  padding:0.6rem 1.4rem;
+  border-radius:99px;
+  font-family:'Cinzel',serif;
+  font-size:0.8rem;
+  font-weight:600;
+  opacity:0;
+  transition:opacity 0.3s,transform 0.3s;
+  pointer-events:none;
+  z-index:9998;
+  box-shadow:var(--shadow);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ========== BOTTOM NAV (mobile) ========== */
+.bottom-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(9,30,18,0.97);
+  border-top:1px solid rgba(76,175,80,0.2);
+  padding:0.4rem 0;
+  backdrop-filter:blur(10px);
+}
+@media(max-width:768px){
+  .bottom-nav{display:flex}
+  nav{display:none}
+}
+.bottom-nav-btn{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;gap:0.2rem;
+  padding:0.4rem;
+  background:none;border:none;
+  color:rgba(245,234,216,0.4);
+  font-family:'Cinzel',serif;font-size:0.55rem;font-weight:600;
+  letter-spacing:0.03em;
+  cursor:pointer;
+  transition:color 0.2s;
+}
+.bottom-nav-btn.active{color:var(--amber)}
+.bottom-nav-btn .bn-icon{font-size:1.2rem}
+
+/* ========== OFFLINE BADGE ========== */
+#offline-badge{
+  position:fixed;top:70px;right:10px;
+  background:rgba(180,40,40,0.9);
+  color:#fff;
+  padding:0.3rem 0.7rem;
+  border-radius:99px;
+  font-size:0.7rem;
+  font-family:'Cinzel',serif;
+  font-weight:600;
+  display:none;
+  z-index:200;
+  box-shadow:0 4px 15px rgba(0,0,0,0.4);
+}
+.offline #offline-badge{display:block}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.5s,transform 0.5s}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ========== SECTION VISIBILITY ========== */
+.section{display:none}
+.section.active{display:block}
+
+/* ========== DECORATIVE DIVIDER ========== */
+.divider{
+  display:flex;align-items:center;gap:1rem;
+  margin:1.5rem 0;
+  color:rgba(212,168,67,0.4);
+  font-size:0.75rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  font-family:'Cinzel',serif;
+}
+.divider::before,.divider::after{
+  content:'';flex:1;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,168,67,0.25),transparent);
+}
+
+/* ========== COMPETENCY METER ========== */
+.comp-row{
+  display:grid;grid-template-columns:1fr 160px 45px;
+  gap:0.8rem;align-items:center;
+  padding:0.5rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.comp-row:last-child{border-bottom:none}
+.comp-name{font-size:0.88rem;color:var(--cream)}
+.comp-score{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem;color:var(--amber);
+  text-align:right;
+}
+
+/* ========== MISSION TAGS ========== */
+.mission-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.8rem}
+.mission-tag{
+  background:rgba(212,168,67,0.1);
+  border:1px solid rgba(212,168,67,0.25);
+  border-radius:6px;
+  padding:0.25rem 0.6rem;
+  font-size:0.72rem;
+  color:var(--amber);
+  font-family:'JetBrains Mono',monospace;
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(76,175,80,0.3);border-radius:99px}
+</style>
+</head>
+<body>
+
+<!-- ===== SPLASH ===== -->
+<div id="splash">
+  <div class="splash-logo">📚</div>
+  <div class="splash-title">Silent Classrooms</div>
+  <div class="splash-sub">Multi-Grade Single-Teacher Support System</div>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
+  <div style="font-size:0.75rem;opacity:0.4;font-family:'JetBrains Mono',monospace;">by Mateen Yousuf · J&K SED</div>
+</div>
+
+<!-- ===== OFFLINE BADGE ===== -->
+<div id="offline-badge">📴 Offline Mode</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast"></div>
+
+<!-- ===== AUTHOR MODAL ===== -->
+<div class="modal-overlay" id="authorModal">
+  <div class="modal">
+    <div class="modal-title">👤 Author Profile</div>
+    <img id="authorImg" class="author-profile-pic" src="" alt="Mateen Yousuf" onerror="this.style.display='none'"/>
+    <div style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--amber);text-align:center;font-weight:700">Mateen Yousuf</div>
+    <div class="author-bio">Teacher – School Education Department<br/>Jammu & Kashmir<br/><br/>Author of <em>Silent Classrooms</em> — a comprehensive pedagogical framework for multi-grade teaching in underserved rural schools.</div>
+    <div class="mission-tags" style="justify-content:center;margin-bottom:1rem">
+      <span class="mission-tag">NEP 2020</span>
+      <span class="mission-tag">NCF 2023</span>
+      <span class="mission-tag">PARAKH</span>
+      <span class="mission-tag">NIPUN Bharat</span>
+      <span class="mission-tag">FLN Mission</span>
+    </div>
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+      <div style="font-size:1.8rem;margin-bottom:0.4rem">📷</div>
+      <div style="font-size:0.82rem;color:var(--cream);opacity:0.7">Tap to upload profile photo</div>
+      <div style="font-size:0.7rem;color:var(--cream);opacity:0.4;margin-top:0.2rem">Stored locally on your device</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*"/>
+    <button class="btn btn-primary" style="width:100%" onclick="closeModal()">✓ Close</button>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="header-logo">📚</div>
+      <div class="header-text">
+        <div class="header-title">Silent Classrooms</div>
+        <div class="header-sub">Multi-Grade · Single-Teacher · J&K SED</div>
+      </div>
+      <div class="author-chip" onclick="openModal()">
+        <div class="author-avatar" id="chipAvatar">MY</div>
+        <div class="author-name">Mateen</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- DESKTOP NAV -->
+  <nav id="desktopNav">
+    <div class="nav-inner">
+      <button class="nav-btn active" onclick="showSection('dashboard',this)"><span class="nav-icon">🏠</span> Dashboard</button>
+      <button class="nav-btn" onclick="showSection('students',this)"><span class="nav-icon">👥</span> Students</button>
+      <button class="nav-btn" onclick="showSection('classroom',this)"><span class="nav-icon">🏫</span> Classroom</button>
+      <button class="nav-btn" onclick="showSection('schedule',this)"><span class="nav-icon">🗓️</span> Schedule</button>
+      <button class="nav-btn" onclick="showSection('assessment',this)"><span class="nav-icon">📝</span> Assessment</button>
+      <button class="nav-btn" onclick="showSection('activities',this)"><span class="nav-icon">🎯</span> Activities</button>
+      <button class="nav-btn" onclick="showSection('progress',this)"><span class="nav-icon">📊</span> Progress</button>
+      <button class="nav-btn" onclick="showSection('notes',this)"><span class="nav-icon">📒</span> Notes</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="section active" id="sec-dashboard">
+      <div class="section-header reveal">
+        <div class="section-title">🏠 Dashboard</div>
+        <div class="section-desc">Multi-Grade Classroom Overview · NEP 2020 & NCF 2023 Aligned</div>
+      </div>
+      <div class="stat-grid reveal">
+        <div class="stat-card"><div class="stat-value" id="totalStudents">0</div><div class="stat-label">Total Students</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalGrades">0</div><div class="stat-label">Active Grades</div></div>
+        <div class="stat-card"><div class="stat-value" id="avgScore">—</div><div class="stat-label">Avg. Quiz Score</div></div>
+        <div class="stat-card"><div class="stat-value" id="activitiesDone">0</div><div class="stat-label">Activities Done</div></div>
+      </div>
+      <div class="divider reveal">Core Vision</div>
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card-title">🎯 System Mission</div>
+          <div class="card-body">Enable multi-grade teaching management through automated grouping, rotational planning, and PARAKH-aligned competency tracking for single-teacher rural schools across J&K.</div>
+          <div class="mission-tags">
+            <span class="mission-tag">NEP 2020</span><span class="mission-tag">NCF 2023</span><span class="mission-tag">PARAKH</span><span class="mission-tag">NIPUN Bharat</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 Key Modules</div>
+          <div class="card-body">
+            🔹 Dynamic Classroom Grouping Engine<br/>
+            🔹 Rotational Teaching Planner<br/>
+            🔹 Offline Activity Bank (FLN-based)<br/>
+            🔹 Silent Classroom Mode<br/>
+            🔹 Multi-Level Content Engine<br/>
+            🔹 PARAKH Assessment Tracker
+          </div>
+        </div>
+      </div>
+      <div class="divider reveal">Problem Landscape</div>
+      <div class="grid-3 reveal">
+        <div class="card">
+          <div class="card-title">⚠️ 3–5 Grades Simultaneously</div>
+          <div class="card-body">One teacher must manage multiple grade levels at the same time with structured rotation plans.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">📉 Learning Gaps</div>
+          <div class="card-body">Differentiated instruction tools to bridge competency gaps across levels and subjects.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">🧠 Cognitive Load</div>
+          <div class="card-body">Auto-grouping and visual management tools reduce mental overload for the solo teacher.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STUDENTS ===== -->
+    <section class="section" id="sec-students">
+      <div class="section-header reveal">
+        <div class="section-title">👥 Student Registry</div>
+        <div class="section-desc">Add students, assign grades & competency levels</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">➕ Add New Student</div>
+        <div class="student-form">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" id="sName" placeholder="e.g. Aisha Bhat"/>
+          </div>
+          <div class="form-group">
+            <label>Grade</label>
+            <select id="sGrade">
+              <option value="">Select</option>
+              <option>Grade 1</option><option>Grade 2</option><option>Grade 3</option>
+              <option>Grade 4</option><option>Grade 5</option><option>Grade 6</option>
+              <option>Grade 7</option><option>Grade 8</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Competency Level</label>
+            <select id="sLevel">
+              <option value="">Select</option>
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="addStudent()">➕ Add</button>
+        </div>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Name</th><th>Grade</th><th>Level</th><th>Quiz Score</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentTable">
+            <tr><td colspan="6" style="text-align:center;opacity:0.4;padding:2rem">No students added yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== CLASSROOM ===== -->
+    <section class="section" id="sec-classroom">
+      <div class="section-header reveal">
+        <div class="section-title">🏫 Live Classroom View</div>
+        <div class="section-desc">3-Panel Dynamic Grouping System — Teacher · Self-Learning · Peer Learning</div>
+      </div>
+      <div class="card reveal" style="text-align:center">
+        <div class="card-title" style="justify-content:center">⚙️ Auto-Group Students by Competency</div>
+        <div class="card-body" style="margin-bottom:1rem">Click to automatically assign students to the three learning groups based on their competency level.</div>
+        <button class="btn btn-gold" onclick="autoGroup()">🔄 Generate Groups Now</button>
+      </div>
+      <div class="classroom-panels reveal" id="classroomPanels">
+        <div class="panel panel-teacher">
+          <div class="panel-label">🎓 Teacher-Led Group</div>
+          <div class="panel-group-list" id="group-teacher"><div style="font-size:0.8rem;opacity:0.4">Auto-assign students first</div></div>
+        </div>
+        <div class="panel panel-selflearn">
+          <div class="panel-label">📖 Self-Learning Group</div>
+          <div class="panel-group-list" id="group-self"><div style="font-size:0.8rem;opacity:0.4">Auto-assign students first</div></div>
+        </div>
+        <div class="panel panel-peerlearn">
+          <div class="panel-label">🤝 Peer Learning Group</div>
+          <div class="panel-group-list" id="group-peer"><div style="font-size:0.8rem;opacity:0.4">Auto-assign students first</div></div>
+        </div>
+      </div>
+      <div class="divider reveal">Silent Classroom Mode</div>
+      <div class="card reveal">
+        <div class="card-title">🔇 Silent Classroom Instructions</div>
+        <div class="card-body">
+          Students follow visual/audio instructions independently while the teacher focuses on one group at a time.<br/><br/>
+          🟢 <strong>Group A (Beginner)</strong> → Work on FLN activity cards (visual tasks)<br/>
+          🔵 <strong>Group B (Intermediate)</strong> → Worksheet-based peer review<br/>
+          🟣 <strong>Group C (Advanced)</strong> → Independent project/self-assessment
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SCHEDULE ===== -->
+    <section class="section" id="sec-schedule">
+      <div class="section-header reveal">
+        <div class="section-title">🗓️ Rotational Teaching Schedule</div>
+        <div class="section-desc">Auto-generated daily timetable for multi-grade teaching</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">📅 Today's Teaching Plan</div>
+        <div class="card-body" style="margin-bottom:1rem">Rotational blocks: Teacher-Focus → Independent → Peer → Break → Repeat</div>
+        <div class="schedule-grid" id="scheduleGrid"></div>
+      </div>
+      <div class="divider reveal">Implementation Phases</div>
+      <div class="grid-3 reveal">
+        <div class="card">
+          <div class="card-title">🌱 Phase 1 — Pilot</div>
+          <div class="card-body">Single-teacher schools in remote J&K clusters. Focus on FLN and basic competency tracking.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">🌿 Phase 2 — Cluster</div>
+          <div class="card-body">Expand to school complex model. Shared resource bank and cross-school competency benchmarks.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">🌳 Phase 3 — District</div>
+          <div class="card-body">District-wide scaling with cloud sync, analytics dashboards, and cluster coordination features.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ASSESSMENT ===== -->
+    <section class="section" id="sec-assessment">
+      <div class="section-header reveal">
+        <div class="section-title">📝 PARAKH Assessment Engine</div>
+        <div class="section-desc">Competency-tagged micro-assessments · Diagnostic → Remedial Loop</div>
+      </div>
+      <div id="quizContainer"></div>
+      <div id="quizResult" style="display:none" class="card reveal">
+        <div class="score-display" id="scoreDisplay"></div>
+        <div style="text-align:center;margin-top:0.5rem">
+          <button class="btn btn-gold" onclick="restartQuiz()">🔄 Retry Assessment</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ACTIVITIES ===== -->
+    <section class="section" id="sec-activities">
+      <div class="section-header reveal">
+        <div class="section-title">🎯 Offline Activity Bank</div>
+        <div class="section-desc">FLN-based · Grade-neutral · Experiential Learning Tasks</div>
+      </div>
+      <div id="activityList" class="grid-2 reveal"></div>
+    </section>
+
+    <!-- ===== PROGRESS ===== -->
+    <section class="section" id="sec-progress">
+      <div class="section-header reveal">
+        <div class="section-title">📊 Competency Progress Tracker</div>
+        <div class="section-desc">PARAKH-aligned tracking · Per student & class overview</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">📈 Class Competency Overview</div>
+        <div id="progressList" style="margin-top:0.5rem"></div>
+      </div>
+      <div class="card reveal" style="margin-top:1rem">
+        <div class="card-title">🔖 Bookmarks & Chapter Progress</div>
+        <div id="bookmarkList" style="font-size:0.88rem;opacity:0.7">No bookmarks yet. Add from the activity bank.</div>
+      </div>
+    </section>
+
+    <!-- ===== NOTES ===== -->
+    <section class="section" id="sec-notes">
+      <div class="section-header reveal">
+        <div class="section-title">📒 Teacher Notes</div>
+        <div class="section-desc">Private notes · Saved locally on device</div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">✏️ My Notes</div>
+        <textarea id="notesArea" placeholder="Write your lesson observations, student progress notes, or teaching reminders here…" oninput="saveNotes()"></textarea>
+        <div style="margin-top:0.6rem;display:flex;gap:0.6rem;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="saveNotes()">💾 Save Notes</button>
+          <button class="btn btn-danger btn-sm" onclick="clearNotes()">🗑️ Clear</button>
+        </div>
+      </div>
+      <div class="divider reveal">System Architecture</div>
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card-title">🏗️ System Layers</div>
+          <div class="card-body">
+            1. <strong>UI Layer</strong> — Responsive PWA interface<br/>
+            2. <strong>Local DB</strong> — IndexedDB + LocalStorage<br/>
+            3. <strong>Sync Engine</strong> — Background delta sync<br/>
+            4. <strong>API Layer</strong> — REST / GraphQL<br/>
+            5. <strong>Cloud DB</strong> — Supabase / PostgreSQL
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔒 Security</div>
+          <div class="card-body">
+            🔐 Local encryption of student data<br/>
+            👤 Role-based access control<br/>
+            📵 Minimal personal data storage<br/>
+            🔄 Conflict resolution on sync<br/>
+            📦 Low-memory footprint design
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- end main -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="bottom-nav-btn active" onclick="showSection('dashboard',this)"><span class="bn-icon">🏠</span>Home</button>
+    <button class="bottom-nav-btn" onclick="showSection('students',this)"><span class="bn-icon">👥</span>Students</button>
+    <button class="bottom-nav-btn" onclick="showSection('classroom',this)"><span class="bn-icon">🏫</span>Class</button>
+    <button class="bottom-nav-btn" onclick="showSection('schedule',this)"><span class="bn-icon">🗓️</span>Schedule</button>
+    <button class="bottom-nav-btn" onclick="showSection('assessment',this)"><span class="bn-icon">📝</span>Quiz</button>
+    <button class="bottom-nav-btn" onclick="showSection('activities',this)"><span class="bn-icon">🎯</span>Tasks</button>
+    <button class="bottom-nav-btn" onclick="showSection('progress',this)"><span class="bn-icon">📊</span>Progress</button>
+    <button class="bottom-nav-btn" onclick="showSection('notes',this)"><span class="bn-icon">📒</span>Notes</button>
+  </div>
+
+</div><!-- end #app -->
+
+<script>
+/* ===========================
+   DATA & STATE
+=========================== */
+let students = JSON.parse(localStorage.getItem('sc_students')||'[]');
+let quizScores = JSON.parse(localStorage.getItem('sc_scores')||'[]');
+let activitiesDone = parseInt(localStorage.getItem('sc_acts')||'0');
+let bookmarks = JSON.parse(localStorage.getItem('sc_bm')||'[]');
+let currentQ = 0;
+let quizScore = 0;
+let quizAnswered = [];
+
+const QUIZ = [
+  {q:"Which process do plants use to make food using sunlight?",opts:["Respiration","Photosynthesis","Digestion","Absorption"],ans:1,comp:"Biology – FLN"},
+  {q:"What is the chemical formula of water?",opts:["CO₂","NaCl","H₂O","O₂"],ans:2,comp:"Chemistry – Basic"},
+  {q:"Which planet is closest to the Sun?",opts:["Earth","Venus","Mercury","Mars"],ans:2,comp:"Science – Space"},
+  {q:"What force pulls objects toward the Earth?",opts:["Friction","Magnetism","Gravity","Buoyancy"],ans:2,comp:"Physics – Forces"},
+  {q:"How many bones are in the adult human body?",opts:["206","208","186","220"],ans:0,comp:"Biology – Human Body"},
+  {q:"What is the unit of electric current?",opts:["Volt","Watt","Ohm","Ampere"],ans:3,comp:"Physics – Electricity"},
+  {q:"Which gas is most abundant in Earth's atmosphere?",opts:["Oxygen","Carbon Dioxide","Nitrogen","Hydrogen"],ans:2,comp:"Chemistry – Environment"},
+  {q:"What is the speed of light approximately?",opts:["3×10⁶ m/s","3×10⁸ m/s","3×10⁴ m/s","3×10¹⁰ m/s"],ans:1,comp:"Physics – Light"},
+];
+
+const ACTIVITIES = [
+  {title:"Leaf Observation Journal",emoji:"🍃",desc:"Collect 5 different leaves. Draw their shapes, count veins, and identify similarities/differences.",tags:["FLN","Biology","Grade 3-5"],grade:"Grade 3–5",type:"Observation"},
+  {title:"Number Pattern Cards",emoji:"🔢",desc:"Create pattern cards with sequences. Students identify the rule and predict next 3 numbers.",tags:["FLN","Maths","Grade 1-4"],grade:"Grade 1–4",type:"Activity"},
+  {title:"Story Sequencing",emoji:"📖",desc:"Provide 6 picture cards of a story. Students arrange in correct order and narrate.",tags:["Language","FLN","Grade 2-5"],grade:"Grade 2–5",type:"Language"},
+  {title:"Simple Machines Hunt",emoji:"⚙️",desc:"Students identify 5 simple machines in classroom/home and explain how each works.",tags:["Physics","Grade 5-8"],grade:"Grade 5–8",type:"Experiential"},
+  {title:"Shadow Length Chart",emoji:"☀️",desc:"Measure shadow length at 3 times of day. Plot on graph and explain the pattern.",tags:["Science","Math","Grade 4-7"],grade:"Grade 4–7",type:"Experiment"},
+  {title:"Peer Word Quiz",emoji:"🤝",desc:"Pairs quiz each other on 10 vocabulary words. Switch roles. Teacher tracks accuracy.",tags:["Language","Peer Learning"],grade:"All Grades",type:"Peer"},
+  {title:"Counting with Seeds",emoji:"🌾",desc:"Use seeds/pebbles for counting, grouping, and basic addition/subtraction operations.",tags:["FLN","Maths","Grade 1-3"],grade:"Grade 1–3",type:"FLN"},
+  {title:"Water Cycle Diagram",emoji:"💧",desc:"Draw and label the water cycle from memory using given keywords as clues.",tags:["Science","Grade 5-7"],grade:"Grade 5–7",type:"Drawing"},
+];
+
+const SCHEDULE = [
+  {time:"08:00",label:"Morning Circle / Attendance",type:"break"},
+  {time:"08:15",label:"🎓 Teacher-Led: Group A (Beginner) – FLN/Literacy",type:"teacher"},
+  {time:"08:45",label:"📖 Self-Learning: Group B (Intermediate) – Worksheets",type:"self"},
+  {time:"08:45",label:"🤝 Peer Learning: Group C (Advanced) – Project work",type:"peer"},
+  {time:"09:15",label:"🎓 Teacher-Led: Group B (Intermediate) – Concept Teaching",type:"teacher"},
+  {time:"09:45",label:"📖 Self-Learning: Group A – Activity Cards",type:"self"},
+  {time:"09:45",label:"🤝 Peer Learning: Group C – Teach-back to Group A",type:"peer"},
+  {time:"10:15",label:"☕ Short Break",type:"break"},
+  {time:"10:30",label:"🎓 Teacher-Led: Group C (Advanced) – Higher-order tasks",type:"teacher"},
+  {time:"11:00",label:"📖 Self-Learning: Group A & B – Revision Cards",type:"self"},
+  {time:"11:30",label:"📝 Micro-Assessment / Exit Ticket (All Groups)",type:"teacher"},
+  {time:"12:00",label:"🍱 Lunch Break",type:"break"},
+];
+
+/* ===========================
+   SPLASH
+=========================== */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('hide');
+    setTimeout(()=>{
+      document.getElementById('splash').style.display='none';
+      document.getElementById('app').classList.add('visible');
+      initApp();
+    },800);
+  },2400);
+});
+
+function initApp(){
+  renderSchedule();
+  renderActivities();
+  buildQuiz();
+  loadNotes();
+  updateDashboard();
+  renderStudentTable();
+  loadAuthorPhoto();
+  scrollReveal();
+  // Online/Offline
+  window.addEventListener('offline',()=>document.body.classList.add('offline'));
+  window.addEventListener('online',()=>document.body.classList.remove('offline'));
+  if(!navigator.onLine) document.body.classList.add('offline');
+}
+
+/* ===========================
+   NAVIGATION
+=========================== */
+function showSection(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  // Desktop nav
+  document.querySelectorAll('#desktopNav .nav-btn').forEach(b=>b.classList.remove('active'));
+  // Bottom nav
+  document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // Sync both navs
+  const allBtns = [...document.querySelectorAll('#desktopNav .nav-btn'),...document.querySelectorAll('.bottom-nav-btn')];
+  allBtns.forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'"))b.classList.add('active')});
+  setTimeout(scrollReveal,50);
+  // Special init
+  if(id==='progress') renderProgress();
+}
+
+/* ===========================
+   STUDENTS
+=========================== */
+function addStudent(){
+  const name=document.getElementById('sName').value.trim();
+  const grade=document.getElementById('sGrade').value;
+  const level=document.getElementById('sLevel').value;
+  if(!name||!grade||!level){toast('Please fill all fields');return;}
+  students.push({id:Date.now(),name,grade,level,score:null});
+  saveStudents();
+  document.getElementById('sName').value='';
+  document.getElementById('sGrade').value='';
+  document.getElementById('sLevel').value='';
+  renderStudentTable();
+  updateDashboard();
+  toast('✅ Student added');
+}
+
+function deleteStudent(id){
+  students=students.filter(s=>s.id!==id);
+  saveStudents();
+  renderStudentTable();
+  updateDashboard();
+  toast('Student removed');
+}
+
+function saveStudents(){localStorage.setItem('sc_students',JSON.stringify(students))}
+
+function renderStudentTable(){
+  const tb=document.getElementById('studentTable');
+  if(!students.length){
+    tb.innerHTML='<tr><td colspan="6" style="text-align:center;opacity:0.4;padding:2rem">No students added yet</td></tr>';
+    return;
+  }
+  tb.innerHTML=students.map((s,i)=>`
+    <tr>
+      <td style="opacity:0.5">${i+1}</td>
+      <td>${s.name}</td>
+      <td><span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--amber)">${s.grade}</span></td>
+      <td><span class="badge badge-${s.level.toLowerCase()}">${s.level}</span></td>
+      <td>${s.score!==null?`<span style="color:var(--lime);font-family:'JetBrains Mono',monospace">${s.score}%</span>`:'<span style="opacity:0.3">—</span>'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteStudent(${s.id})">✕</button></td>
+    </tr>
+  `).join('');
+}
+
+/* ===========================
+   DASHBOARD STATS
+=========================== */
+function updateDashboard(){
+  document.getElementById('totalStudents').textContent=students.length;
+  const grades=[...new Set(students.map(s=>s.grade))].filter(Boolean);
+  document.getElementById('totalGrades').textContent=grades.length;
+  const scored=students.filter(s=>s.score!==null);
+  document.getElementById('avgScore').textContent=scored.length?Math.round(scored.reduce((a,s)=>a+s.score,0)/scored.length)+'%':'—';
+  document.getElementById('activitiesDone').textContent=activitiesDone;
+}
+
+/* ===========================
+   CLASSROOM AUTO-GROUP
+=========================== */
+function autoGroup(){
+  if(!students.length){toast('Add students first!');return;}
+  const beg=students.filter(s=>s.level==='Beginner');
+  const mid=students.filter(s=>s.level==='Intermediate');
+  const adv=students.filter(s=>s.level==='Advanced');
+  renderGroup('group-teacher',beg,'🎓','#4caf50');
+  renderGroup('group-self',mid,'📖','#64b5f6');
+  renderGroup('group-peer',adv,'🤝','#ce93d8');
+  toast('✅ Groups generated!');
+}
+
+function renderGroup(id,arr,icon,color){
+  const el=document.getElementById(id);
+  if(!arr.length){el.innerHTML=`<div style="font-size:0.8rem;opacity:0.4">No students in this level</div>`;return;}
+  el.innerHTML=arr.map(s=>`
+    <div class="student-chip">
+      <span>${icon}</span>
+      <span>${s.name}</span>
+      <span style="margin-left:auto;font-size:0.7rem;opacity:0.5">${s.grade}</span>
+    </div>
+  `).join('');
+}
+
+/* ===========================
+   SCHEDULE
+=========================== */
+function renderSchedule(){
+  const grid=document.getElementById('scheduleGrid');
+  grid.innerHTML=SCHEDULE.map(b=>`
+    <div class="time-block">
+      <div class="time-label">${b.time}</div>
+      <div class="block-content block-${b.type}">
+        <span>${b.label}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===========================
+   QUIZ / ASSESSMENT
+=========================== */
+function buildQuiz(){
+  currentQ=0;quizScore=0;quizAnswered=[];
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const container=document.getElementById('quizContainer');
+  document.getElementById('quizResult').style.display='none';
+  if(currentQ>=QUIZ.length){
+    showQuizResult();return;
+  }
+  const q=QUIZ[currentQ];
+  container.innerHTML=`
+    <div class="question-card reveal">
+      <div style="display:flex;justify-content:space-between;margin-bottom:0.6rem">
+        <span class="activity-tag">🔖 ${q.comp}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--amber)">${currentQ+1}/${QUIZ.length}</span>
+      </div>
+      <div class="question-text">${q.q}</div>
+      <div class="options-grid">
+        ${q.opts.map((o,i)=>`<button class="option-btn" onclick="answerQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+      </div>
+    </div>
+    <div style="margin-top:0.8rem">
+      <div class="progress-wrap"><div class="progress-fill progress-green" style="width:${(currentQ/QUIZ.length)*100}%"></div></div>
+      <div style="font-size:0.75rem;opacity:0.5;margin-top:0.3rem;font-family:'JetBrains Mono',monospace">Progress: ${currentQ}/${QUIZ.length}</div>
+    </div>
+  `;
+  setTimeout(scrollReveal,50);
+}
+
+function answerQ(idx){
+  const q=QUIZ[currentQ];
+  const btns=document.querySelectorAll('.option-btn');
+  btns.forEach(b=>b.disabled=true);
+  if(idx===q.ans){
+    btns[idx].classList.add('correct');
+    quizScore++;
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+  }
+  setTimeout(()=>{currentQ++;renderQuestion();},1200);
+}
+
+function showQuizResult(){
+  document.getElementById('quizContainer').innerHTML='';
+  const pct=Math.round((quizScore/QUIZ.length)*100);
+  document.getElementById('quizResult').style.display='block';
+  document.getElementById('scoreDisplay').innerHTML=`
+    <div style="font-size:3rem">${pct>=80?'🏆':pct>=50?'📚':'💪'}</div>
+    <div>Score: ${quizScore}/${QUIZ.length} — ${pct}%</div>
+    <div style="font-size:0.9rem;color:var(--cream);opacity:0.7;margin-top:0.5rem;font-family:'Crimson Pro',serif;font-weight:300">
+      ${pct>=80?'Excellent! Advanced level performance.':pct>=50?'Good work! Intermediate level.':'Keep practicing — Beginner track recommended.'}
+    </div>
+  `;
+  // Save to storage
+  quizScores.push(pct);
+  localStorage.setItem('sc_scores',JSON.stringify(quizScores));
+  localStorage.setItem('sc_acts',String(activitiesDone+1));
+  activitiesDone++;
+  updateDashboard();
+}
+
+function restartQuiz(){buildQuiz()}
+
+/* ===========================
+   ACTIVITIES
+=========================== */
+function renderActivities(){
+  const list=document.getElementById('activityList');
+  list.innerHTML=ACTIVITIES.map((a,i)=>`
+    <div class="card">
+      <div class="card-title"><span style="font-size:1.5rem">${a.emoji}</span> ${a.title}</div>
+      <div class="card-body" style="margin-bottom:0.8rem">${a.desc}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:0.8rem">
+        ${a.tags.map(t=>`<span class="activity-tag">${t}</span>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:0.75rem;opacity:0.5;font-family:'JetBrains Mono',monospace">${a.grade} · ${a.type}</span>
+        <button class="btn btn-sm btn-primary" onclick="bookmarkActivity(${i})">🔖 Bookmark</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function bookmarkActivity(i){
+  const a=ACTIVITIES[i];
+  if(!bookmarks.find(b=>b.title===a.title)){
+    bookmarks.push({title:a.title,emoji:a.emoji,grade:a.grade});
+    localStorage.setItem('sc_bm',JSON.stringify(bookmarks));
+    toast(`🔖 "${a.title}" bookmarked!`);
+  } else {
+    toast('Already bookmarked!');
+  }
+}
+
+/* ===========================
+   PROGRESS
+=========================== */
+function renderProgress(){
+  const list=document.getElementById('progressList');
+  if(!students.length){
+    list.innerHTML='<div style="opacity:0.4;font-size:0.88rem">Add students to view progress</div>';
+    return;
+  }
+  list.innerHTML=students.map(s=>{
+    const sc=s.score??0;
+    const w=s.score!==null?sc:'0';
+    const cls=s.level==='Advanced'?'progress-green':s.level==='Intermediate'?'progress-amber':'progress-blue';
+    return `
+    <div class="comp-row">
+      <div class="comp-name">${s.name} <span style="opacity:0.4;font-size:0.78rem">(${s.grade})</span></div>
+      <div class="progress-wrap"><div class="progress-fill ${cls}" style="width:${w}%"></div></div>
+      <div class="comp-score">${s.score!==null?sc+'%':'—'}</div>
+    </div>`;
+  }).join('');
+  // Bookmarks
+  const bkEl=document.getElementById('bookmarkList');
+  if(bookmarks.length){
+    bkEl.innerHTML=bookmarks.map(b=>`
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+        <span style="font-size:1.2rem">${b.emoji}</span>
+        <span>${b.title}</span>
+        <span style="margin-left:auto;opacity:0.4;font-size:0.75rem;font-family:'JetBrains Mono',monospace">${b.grade}</span>
+      </div>
+    `).join('');
+  } else {
+    bkEl.innerHTML='<div style="opacity:0.4;font-size:0.88rem">No bookmarks yet.</div>';
+  }
+}
+
+/* ===========================
+   NOTES
+=========================== */
+function saveNotes(){
+  localStorage.setItem('sc_notes',document.getElementById('notesArea').value);
+  toast('💾 Notes saved');
+}
+function clearNotes(){
+  document.getElementById('notesArea').value='';
+  localStorage.removeItem('sc_notes');
+  toast('Notes cleared');
+}
+function loadNotes(){
+  const n=localStorage.getItem('sc_notes');
+  if(n) document.getElementById('notesArea').value=n;
+}
+
+/* ===========================
+   AUTHOR MODAL
+=========================== */
+function openModal(){document.getElementById('authorModal').classList.add('open')}
+function closeModal(){document.getElementById('authorModal').classList.remove('open')}
+document.getElementById('authorModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+document.getElementById('fileInput').addEventListener('change',function(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const data=ev.target.result;
+    localStorage.setItem('sc_author_photo',data);
+    document.getElementById('authorImg').src=data;
+    document.getElementById('authorImg').style.display='block';
+    updateChipAvatar(data);
+    toast('✅ Profile photo saved');
+  };
+  reader.readAsDataURL(file);
+});
+
+function loadAuthorPhoto(){
+  const saved=localStorage.getItem('sc_author_photo');
+  if(saved){
+    document.getElementById('authorImg').src=saved;
+    document.getElementById('authorImg').style.display='block';
+    updateChipAvatar(saved);
+  }
+}
+
+function updateChipAvatar(src){
+  const chip=document.getElementById('chipAvatar');
+  chip.innerHTML=`<img src="${src}" alt="Mateen Yousuf"/>`;
+}
+
+/* ===========================
+   TOAST
+=========================== */
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+/* ===========================
+   SCROLL REVEAL
+=========================== */
+function scrollReveal(){
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>{
+    const rect=el.getBoundingClientRect();
+    if(rect.top<window.innerHeight-40) el.classList.add('in');
+  });
+}
+window.addEventListener('scroll',scrollReveal);
+
+/* ===========================
+   SERVICE WORKER
+=========================== */
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./service-worker.js')
+    .then(()=>console.log('SW registered'))
+    .catch(e=>console.log('SW error',e));
+}
+</script>
+</body>
+</html>

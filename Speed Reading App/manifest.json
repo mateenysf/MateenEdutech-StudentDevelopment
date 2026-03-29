@@ -1,0 +1,22 @@
+{
+  "name": "ReadFlow \u2013 Read Faster. Understand Better.",
+  "short_name": "ReadFlow",
+  "description": "AI-powered Reading Speed Trainer aligned with NEP 2020 and NCF 2023. Developed by Mateen Yousuf, Teacher, School Education Department J&K.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1f14",
+  "theme_color": "#2d6a4f",
+  "orientation": "portrait",
+  "categories": [
+    "education"
+  ],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%232d6a4f'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='110' fill='white'>\ud83d\udcd6</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

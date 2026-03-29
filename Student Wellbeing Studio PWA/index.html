@@ -1,0 +1,2358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f2d4a">
+<meta name="description" content="Student Wellbeing, Mental Health & Emotional Resilience Development Studio">
+<title>Student Wellbeing Studio</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="author.jpg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --deep-blue: #0f2d4a;
+    --mid-blue: #1a4a6e;
+    --light-blue: #2d7ab8;
+    --accent-blue: #4a9fd4;
+    --green: #2e8b57;
+    --light-green: #52b788;
+    --pale-green: #d8f3dc;
+    --cream: #f8f5f0;
+    --white: #ffffff;
+    --text-dark: #1a2332;
+    --text-mid: #344a5e;
+    --text-light: #6b849a;
+    --gold: #c9a84c;
+    --warning: #e07a3a;
+    --danger: #c0392b;
+    --safe: #27ae60;
+    --shadow: 0 4px 24px rgba(15,45,74,0.12);
+    --shadow-lg: 0 8px 40px rgba(15,45,74,0.18);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: block; }
+
+  /* ===== HOME SCREEN ===== */
+  #home {
+    background: linear-gradient(160deg, var(--deep-blue) 0%, var(--mid-blue) 50%, #0d3b5e 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #home::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(45,122,184,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #home::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,139,87,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .home-inner {
+    position: relative; z-index: 2;
+    padding: 40px 24px 60px;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .nep-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 7px 18px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    backdrop-filter: blur(8px);
+  }
+
+  .home-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 5vw, 38px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+
+  .home-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--accent-blue);
+    font-style: italic;
+    margin-bottom: 32px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Author section */
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 36px;
+    backdrop-filter: blur(10px);
+    text-align: left;
+  }
+
+  .author-photo {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--light-green);
+    flex-shrink: 0;
+    background: var(--mid-blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    overflow: hidden;
+  }
+
+  .author-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .author-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .author-info p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  /* Nav buttons */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .nav-btn {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-btn:hover, .nav-btn:focus {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  }
+
+  .nav-btn .btn-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .nav-btn .btn-title {
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .nav-btn .btn-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+  }
+
+  .nav-btn.green-accent {
+    border-color: rgba(82,183,136,0.35);
+    background: rgba(82,183,136,0.1);
+  }
+
+  .nav-btn.gold-accent {
+    border-color: rgba(201,168,76,0.35);
+    background: rgba(201,168,76,0.08);
+  }
+
+  /* ===== SECTION HEADER ===== */
+  .section-header {
+    background: var(--deep-blue);
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .back-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: all 0.2s;
+  }
+
+  .back-btn:hover { background: rgba(255,255,255,0.22); }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .section-header .section-icon { font-size: 20px; }
+
+  /* ===== CONTENT AREA ===== */
+  .content-area {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  /* ===== FOUNDATIONS ===== */
+  .page-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    scrollbar-width: none;
+  }
+
+  .page-nav::-webkit-scrollbar { display: none; }
+
+  .page-pill {
+    flex-shrink: 0;
+    background: white;
+    border: 2px solid #e0e8f0;
+    border-radius: 100px;
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .page-pill.active, .page-pill:hover {
+    background: var(--deep-blue);
+    border-color: var(--deep-blue);
+    color: white;
+  }
+
+  .foundation-page { display: none; }
+  .foundation-page.active { display: block; }
+
+  .page-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+
+  .page-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--deep-blue);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .page-card .page-tag {
+    display: inline-block;
+    background: var(--pale-green);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .page-card p {
+    font-size: 14.5px;
+    line-height: 1.78;
+    color: var(--text-mid);
+    margin-bottom: 14px;
+  }
+
+  .page-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin: 20px 0 10px;
+  }
+
+  .callout {
+    background: linear-gradient(135deg, #e8f4ff, #f0f8ff);
+    border-left: 4px solid var(--light-blue);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 18px;
+    margin: 18px 0;
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .callout strong { color: var(--mid-blue); }
+
+  .tip-box {
+    background: linear-gradient(135deg, #f0fff4, #e8f8ee);
+    border: 1px solid #b7e0c7;
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin: 18px 0;
+  }
+
+  .tip-box .tip-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  .tip-box p { font-size: 13.5px; color: var(--text-mid); margin: 0; }
+
+  .reflection-box {
+    background: linear-gradient(135deg, #fff8f0, #fff3e8);
+    border: 1px solid #f0c9a0;
+    border-radius: var(--radius-sm);
+    padding: 18px;
+    margin: 18px 0;
+  }
+
+  .reflection-box .ref-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--warning);
+    margin-bottom: 10px;
+  }
+
+  .reflection-box ul { padding-left: 18px; }
+  .reflection-box ul li {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+
+  /* ===== SELF-CHECK TOOL ===== */
+  .check-grid {
+    display: grid;
+    gap: 18px;
+  }
+
+  .check-item {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .check-item label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin-bottom: 6px;
+  }
+
+  .check-item .desc {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 14px;
+  }
+
+  .slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .slider-wrap input[type=range] {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    background: linear-gradient(to right, var(--light-blue) 0%, var(--light-blue) var(--val, 60%), #e0e8f0 var(--val, 60%));
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .slider-wrap input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--deep-blue);
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+
+  .slider-val {
+    min-width: 32px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--deep-blue);
+    font-size: 16px;
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 6px;
+  }
+
+  /* ===== RESULTS ===== */
+  .result-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-top: 20px;
+  }
+
+  .result-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--deep-blue);
+    margin-bottom: 18px;
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .score-label {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mid);
+  }
+
+  .score-bar-wrap {
+    flex: 2;
+    background: #eef2f6;
+    border-radius: 100px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .score-bar {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .score-val {
+    min-width: 44px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+    color: var(--deep-blue);
+  }
+
+  .risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .risk-safe { background: #e8f8ee; color: var(--safe); }
+  .risk-moderate { background: #fff3e8; color: var(--warning); }
+  .risk-high { background: #fdecea; color: var(--danger); }
+
+  /* ===== CALC BUTTON ===== */
+  .calc-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--deep-blue), var(--mid-blue));
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.3px;
+  }
+
+  .calc-btn:hover {
+    background: linear-gradient(135deg, var(--mid-blue), var(--light-blue));
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(15,45,74,0.25);
+  }
+
+  /* ===== DASHBOARD ===== */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .dash-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+
+  .dash-card .d-icon { font-size: 28px; margin-bottom: 8px; }
+
+  .dash-card .d-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-light);
+    margin-bottom: 6px;
+  }
+
+  .dash-card .d-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--deep-blue);
+  }
+
+  .dash-card .d-sub {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  /* Radar chart using CSS */
+  .radar-container {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .radar-container h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--deep-blue);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* ===== WARNING SYSTEM ===== */
+  .alert-card {
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+
+  .alert-card.high {
+    background: linear-gradient(135deg, #fdecea, #fce8e6);
+    border: 1.5px solid #e8a0a0;
+  }
+
+  .alert-card.moderate {
+    background: linear-gradient(135deg, #fff3e8, #fff0e0);
+    border: 1.5px solid #f0c080;
+  }
+
+  .alert-card.stable {
+    background: linear-gradient(135deg, #e8f8ee, #e0f4e8);
+    border: 1.5px solid #90d0a8;
+  }
+
+  .alert-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .alert-card p { font-size: 13.5px; line-height: 1.65; color: var(--text-mid); }
+
+  .coping-list {
+    margin-top: 14px;
+    padding-left: 18px;
+  }
+
+  .coping-list li {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 7px;
+    line-height: 1.6;
+  }
+
+  /* ===== RESILIENCE LAB ===== */
+  .lab-input {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  .lab-input h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin-bottom: 14px;
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #e0e8f0;
+    transition: all 0.2s;
+    font-size: 12.5px;
+    color: var(--text-mid);
+  }
+
+  .checkbox-item:hover { border-color: var(--light-blue); background: #f0f8ff; }
+  .checkbox-item input { accent-color: var(--deep-blue); }
+
+  /* ===== REPORT ===== */
+  .report-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  .report-section h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--deep-blue);
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eef2f6;
+  }
+
+  .report-section p, .report-section li {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-mid);
+  }
+
+  .report-section ul { padding-left: 18px; margin-top: 8px; }
+  .report-section ul li { margin-bottom: 6px; }
+
+  .print-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--green), #229954);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 12px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .print-btn:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translateY(-1px);
+  }
+
+  /* ===== FRAMEWORK ===== */
+  .framework-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  .framework-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--deep-blue);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .framework-card p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text-mid);
+    margin-bottom: 10px;
+  }
+
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .pill-item {
+    background: var(--pale-green);
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+
+  /* ===== TRACKER ===== */
+  .tracker-form {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin-bottom: 8px;
+  }
+
+  .form-group select, .form-group input[type=number] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #d0dce8;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .form-group select:focus, .form-group input:focus {
+    border-color: var(--light-blue);
+  }
+
+  /* ===== SUPPORT MAPPER ===== */
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .support-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+
+  .support-card .s-icon { font-size: 32px; margin-bottom: 8px; }
+  .support-card .s-name { font-size: 12px; font-weight: 600; color: var(--deep-blue); margin-bottom: 10px; }
+
+  /* ===== HISTORY ===== */
+  .history-list {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  .history-list h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin-bottom: 14px;
+  }
+
+  .history-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eef2f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .history-item:last-child { border-bottom: none; }
+  .history-item .h-date { color: var(--text-light); font-size: 11px; }
+  .history-item .h-score { font-weight: 700; color: var(--deep-blue); }
+
+  /* ===== BALANCE ANALYZER ===== */
+  .balance-meter {
+    width: 100%;
+    height: 12px;
+    background: #eef2f6;
+    border-radius: 100px;
+    overflow: hidden;
+    margin: 8px 0 4px;
+  }
+
+  .balance-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--safe), var(--light-blue));
+    transition: width 0.8s ease;
+  }
+
+  /* Emotion Wheel */
+  .emotion-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 2px solid;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 4px;
+    transition: all 0.2s;
+  }
+
+  .emotion-btn.joy { border-color: #f0c040; color: #c08000; background: #fffbe8; }
+  .emotion-btn.joy.sel { background: #f0c040; color: white; }
+  .emotion-btn.calm { border-color: #60a0d0; color: #2060a0; background: #e8f4ff; }
+  .emotion-btn.calm.sel { background: #60a0d0; color: white; }
+  .emotion-btn.sad { border-color: #8080c0; color: #4040a0; background: #f0f0ff; }
+  .emotion-btn.sad.sel { background: #8080c0; color: white; }
+  .emotion-btn.anxious { border-color: #e08040; color: #a04000; background: #fff0e8; }
+  .emotion-btn.anxious.sel { background: #e08040; color: white; }
+  .emotion-btn.angry { border-color: #e06060; color: #c00000; background: #ffeaea; }
+  .emotion-btn.angry.sel { background: #e06060; color: white; }
+  .emotion-btn.confused { border-color: #a0a0a0; color: #606060; background: #f4f4f4; }
+  .emotion-btn.confused.sel { background: #a0a0a0; color: white; }
+
+  /* ===== SCORE COLORS ===== */
+  .bar-green { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+  .bar-blue { background: linear-gradient(90deg, #2d7ab8, #4a9fd4); }
+  .bar-orange { background: linear-gradient(90deg, #e07a3a, #f0a060); }
+  .bar-red { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+  .bar-gold { background: linear-gradient(90deg, #c9a84c, #f0d060); }
+
+  /* ===== MOBILE NAV ===== */
+  .bottom-hint {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--deep-blue);
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    z-index: 90;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    .section-header, .back-btn, .calc-btn, .print-btn, .bottom-hint { display: none !important; }
+    .content-area { padding: 0; }
+    .page-card, .result-card, .report-section { box-shadow: none; break-inside: avoid; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 480px) {
+    .nav-grid { grid-template-columns: 1fr; }
+    .dashboard-grid { grid-template-columns: 1fr 1fr; }
+    .checkbox-group { grid-template-columns: 1fr; }
+    .support-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== SECTION TABS ===== */
+  .tab-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-row::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 2px solid #d0dce8;
+    background: white;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: var(--deep-blue);
+    border-color: var(--deep-blue);
+    color: white;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Animated elements */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .content-area > * {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .svg-radar { width: 100%; max-width: 300px; }
+</style>
+</head>
+<body>
+
+<!-- ===== HOME SCREEN ===== -->
+<div id="home" class="screen active">
+  <div class="home-inner">
+    <div class="nep-badge">🎓 Aligned with NEP 2020 | Holistic Development | Safe Learning Environment</div>
+
+    <h1 class="home-title">Student Wellbeing, Mental Health & Emotional Resilience Development Studio</h1>
+    <p class="home-subtitle">A comprehensive offline platform for student flourishing</p>
+
+    <div class="author-card">
+      <div class="author-photo">
+        <img src="author.jpg" alt="Mateen Yousuf" onerror="this.parentElement.innerHTML='👨‍🏫'">
+      </div>
+      <div class="author-info">
+        <h3>Mateen Yousuf</h3>
+        <p>Teacher, School Education Department<br>Kashmir, India</p>
+      </div>
+    </div>
+
+    <div class="nav-grid">
+      <button class="nav-btn green-accent" onclick="showScreen('selfcheck')">
+        <span class="btn-icon">🌿</span>
+        <span class="btn-title">Wellbeing Self-Check</span>
+        <span class="btn-desc">Assess your emotional health & mood</span>
+      </button>
+      <button class="nav-btn" onclick="showScreen('stress')">
+        <span class="btn-icon">💪</span>
+        <span class="btn-title">Stress & Resilience Lab</span>
+        <span class="btn-desc">Build coping strength & bounce back</span>
+      </button>
+      <button class="nav-btn gold-accent" onclick="showScreen('dashboard')">
+        <span class="btn-icon">📊</span>
+        <span class="btn-title">Emotional Growth Dashboard</span>
+        <span class="btn-desc">Your complete wellbeing profile</span>
+      </button>
+      <button class="nav-btn" onclick="showScreen('foundations')">
+        <span class="btn-icon">📚</span>
+        <span class="btn-title">Framework & Principles</span>
+        <span class="btn-desc">20 wellbeing knowledge pages</span>
+      </button>
+    </div>
+
+    <div class="nav-grid">
+      <button class="nav-btn" onclick="showScreen('tracker')">
+        <span class="btn-icon">🧠</span>
+        <span class="btn-title">Emotion Tracker</span>
+        <span class="btn-desc">Log & regulate emotions</span>
+      </button>
+      <button class="nav-btn" onclick="showScreen('balance')">
+        <span class="btn-icon">⚖️</span>
+        <span class="btn-title">Balance Analyzer</span>
+        <span class="btn-desc">Academic & life balance</span>
+      </button>
+      <button class="nav-btn" onclick="showScreen('support')">
+        <span class="btn-icon">🤝</span>
+        <span class="btn-title">Support Mapper</span>
+        <span class="btn-desc">Map your support network</span>
+      </button>
+      <button class="nav-btn" onclick="showScreen('report')">
+        <span class="btn-icon">📋</span>
+        <span class="btn-title">Wellbeing Report</span>
+        <span class="btn-desc">Print your full profile</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATIONS SCREEN ===== -->
+<div id="foundations" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">📚</span>
+    <h2>Wellbeing Foundations</h2>
+  </div>
+  <div class="content-area">
+    <div class="page-nav" id="pageNav"></div>
+    <div id="foundationPages"></div>
+  </div>
+</div>
+
+<!-- ===== SELF-CHECK SCREEN ===== -->
+<div id="selfcheck" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">🌿</span>
+    <h2>Wellbeing Self-Check</h2>
+  </div>
+  <div class="content-area">
+    <div class="page-card" style="margin-bottom:0">
+      <h3>How are you feeling today?</h3>
+      <p style="font-size:13px;color:var(--text-light)">Rate each area from 1 (very low) to 5 (excellent). Be honest — this is just for you.</p>
+    </div>
+    <br>
+    <div class="check-grid">
+      <div class="check-item">
+        <label>😊 Mood Stability</label>
+        <div class="desc">How balanced and stable is your mood today?</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" value="3" id="s_mood" oninput="updateSlider(this,'v_mood')">
+          <div class="slider-val" id="v_mood">3</div>
+        </div>
+        <div class="slider-labels"><span>Very Low</span><span>Excellent</span></div>
+      </div>
+      <div class="check-item">
+        <label>😰 Stress Frequency</label>
+        <div class="desc">How often do you feel stressed? (5 = rarely)</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" value="3" id="s_stress" oninput="updateSlider(this,'v_stress')">
+          <div class="slider-val" id="v_stress">3</div>
+        </div>
+        <div class="slider-labels"><span>Always</span><span>Rarely</span></div>
+      </div>
+      <div class="check-item">
+        <label>😴 Sleep Quality</label>
+        <div class="desc">How restful and adequate is your sleep?</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" value="3" id="s_sleep" oninput="updateSlider(this,'v_sleep')">
+          <div class="slider-val" id="v_sleep">3</div>
+        </div>
+        <div class="slider-labels"><span>Very Poor</span><span>Excellent</span></div>
+      </div>
+      <div class="check-item">
+        <label>🎯 Focus Ability</label>
+        <div class="desc">Can you concentrate on studies and tasks?</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" value="3" id="s_focus" oninput="updateSlider(this,'v_focus')">
+          <div class="slider-val" id="v_focus">3</div>
+        </div>
+        <div class="slider-labels"><span>Very Hard</span><span>Very Easy</span></div>
+      </div>
+      <div class="check-item">
+        <label>👥 Social Connection</label>
+        <div class="desc">Do you feel connected with friends and family?</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" value="3" id="s_social" oninput="updateSlider(this,'v_social')">
+          <div class="slider-val" id="v_social">3</div>
+        </div>
+        <div class="slider-labels"><span>Very Isolated</span><span>Well Connected</span></div>
+      </div>
+      <div class="check-item">
+        <label>📚 Academic Pressure</label>
+        <div class="desc">How manageable is your academic pressure? (5 = very manageable)</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" value="3" id="s_academic" oninput="updateSlider(this,'v_academic')">
+          <div class="slider-val" id="v_academic">3</div>
+        </div>
+        <div class="slider-labels"><span>Overwhelming</span><span>Manageable</span></div>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcSelfCheck()">📊 Calculate My Wellbeing Scores</button>
+
+    <div id="selfcheck-result" style="display:none">
+      <div class="result-card">
+        <h3>Your Wellbeing Profile</h3>
+        <div id="score-bars"></div>
+        <div id="risk-indicator" style="margin-top:16px"></div>
+        <div id="check-advice" style="margin-top:18px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRESS LAB SCREEN ===== -->
+<div id="stress" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">💪</span>
+    <h2>Stress & Resilience Lab</h2>
+  </div>
+  <div class="content-area">
+    <div class="lab-input">
+      <h4>📌 Recent Stressful Events (check all that apply)</h4>
+      <div class="checkbox-group" id="stressors">
+        <label class="checkbox-item"><input type="checkbox" value="3"> Exam pressure</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Family conflict</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Friendship issues</label>
+        <label class="checkbox-item"><input type="checkbox" value="3"> Academic failure</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Time management</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Health concerns</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Sleep problems</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Social rejection</label>
+      </div>
+    </div>
+
+    <div class="lab-input">
+      <h4>🛡️ Coping Strategies I Use</h4>
+      <div class="checkbox-group" id="copings">
+        <label class="checkbox-item"><input type="checkbox" value="2"> Deep breathing</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Talking to someone</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Exercise / sports</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Journaling</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Prayer / meditation</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Creative activities</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Taking breaks</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Seeking guidance</label>
+      </div>
+    </div>
+
+    <div class="lab-input">
+      <h4>🤝 Support Systems Available to Me</h4>
+      <div class="checkbox-group" id="supports">
+        <label class="checkbox-item"><input type="checkbox" value="3"> Supportive family</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Trusted friends</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> Helpful teacher</label>
+        <label class="checkbox-item"><input type="checkbox" value="2"> School counselor</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Community/mentor</label>
+        <label class="checkbox-item"><input type="checkbox" value="1"> Religious guidance</label>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcResilience()">🧪 Analyze My Resilience</button>
+
+    <div id="resilience-result" style="display:none">
+      <div class="result-card">
+        <h3>Resilience Analysis</h3>
+        <div id="resilience-bars"></div>
+        <div id="resilience-advice"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD SCREEN ===== -->
+<div id="dashboard" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">📊</span>
+    <h2>Emotional Growth Dashboard</h2>
+  </div>
+  <div class="content-area">
+    <div class="dashboard-grid" id="dash-cards"></div>
+    <div class="radar-container">
+      <h4>Emotional Profile Radar</h4>
+      <svg class="svg-radar" viewBox="0 0 280 280" id="radarSVG"></svg>
+    </div>
+    <div class="history-list">
+      <h4>📅 Recent Check-In History</h4>
+      <div id="historyList"></div>
+    </div>
+    <button class="calc-btn" onclick="clearAllData()" style="background:linear-gradient(135deg,#c0392b,#e74c3c)">🗑️ Clear All Data</button>
+  </div>
+</div>
+
+<!-- ===== EMOTION TRACKER SCREEN ===== -->
+<div id="tracker" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">🧠</span>
+    <h2>Emotional Regulation Tracker</h2>
+  </div>
+  <div class="content-area">
+    <div class="tracker-form">
+      <h4 style="font-family:'Playfair Display',serif;font-size:17px;color:var(--deep-blue);margin-bottom:16px">Log an Emotional Event</h4>
+
+      <div class="form-group">
+        <label>How are you feeling right now?</label>
+        <div id="emotionWheel" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+      </div>
+
+      <div class="form-group">
+        <label>What triggered this emotion?</label>
+        <select id="trigger">
+          <option value="">-- Select trigger --</option>
+          <option value="exam">Exam or test</option>
+          <option value="teacher">Teacher interaction</option>
+          <option value="peer">Peer/friend situation</option>
+          <option value="family">Family issue</option>
+          <option value="failure">Perceived failure</option>
+          <option value="rejection">Social rejection</option>
+          <option value="overwhelm">Too much work</option>
+          <option value="physical">Physical discomfort</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Reaction Type</label>
+        <select id="reaction">
+          <option value="calm">Stayed calm</option>
+          <option value="slight">Slightly upset but managed</option>
+          <option value="moderate">Moderately reactive</option>
+          <option value="high">Highly reactive</option>
+          <option value="extreme">Lost control</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Recovery Time (minutes)</label>
+        <input type="number" id="recovTime" min="0" max="1440" value="15" placeholder="e.g. 20">
+      </div>
+
+      <button class="calc-btn" onclick="logEmotion()">💾 Log & Analyze Emotion</button>
+    </div>
+
+    <div id="tracker-result" style="display:none">
+      <div class="result-card">
+        <h3>Emotional Regulation Analysis</h3>
+        <div id="tracker-bars"></div>
+        <div id="tracker-advice"></div>
+      </div>
+    </div>
+
+    <div class="history-list" id="emotion-log-history">
+      <h4>📅 Emotion Log History</h4>
+      <div id="emotionHistory"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BALANCE ANALYZER SCREEN ===== -->
+<div id="balance" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">⚖️</span>
+    <h2>Academic–Wellbeing Balance Analyzer</h2>
+  </div>
+  <div class="content-area">
+    <div class="tracker-form">
+      <h4 style="font-family:'Playfair Display',serif;font-size:17px;color:var(--deep-blue);margin-bottom:16px">Today's Activities</h4>
+
+      <div class="form-group">
+        <label>📚 Daily Study Hours</label>
+        <input type="number" id="b_study" min="0" max="16" value="6" placeholder="Hours">
+      </div>
+      <div class="form-group">
+        <label>😴 Sleep Duration (hours)</label>
+        <input type="number" id="b_sleep" min="0" max="12" value="7" placeholder="Hours">
+      </div>
+      <div class="form-group">
+        <label>☕ Break Time (hours)</label>
+        <input type="number" id="b_break" min="0" max="8" value="1" placeholder="Hours">
+      </div>
+      <div class="form-group">
+        <label>🏃 Physical Activity (hours)</label>
+        <input type="number" id="b_activity" min="0" max="5" value="1" placeholder="Hours">
+      </div>
+
+      <button class="calc-btn" onclick="calcBalance()">⚖️ Analyze My Balance</button>
+    </div>
+
+    <div id="balance-result" style="display:none">
+      <div class="result-card">
+        <h3>Balance Analysis Results</h3>
+        <div id="balance-bars"></div>
+        <div id="balance-advice"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUPPORT MAPPER SCREEN ===== -->
+<div id="support" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">🤝</span>
+    <h2>Social Support Mapper</h2>
+  </div>
+  <div class="content-area">
+    <div class="page-card">
+      <h3>Map Your Support Network</h3>
+      <p style="font-size:13px;color:var(--text-light)">Rate how much support you currently receive from each source (1 = none, 5 = strong).</p>
+    </div>
+    <br>
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="s-icon">👨‍👩‍👧</div>
+        <div class="s-name">Family Support</div>
+        <div class="slider-wrap" style="flex-direction:column;gap:6px">
+          <input type="range" min="1" max="5" value="3" id="sup_family" oninput="updateSlider(this,'sv_family')" style="width:100%">
+          <div class="slider-val" id="sv_family">3</div>
+        </div>
+      </div>
+      <div class="support-card">
+        <div class="s-icon">👫</div>
+        <div class="s-name">Peer Support</div>
+        <div class="slider-wrap" style="flex-direction:column;gap:6px">
+          <input type="range" min="1" max="5" value="3" id="sup_peer" oninput="updateSlider(this,'sv_peer')" style="width:100%">
+          <div class="slider-val" id="sv_peer">3</div>
+        </div>
+      </div>
+      <div class="support-card">
+        <div class="s-icon">👩‍🏫</div>
+        <div class="s-name">Teacher Guidance</div>
+        <div class="slider-wrap" style="flex-direction:column;gap:6px">
+          <input type="range" min="1" max="5" value="3" id="sup_teacher" oninput="updateSlider(this,'sv_teacher')" style="width:100%">
+          <div class="slider-val" id="sv_teacher">3</div>
+        </div>
+      </div>
+      <div class="support-card">
+        <div class="s-icon">🏘️</div>
+        <div class="s-name">Community Trust</div>
+        <div class="slider-wrap" style="flex-direction:column;gap:6px">
+          <input type="range" min="1" max="5" value="3" id="sup_community" oninput="updateSlider(this,'sv_community')" style="width:100%">
+          <div class="slider-val" id="sv_community">3</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcSupport()">🗺️ Map My Support Network</button>
+
+    <div id="support-result" style="display:none">
+      <div class="result-card">
+        <h3>Support Network Analysis</h3>
+        <div id="support-bars"></div>
+        <div id="support-advice"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REPORT SCREEN ===== -->
+<div id="report" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="section-icon">📋</span>
+    <h2>Wellbeing Report</h2>
+  </div>
+  <div class="content-area" id="reportContent">
+    <div id="report-body"></div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="calc-btn" onclick="generateReport()">🔄 Refresh Report</button>
+  </div>
+</div>
+
+<!-- ===== FRAMEWORK SCREEN (re-using foundations) ===== -->
+
+<script>
+// ========================================
+// DATA & STORAGE
+// ========================================
+
+const DATA = {
+  wellbeingIndicators: {
+    mood: { weight: 1.5, label: "Mood Stability" },
+    stress: { weight: 1.3, label: "Stress Management" },
+    sleep: { weight: 1.4, label: "Sleep Quality" },
+    focus: { weight: 1.2, label: "Focus Ability" },
+    social: { weight: 1.1, label: "Social Connection" },
+    academic: { weight: 1.0, label: "Academic Balance" }
+  },
+  resilienceWeights: {
+    copingSkills: 0.4,
+    socialSupport: 0.35,
+    stressLoad: 0.25
+  },
+  copingStrategies: {
+    high: [
+      "Practice 4-7-8 breathing (inhale 4s, hold 7s, exhale 8s)",
+      "Talk to a trusted teacher, family member, or counselor",
+      "Take a 10-minute walk in nature or open space",
+      "Write your feelings in a private journal",
+      "Break large tasks into small, manageable steps",
+      "Get adequate sleep — at least 7-8 hours nightly",
+      "Limit social media and screen time before bed",
+      "Practice gratitude: write 3 good things each day"
+    ],
+    moderate: [
+      "Take regular study breaks every 45-60 minutes",
+      "Connect with a friend or family member today",
+      "Do light physical activity — even a 15-minute walk helps",
+      "Try a short mindfulness or relaxation exercise",
+      "Review your schedule and prioritize key tasks"
+    ],
+    stable: [
+      "Continue your healthy habits — you're doing well!",
+      "Strengthen your coping toolkit with new skills",
+      "Support a peer who may be struggling",
+      "Set goals for your emotional growth"
+    ]
+  }
+};
+
+function saveData(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch(e) {}
+}
+
+function loadData(key, def = null) {
+  try {
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : def;
+  } catch(e) { return def; }
+}
+
+function getScores() {
+  return {
+    wellbeing: loadData('wellbeingScores', null),
+    resilience: loadData('resilienceScores', null),
+    balance: loadData('balanceScores', null),
+    support: loadData('supportScores', null),
+    emotions: loadData('emotionLogs', []),
+    history: loadData('checkHistory', [])
+  };
+}
+
+// ========================================
+// SCREEN NAVIGATION
+// ========================================
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'report') generateReport();
+  if (id === 'foundations') initFoundations();
+  if (id === 'tracker') renderEmotionHistory();
+}
+
+// ========================================
+// SLIDER UPDATE
+// ========================================
+
+function updateSlider(input, valId) {
+  document.getElementById(valId).textContent = input.value;
+  const pct = ((input.value - 1) / 4 * 100).toFixed(0);
+  input.style.setProperty('--val', pct + '%');
+  input.style.background = `linear-gradient(to right, var(--light-blue) 0%, var(--light-blue) ${pct}%, #e0e8f0 ${pct}%)`;
+}
+
+// Init sliders
+document.querySelectorAll('input[type=range]').forEach(r => updateSlider(r, r.id.replace('s_','v_').replace('sup_','sv_')));
+
+// ========================================
+// FORMULAS
+// ========================================
+
+// Emotional Stability Index (ESI): Weighted average of mood, sleep, focus
+function calcESI(mood, sleep, focus) {
+  return Math.round(((mood * 1.5 + sleep * 1.4 + focus * 1.2) / (1.5 + 1.4 + 1.2)) * 20);
+}
+
+// Stress Load Score (SLS): Inverse of stress + academic (low = high stress)
+function calcSLS(stressInv, academicInv) {
+  return Math.round(((stressInv * 1.3 + academicInv * 1.0) / 2.3) * 20);
+}
+
+// Wellbeing Balance Indicator (WBI): Overall holistic score
+function calcWBI(scores) {
+  const vals = Object.values(scores);
+  const weights = [1.5, 1.3, 1.4, 1.2, 1.1, 1.0];
+  const totalW = weights.reduce((a, b) => a + b, 0);
+  const weighted = vals.reduce((sum, v, i) => sum + v * weights[i], 0);
+  return Math.round((weighted / (totalW * 5)) * 100);
+}
+
+// Resilience Strength Score
+function calcRSS(copingPts, supportPts, stressLoad) {
+  const maxCoping = 11, maxSupport = 13;
+  const copingR = Math.min(copingPts / maxCoping, 1);
+  const supportR = Math.min(supportPts / maxSupport, 1);
+  const stressR = 1 - Math.min(stressLoad / 13, 1);
+  return Math.round((copingR * 0.4 + supportR * 0.35 + stressR * 0.25) * 100);
+}
+
+// Balance Stability Score
+function calcBSS(study, sleep, breaks, activity) {
+  const total = study + sleep + breaks + activity;
+  const idealStudy = [4, 8], idealSleep = [7, 9], idealBreak = [1, 3], idealActivity = [0.5, 2];
+  const studyScore = inRange(study, idealStudy) ? 1 : Math.max(0, 1 - Math.abs(study - avg(idealStudy)) / 4);
+  const sleepScore = inRange(sleep, idealSleep) ? 1 : Math.max(0, 1 - Math.abs(sleep - avg(idealSleep)) / 3);
+  const breakScore = inRange(breaks, idealBreak) ? 1 : Math.max(0, 1 - Math.abs(breaks - avg(idealBreak)) / 2);
+  const actScore = inRange(activity, idealActivity) ? 1 : Math.max(0, 1 - Math.abs(activity - avg(idealActivity)) / 2);
+  return Math.round(((studyScore + sleepScore + breakScore + actScore) / 4) * 100);
+}
+
+function inRange(v, range) { return v >= range[0] && v <= range[1]; }
+function avg(range) { return (range[0] + range[1]) / 2; }
+
+// Burnout Risk
+function calcBurnout(study, sleep, breaks) {
+  const overStudy = Math.max(0, study - 8) * 10;
+  const underSleep = Math.max(0, 7 - sleep) * 15;
+  const underBreak = Math.max(0, 1 - breaks) * 10;
+  return Math.min(100, overStudy + underSleep + underBreak);
+}
+
+// Support Network Strength
+function calcSNS(family, peer, teacher, community) {
+  const weights = [0.35, 0.25, 0.25, 0.15];
+  return Math.round(((family * weights[0] + peer * weights[1] + teacher * weights[2] + community * weights[3]) / 5) * 100);
+}
+
+// Emotional Regulation Index
+function calcERI(reaction, recovTime) {
+  const reactionMap = { calm: 100, slight: 80, moderate: 55, high: 30, extreme: 10 };
+  const reactionScore = reactionMap[reaction] || 50;
+  const recovScore = recovTime <= 10 ? 100 : recovTime <= 30 ? 80 : recovTime <= 60 ? 60 : recovTime <= 120 ? 40 : 20;
+  return Math.round((reactionScore * 0.6 + recovScore * 0.4));
+}
+
+function getRiskLevel(score) {
+  if (score >= 65) return 'stable';
+  if (score >= 40) return 'moderate';
+  return 'high';
+}
+
+// ========================================
+// SELF-CHECK CALCULATION
+// ========================================
+
+function calcSelfCheck() {
+  const mood = +document.getElementById('s_mood').value;
+  const stress = +document.getElementById('s_stress').value;
+  const sleep = +document.getElementById('s_sleep').value;
+  const focus = +document.getElementById('s_focus').value;
+  const social = +document.getElementById('s_social').value;
+  const academic = +document.getElementById('s_academic').value;
+
+  const esi = calcESI(mood, sleep, focus);
+  const sls = calcSLS(stress, academic);
+  const wbi = calcWBI({ mood, stress, sleep, focus, social, academic });
+
+  const scores = { mood, stress, sleep, focus, social, academic, esi, sls, wbi };
+  saveData('wellbeingScores', scores);
+
+  // Save to history
+  const hist = loadData('checkHistory', []);
+  hist.unshift({ date: new Date().toLocaleDateString('en-IN'), wbi, esi, sls });
+  if (hist.length > 10) hist.pop();
+  saveData('checkHistory', hist);
+
+  const risk = getRiskLevel(wbi);
+
+  const barsHTML = [
+    { label: 'Emotional Stability Index', val: esi, color: esi >= 65 ? 'bar-green' : esi >= 40 ? 'bar-blue' : 'bar-red' },
+    { label: 'Stress Management Score', val: sls, color: sls >= 65 ? 'bar-green' : sls >= 40 ? 'bar-orange' : 'bar-red' },
+    { label: 'Overall Wellbeing Index', val: wbi, color: wbi >= 65 ? 'bar-green' : wbi >= 40 ? 'bar-blue' : 'bar-red' }
+  ].map(s => `
+    <div class="score-row">
+      <div class="score-label">${s.label}</div>
+      <div class="score-bar-wrap"><div class="score-bar ${s.color}" style="width:${s.val}%"></div></div>
+      <div class="score-val">${s.val}%</div>
+    </div>
+  `).join('');
+
+  document.getElementById('score-bars').innerHTML = barsHTML;
+
+  const riskLabels = {
+    stable: { cls: 'risk-safe', icon: '✅', text: 'Stable Zone — You\'re doing well!' },
+    moderate: { cls: 'risk-moderate', icon: '⚠️', text: 'Moderate Risk — Some areas need attention' },
+    high: { cls: 'risk-high', icon: '🔴', text: 'High Risk — Please seek support' }
+  };
+  const rl = riskLabels[risk];
+  document.getElementById('risk-indicator').innerHTML = `<div class="risk-badge ${rl.cls}">${rl.icon} ${rl.text}</div>`;
+
+  const strategies = DATA.copingStrategies[risk];
+  document.getElementById('check-advice').innerHTML = `
+    <h4 style="color:var(--deep-blue);margin-bottom:10px">💡 Recommended for You</h4>
+    <ul style="padding-left:18px">
+      ${strategies.map(s => `<li style="font-size:13px;color:var(--text-mid);margin-bottom:6px;line-height:1.6">${s}</li>`).join('')}
+    </ul>`;
+
+  document.getElementById('selfcheck-result').style.display = 'block';
+  document.getElementById('selfcheck-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ========================================
+// RESILIENCE CALC
+// ========================================
+
+function calcResilience() {
+  const stressorPts = [...document.querySelectorAll('#stressors input:checked')].reduce((s, i) => s + +i.value, 0);
+  const copingPts = [...document.querySelectorAll('#copings input:checked')].reduce((s, i) => s + +i.value, 0);
+  const supportPts = [...document.querySelectorAll('#supports input:checked')].reduce((s, i) => s + +i.value, 0);
+
+  const rss = calcRSS(copingPts, supportPts, stressorPts);
+  const sri = Math.round(Math.max(0, 100 - stressorPts * 7 + copingPts * 5));
+  const cer = Math.min(100, Math.round((copingPts / Math.max(stressorPts, 1)) * 40));
+
+  saveData('resilienceScores', { rss, sri, cer, stressorPts, copingPts, supportPts });
+
+  const risk = getRiskLevel(rss);
+  const barsHTML = [
+    { label: 'Resilience Strength Score', val: rss, color: rss >= 65 ? 'bar-green' : rss >= 40 ? 'bar-blue' : 'bar-red' },
+    { label: 'Stress Recovery Index', val: Math.min(100, sri), color: sri >= 65 ? 'bar-green' : sri >= 40 ? 'bar-orange' : 'bar-red' },
+    { label: 'Coping Effectiveness Rating', val: cer, color: cer >= 65 ? 'bar-green' : cer >= 40 ? 'bar-gold' : 'bar-red' }
+  ].map(s => `
+    <div class="score-row">
+      <div class="score-label">${s.label}</div>
+      <div class="score-bar-wrap"><div class="score-bar ${s.color}" style="width:${Math.min(100,s.val)}%"></div></div>
+      <div class="score-val">${Math.min(100,s.val)}%</div>
+    </div>
+  `).join('');
+
+  const advice = rss >= 65
+    ? `<div class="tip-box"><div class="tip-title">✅ Strong Resilience</div><p>You have good coping skills and support. Keep building these strengths and support others around you.</p></div>`
+    : rss >= 40
+    ? `<div class="callout"><strong>⚠️ Building Resilience:</strong> You have some coping strategies but need to develop more support systems. Try talking to a teacher or family member about what you're facing.</div>`
+    : `<div class="alert-card high" style="margin-top:14px"><h3 style="color:var(--danger)">🔴 Resilience Needs Support</h3><p>Your stress load is high and coping resources feel thin. Please reach out to a trusted adult, teacher, or school counselor. You don't have to face this alone.</p></div>`;
+
+  document.getElementById('resilience-bars').innerHTML = barsHTML;
+  document.getElementById('resilience-advice').innerHTML = advice;
+  document.getElementById('resilience-result').style.display = 'block';
+  document.getElementById('resilience-result').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========================================
+// BALANCE CALC
+// ========================================
+
+function calcBalance() {
+  const study = +document.getElementById('b_study').value || 0;
+  const sleep = +document.getElementById('b_sleep').value || 0;
+  const breaks = +document.getElementById('b_break').value || 0;
+  const activity = +document.getElementById('b_activity').value || 0;
+
+  const bss = calcBSS(study, sleep, breaks, activity);
+  const burnout = calcBurnout(study, sleep, breaks);
+  const energyRatio = Math.min(100, Math.round(((sleep + breaks + activity) / Math.max(study, 1)) * 33));
+
+  saveData('balanceScores', { bss, burnout, energyRatio });
+
+  const barsHTML = [
+    { label: 'Balance Stability Score', val: bss, color: bss >= 65 ? 'bar-green' : bss >= 40 ? 'bar-blue' : 'bar-red' },
+    { label: 'Burnout Risk Indicator', val: burnout, color: burnout <= 30 ? 'bar-green' : burnout <= 60 ? 'bar-orange' : 'bar-red', invert: true },
+    { label: 'Energy Recovery Ratio', val: energyRatio, color: energyRatio >= 65 ? 'bar-green' : energyRatio >= 40 ? 'bar-gold' : 'bar-red' }
+  ].map(s => `
+    <div class="score-row">
+      <div class="score-label">${s.label}${s.invert ? ' (lower = better)' : ''}</div>
+      <div class="score-bar-wrap"><div class="score-bar ${s.color}" style="width:${s.val}%"></div></div>
+      <div class="score-val">${s.val}%</div>
+    </div>
+  `).join('');
+
+  let advice = '';
+  if (sleep < 7) advice += `<li>You're sleeping less than 7 hours — aim for 7–9 hours for optimal brain health and emotional regulation.</li>`;
+  if (study > 8) advice += `<li>Studying more than 8 hours can reduce retention and increase burnout risk. Use the Pomodoro technique.</li>`;
+  if (breaks < 1) advice += `<li>You need more breaks! Aim for at least 1 hour of unscheduled rest daily.</li>`;
+  if (activity < 0.5) advice += `<li>Physical activity boosts mood and concentration. Even a 30-minute walk makes a real difference.</li>`;
+  if (!advice) advice = `<li>Your daily balance looks healthy! Keep maintaining this routine.</li>`;
+
+  document.getElementById('balance-bars').innerHTML = barsHTML;
+  document.getElementById('balance-advice').innerHTML = `<h4 style="margin-top:16px;color:var(--deep-blue)">📌 Personalized Advice</h4><ul class="coping-list">${advice}</ul>`;
+  document.getElementById('balance-result').style.display = 'block';
+  document.getElementById('balance-result').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========================================
+// SUPPORT MAPPER CALC
+// ========================================
+
+function calcSupport() {
+  const family = +document.getElementById('sup_family').value;
+  const peer = +document.getElementById('sup_peer').value;
+  const teacher = +document.getElementById('sup_teacher').value;
+  const community = +document.getElementById('sup_community').value;
+
+  const sns = calcSNS(family, peer, teacher, community);
+  const isolationRisk = Math.round(Math.max(0, (15 - (family + peer + teacher + community)) / 15 * 100));
+
+  saveData('supportScores', { sns, isolationRisk, family, peer, teacher, community });
+
+  const barsHTML = [
+    { label: 'Support Network Strength', val: sns, color: sns >= 65 ? 'bar-green' : sns >= 40 ? 'bar-blue' : 'bar-red' },
+    { label: 'Isolation Risk Level', val: isolationRisk, color: isolationRisk <= 30 ? 'bar-green' : isolationRisk <= 60 ? 'bar-orange' : 'bar-red', invert: true }
+  ].map(s => `
+    <div class="score-row">
+      <div class="score-label">${s.label}${s.invert ? ' (lower = safer)' : ''}</div>
+      <div class="score-bar-wrap"><div class="score-bar ${s.color}" style="width:${s.val}%"></div></div>
+      <div class="score-val">${s.val}%</div>
+    </div>
+  `).join('');
+
+  const weakest = [
+    { name: 'Family', val: family }, { name: 'Peers', val: peer },
+    { name: 'Teacher', val: teacher }, { name: 'Community', val: community }
+  ].sort((a, b) => a.val - b.val)[0];
+
+  const advice = sns >= 65
+    ? `<div class="tip-box"><div class="tip-title">✅ Strong Network</div><p>Your support network is healthy. Nurture these relationships and be a support to others too.</p></div>`
+    : `<div class="callout"><strong>Focus area:</strong> Your ${weakest.name.toLowerCase()} support is lowest. Consider reaching out to strengthen this relationship. Remember — asking for help is a sign of wisdom, not weakness.</div>`;
+
+  document.getElementById('support-bars').innerHTML = barsHTML;
+  document.getElementById('support-advice').innerHTML = advice;
+  document.getElementById('support-result').style.display = 'block';
+  document.getElementById('support-result').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========================================
+// EMOTION LOGGER
+// ========================================
+
+const emotions = [
+  { id: 'joy', label: '😊 Joy' }, { id: 'calm', label: '😌 Calm' },
+  { id: 'sad', label: '😢 Sad' }, { id: 'anxious', label: '😰 Anxious' },
+  { id: 'angry', label: '😠 Angry' }, { id: 'confused', label: '😕 Confused' }
+];
+
+let selectedEmotion = null;
+
+function initEmotionWheel() {
+  const el = document.getElementById('emotionWheel');
+  el.innerHTML = emotions.map(e =>
+    `<button class="emotion-btn ${e.id}" onclick="selectEmotion('${e.id}',this)">${e.label}</button>`
+  ).join('');
+}
+
+function selectEmotion(id, btn) {
+  selectedEmotion = id;
+  document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function logEmotion() {
+  if (!selectedEmotion) { alert('Please select how you are feeling.'); return; }
+  const trigger = document.getElementById('trigger').value;
+  const reaction = document.getElementById('reaction').value;
+  const recovTime = +document.getElementById('recovTime').value || 15;
+
+  const eri = calcERI(reaction, recovTime);
+  const impulseControl = Math.round(eri * 0.6 + (recovTime <= 30 ? 40 : 20));
+  const recovSpeed = Math.min(100, Math.round((1 / Math.max(recovTime, 1)) * 600));
+
+  const log = { date: new Date().toLocaleDateString('en-IN'), time: new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'}), emotion: selectedEmotion, trigger, reaction, recovTime, eri };
+  const logs = loadData('emotionLogs', []);
+  logs.unshift(log);
+  if (logs.length > 20) logs.pop();
+  saveData('emotionLogs', logs);
+
+  const barsHTML = [
+    { label: 'Emotional Regulation Index', val: eri, color: eri >= 65 ? 'bar-green' : eri >= 40 ? 'bar-blue' : 'bar-red' },
+    { label: 'Impulse Control Rating', val: Math.min(100, impulseControl), color: impulseControl >= 65 ? 'bar-green' : 'bar-orange' },
+    { label: 'Recovery Speed Indicator', val: recovSpeed, color: recovSpeed >= 65 ? 'bar-green' : recovSpeed >= 40 ? 'bar-gold' : 'bar-red' }
+  ].map(s => `
+    <div class="score-row">
+      <div class="score-label">${s.label}</div>
+      <div class="score-bar-wrap"><div class="score-bar ${s.color}" style="width:${Math.min(100,s.val)}%"></div></div>
+      <div class="score-val">${Math.min(100,s.val)}%</div>
+    </div>
+  `).join('');
+
+  const tips = eri >= 65
+    ? 'You managed this emotion well. Your regulation skills are developing beautifully.'
+    : eri >= 40
+    ? 'You handled this reasonably. Try the STOP technique: Stop, Take a breath, Observe, Proceed mindfully.'
+    : 'This was a difficult moment. It\'s okay. Try breathing exercises and talk to someone you trust.';
+
+  document.getElementById('tracker-bars').innerHTML = barsHTML;
+  document.getElementById('tracker-advice').innerHTML = `<div class="callout" style="margin-top:14px"><strong>💡 Insight:</strong> ${tips}</div>`;
+  document.getElementById('tracker-result').style.display = 'block';
+  renderEmotionHistory();
+}
+
+function renderEmotionHistory() {
+  const logs = loadData('emotionLogs', []);
+  const el = document.getElementById('emotionHistory');
+  if (!el) return;
+  if (logs.length === 0) { el.innerHTML = '<p style="font-size:13px;color:var(--text-light)">No emotion logs yet. Start tracking your emotions above.</p>'; return; }
+  el.innerHTML = logs.slice(0, 8).map(l => `
+    <div class="history-item">
+      <div>
+        <div style="font-weight:600;font-size:13px">${l.emotion ? l.emotion.charAt(0).toUpperCase() + l.emotion.slice(1) : ''} — ${l.trigger || 'unspecified'}</div>
+        <div class="h-date">${l.date} ${l.time}</div>
+      </div>
+      <div class="h-score">ERI: ${l.eri}%</div>
+    </div>
+  `).join('');
+}
+
+// ========================================
+// DASHBOARD
+// ========================================
+
+function renderDashboard() {
+  const s = getScores();
+  const w = s.wellbeing, r = s.resilience, b = s.balance, sup = s.support;
+
+  const cards = [
+    { icon: '🌿', label: 'Wellbeing Index', val: w ? w.wbi + '%' : '—', sub: w ? getRiskLabel(getRiskLevel(w.wbi)) : 'Take self-check' },
+    { icon: '💪', label: 'Resilience Score', val: r ? r.rss + '%' : '—', sub: r ? getRiskLabel(getRiskLevel(r.rss)) : 'Try resilience lab' },
+    { icon: '⚖️', label: 'Balance Score', val: b ? b.bss + '%' : '—', sub: b ? (b.burnout < 40 ? 'Low burnout risk' : 'Watch for burnout') : 'Analyze balance' },
+    { icon: '🤝', label: 'Support Strength', val: sup ? sup.sns + '%' : '—', sub: sup ? (sup.sns >= 65 ? 'Strong network' : 'Needs building') : 'Map support' }
+  ];
+
+  document.getElementById('dash-cards').innerHTML = cards.map(c => `
+    <div class="dash-card">
+      <div class="d-icon">${c.icon}</div>
+      <div class="d-label">${c.label}</div>
+      <div class="d-val">${c.val}</div>
+      <div class="d-sub">${c.sub}</div>
+    </div>
+  `).join('');
+
+  // Radar SVG
+  const vals = [
+    w ? w.wbi / 100 : 0.5,
+    r ? r.rss / 100 : 0.5,
+    b ? b.bss / 100 : 0.5,
+    sup ? sup.sns / 100 : 0.5,
+    w ? w.esi / 100 : 0.5,
+    w ? w.sls / 100 : 0.5
+  ];
+  const labels = ['Wellbeing', 'Resilience', 'Balance', 'Support', 'Stability', 'Stress Mgmt'];
+  drawRadar(vals, labels);
+
+  // History
+  const hist = s.history;
+  const histEl = document.getElementById('historyList');
+  if (hist && hist.length > 0) {
+    histEl.innerHTML = hist.map(h => `
+      <div class="history-item">
+        <div>
+          <div style="font-weight:600;font-size:13px">Check-in — WBI: ${h.wbi}%</div>
+          <div class="h-date">${h.date}</div>
+        </div>
+        <div class="h-score" style="color:${h.wbi >= 65 ? 'var(--safe)' : h.wbi >= 40 ? 'var(--warning)' : 'var(--danger)'}">${getRiskLabel(getRiskLevel(h.wbi))}</div>
+      </div>
+    `).join('');
+  } else {
+    histEl.innerHTML = '<p style="font-size:13px;color:var(--text-light)">No history yet. Complete a self-check to start tracking.</p>';
+  }
+}
+
+function getRiskLabel(risk) {
+  return { stable: '✅ Stable', moderate: '⚠️ Moderate', high: '🔴 High Risk' }[risk] || '';
+}
+
+function drawRadar(vals, labels) {
+  const svg = document.getElementById('radarSVG');
+  const cx = 140, cy = 140, r = 100;
+  const n = vals.length;
+  const angles = vals.map((_, i) => (i / n * 2 * Math.PI) - Math.PI / 2);
+
+  const gridLines = [0.25, 0.5, 0.75, 1].map(scale =>
+    `<polygon points="${angles.map(a => `${cx + r * scale * Math.cos(a)},${cy + r * scale * Math.sin(a)}`).join(' ')}" fill="none" stroke="#dde4ee" stroke-width="1"/>`
+  ).join('');
+
+  const axes = angles.map(a =>
+    `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(a)}" y2="${cy + r * Math.sin(a)}" stroke="#dde4ee" stroke-width="1"/>`
+  ).join('');
+
+  const dataPoints = vals.map((v, i) => `${cx + r * v * Math.cos(angles[i])},${cy + r * v * Math.sin(angles[i])}`);
+  const polygon = `<polygon points="${dataPoints.join(' ')}" fill="rgba(45,122,184,0.25)" stroke="var(--light-blue)" stroke-width="2"/>`;
+  const dots = dataPoints.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="5" fill="var(--deep-blue)" stroke="white" stroke-width="2"/>`).join('');
+
+  const labelEls = labels.map((lbl, i) => {
+    const x = cx + (r + 22) * Math.cos(angles[i]);
+    const y = cy + (r + 22) * Math.sin(angles[i]);
+    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="var(--text-mid)" font-family="DM Sans,sans-serif">${lbl}</text>`;
+  }).join('');
+
+  svg.innerHTML = gridLines + axes + polygon + dots + labelEls;
+}
+
+function clearAllData() {
+  if (confirm('Clear all saved data? This cannot be undone.')) {
+    ['wellbeingScores','resilienceScores','balanceScores','supportScores','emotionLogs','checkHistory'].forEach(k => localStorage.removeItem(k));
+    renderDashboard();
+  }
+}
+
+// ========================================
+// REPORT GENERATOR
+// ========================================
+
+function generateReport() {
+  const s = getScores();
+  const w = s.wellbeing, r = s.resilience, b = s.balance, sup = s.support;
+  const now = new Date().toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
+
+  let html = `
+    <div class="report-section" style="text-align:center;background:linear-gradient(135deg,var(--deep-blue),var(--mid-blue));color:white">
+      <div style="font-size:36px;margin-bottom:8px">📋</div>
+      <h4 style="font-family:'Playfair Display',serif;font-size:20px;color:white;border:none;padding:0;margin:0 0 8px">Wellbeing Assessment Report</h4>
+      <p style="font-size:12px;opacity:0.8;color:white">Generated: ${now} | Mateen Yousuf — Student Wellbeing Studio</p>
+    </div>
+
+    <div class="report-section">
+      <h4>📊 Overall Wellbeing Summary</h4>
+      ${w ? `
+        <p><strong>Wellbeing Index (WBI):</strong> ${w.wbi}% — ${getRiskLabel(getRiskLevel(w.wbi))}</p>
+        <p><strong>Emotional Stability:</strong> ${w.esi}%</p>
+        <p><strong>Stress Management:</strong> ${w.sls}%</p>
+      ` : '<p>Complete the Wellbeing Self-Check to populate this section.</p>'}
+    </div>
+
+    <div class="report-section">
+      <h4>💪 Resilience Profile</h4>
+      ${r ? `
+        <p><strong>Resilience Strength Score:</strong> ${r.rss}%</p>
+        <p><strong>Stress Recovery Index:</strong> ${Math.min(100, r.sri)}%</p>
+        <p><strong>Coping Effectiveness:</strong> ${r.cer}%</p>
+      ` : '<p>Complete the Stress & Resilience Lab to populate this section.</p>'}
+    </div>
+
+    <div class="report-section">
+      <h4>⚖️ Academic–Life Balance</h4>
+      ${b ? `
+        <p><strong>Balance Stability Score:</strong> ${b.bss}%</p>
+        <p><strong>Burnout Risk Level:</strong> ${b.burnout}% ${b.burnout < 40 ? '✅ Low' : b.burnout < 70 ? '⚠️ Moderate' : '🔴 High'}</p>
+        <p><strong>Energy Recovery Ratio:</strong> ${b.energyRatio}%</p>
+      ` : '<p>Complete the Balance Analyzer to populate this section.</p>'}
+    </div>
+
+    <div class="report-section">
+      <h4>🤝 Social Support Network</h4>
+      ${sup ? `
+        <p><strong>Support Network Strength:</strong> ${sup.sns}%</p>
+        <p><strong>Isolation Risk:</strong> ${sup.isolationRisk}%</p>
+        <p>Family: ${sup.family}/5 | Peers: ${sup.peer}/5 | Teacher: ${sup.teacher}/5 | Community: ${sup.community}/5</p>
+      ` : '<p>Complete the Support Mapper to populate this section.</p>'}
+    </div>
+
+    <div class="report-section">
+      <h4>💡 Strength Areas & Recommendations</h4>
+      <p>Based on your profile, here are personalized recommendations:</p>
+      <ul>
+        ${w && w.wbi >= 65 ? '<li>✅ Your overall wellbeing is strong — continue nurturing your healthy habits.</li>' : ''}
+        ${r && r.rss >= 65 ? '<li>✅ Your resilience is excellent — you handle challenges effectively.</li>' : ''}
+        ${b && b.bss >= 65 ? '<li>✅ You maintain a healthy academic–life balance.</li>' : ''}
+        ${sup && sup.sns >= 65 ? '<li>✅ You have a strong support network — cherish these relationships.</li>' : ''}
+        ${w && w.wbi < 65 ? '<li>⚠️ Focus on improving your overall wellbeing through consistent sleep, exercise, and social connection.</li>' : ''}
+        ${r && r.rss < 65 ? '<li>⚠️ Build more coping strategies. Try journaling, breathing exercises, and talking to a trusted adult.</li>' : ''}
+        ${b && b.burnout > 50 ? '<li>⚠️ Burnout risk is elevated. Take more breaks and reduce study hours if possible.</li>' : ''}
+        ${sup && sup.sns < 65 ? '<li>⚠️ Strengthen your support network. Reach out to a teacher, family member, or counselor.</li>' : ''}
+        <li>Regular physical activity (30 min/day) significantly improves mood and focus.</li>
+        <li>7–8 hours of quality sleep is essential for emotional health and academic performance.</li>
+        <li>Practice mindfulness for 5–10 minutes daily to build emotional regulation skills.</li>
+      </ul>
+    </div>
+
+    <div class="report-section" style="background:linear-gradient(135deg,#e8f8ee,#f0fff4)">
+      <h4>📌 Follow-Up Recommendations</h4>
+      <ul>
+        <li>Complete this self-check weekly to track your emotional growth over time.</li>
+        <li>Share this report with your school counselor or trusted teacher if needed.</li>
+        <li>Practice one new coping strategy each week.</li>
+        <li>If you feel persistently low or overwhelmed, please speak to a trusted adult or school counselor.</li>
+      </ul>
+      <p style="margin-top:14px;font-size:12px;color:var(--text-light);font-style:italic">This report is for personal growth and awareness. It is not a clinical diagnosis. For serious mental health concerns, please consult a qualified professional.</p>
+    </div>
+  `;
+
+  document.getElementById('report-body').innerHTML = html;
+}
+
+// ========================================
+// FOUNDATIONS PAGES
+// ========================================
+
+const foundationPages = [
+  {
+    num: 1, title: "What is Student Wellbeing?",
+    content: `<p>Student wellbeing is a holistic concept that encompasses the physical, emotional, social, and academic health of a young person. It is not merely the absence of illness or distress — rather, it is a vibrant, dynamic state in which a student feels safe, valued, connected, and capable of learning and growing.</p>
+    <p>According to the World Health Organization, wellbeing includes both subjective experience (how a person feels) and functioning (how a person performs in daily life). For students, this translates to feeling good about themselves, being able to manage challenges, maintaining healthy relationships, and engaging meaningfully with their education.</p>
+    <div class="callout"><strong>Key Dimensions of Student Wellbeing:</strong> Emotional wellbeing (feeling positive, managing emotions), Social wellbeing (healthy relationships, belonging), Physical wellbeing (health, sleep, activity), Academic wellbeing (engagement, confidence, purpose).</div>
+    <p>Research consistently shows that students who report higher levels of wellbeing demonstrate better academic outcomes, stronger social skills, greater resilience, and lower rates of mental health difficulties. Wellbeing is not a luxury — it is the foundation upon which all learning is built.</p>
+    <h4>Why Wellbeing Matters in Schools</h4>
+    <p>Schools are not just institutions for academic instruction — they are communities where young people spend a significant portion of their formative years. The school environment profoundly shapes how students see themselves, relate to others, and engage with the world. When schools prioritize wellbeing, students flourish in every dimension of their development.</p>
+    <p>Conversely, when student wellbeing is neglected, the consequences can be severe — declining academic performance, increased absenteeism, behavioral difficulties, and long-term mental health challenges. Early investment in wellbeing prevention is far more effective — and humane — than crisis intervention.</p>
+    <div class="tip-box"><div class="tip-title">🌿 Healthy Insight</div><p>A student who feels cared for learns better. Wellbeing and academic excellence are not competing goals — they strengthen each other.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What does feeling well mean to you personally?</li><li>Which areas of your wellbeing feel strongest right now?</li><li>What is one thing you could do today to support your own wellbeing?</li></ul></div>`
+  },
+  {
+    num: 2, title: "NEP 2020 & Holistic Development",
+    content: `<p>The National Education Policy 2020 (NEP 2020) represents a landmark shift in Indian education philosophy — moving from a narrow focus on examination scores to a comprehensive vision of holistic development. This policy explicitly recognizes that education must nurture the full human potential of every student, encompassing cognitive, social, emotional, physical, ethical, and creative dimensions.</p>
+    <p>NEP 2020 places student wellbeing at the heart of its framework. It calls for schools to become supportive, joyful learning environments where curiosity is cultivated, stress is minimized, and every student's dignity is protected. This is a profound departure from the high-pressure, rote-learning model that has characterized Indian schooling for decades.</p>
+    <div class="callout"><strong>NEP 2020 Wellbeing Commitments:</strong> Counselling systems in every school, reduced examination pressure, focus on life skills and values, promotion of sports and arts, inclusive and safe school climates, teacher training in student support.</div>
+    <h4>Core Pillars of Holistic Development in NEP 2020</h4>
+    <p>The policy identifies several pillars of holistic development. <strong>Cognitive development</strong> involves building not just knowledge but critical thinking, creativity, and problem-solving. <strong>Social-emotional learning (SEL)</strong> is explicitly mandated — students must develop self-awareness, empathy, and responsible decision-making. <strong>Physical health and well-being</strong> is recognized as inseparable from academic achievement. <strong>Ethical and values-based education</strong> nurtures character, integrity, and civic consciousness.</p>
+    <p>NEP 2020 also emphasizes the importance of Indian cultural knowledge and wisdom in supporting student wellbeing — including practices like yoga, mindfulness, and community values that have deep roots in local traditions.</p>
+    <div class="tip-box"><div class="tip-title">🎓 NEP 2020 Vision</div><p>The goal of education should be to produce engaged, productive, and contributing citizens equipped with 21st-century skills — not merely students who can pass standardized tests.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>In what ways has your school supported your holistic growth beyond academics?</li><li>What aspects of NEP 2020's vision do you most want to experience in your school?</li><li>How could you contribute to making your school a more supportive environment?</li></ul></div>`
+  },
+  {
+    num: 3, title: "Emotional Health in Adolescence",
+    content: `<p>Adolescence is one of the most emotionally complex and developmentally significant periods of human life. Between the ages of 10 and 19, young people experience profound neurological, hormonal, and psychological changes that shape who they will become as adults. Understanding this developmental context is essential for supporting student wellbeing.</p>
+    <p>During adolescence, the brain undergoes significant restructuring — particularly in the prefrontal cortex, which governs decision-making, impulse control, and emotional regulation. This process is not complete until the mid-twenties, which helps explain why adolescents often experience emotions more intensely, struggle with self-regulation, and may make impulsive decisions despite knowing better.</p>
+    <div class="callout"><strong>Normal Adolescent Emotional Experiences:</strong> Intense mood swings, heightened sensitivity to peer opinion, strong need for autonomy, identity exploration and questioning, heightened risk-taking, deep capacity for empathy and idealism.</div>
+    <h4>Common Emotional Challenges Students Face</h4>
+    <p>Students commonly experience <strong>exam anxiety</strong> — a form of performance-related stress that can significantly impair concentration, memory, and academic performance. <strong>Social anxiety</strong> around peer relationships, romantic feelings, and social status can also be overwhelming at this age. <strong>Depression and low mood</strong> affect a significant proportion of adolescents and require compassionate attention from adults and peers alike.</p>
+    <p>It is crucial to distinguish between normal emotional turbulence — which is part of healthy development — and persistent mental health difficulties that require professional support. Not every bad day indicates a mental health problem, but consistent patterns of distress that impair daily functioning deserve attention.</p>
+    <div class="tip-box"><div class="tip-title">🧠 Brain Science</div><p>Your brain is literally under construction during adolescence. The emotional intensity you feel is real and valid — and your brain is building the emotional skills you will use for life.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What emotions do you find most difficult to manage?</li><li>When do you feel emotionally strongest? What conditions support this?</li><li>Who in your life helps you navigate difficult emotions?</li></ul></div>`
+  },
+  {
+    num: 4, title: "Stress & Academic Pressure",
+    content: `<p>Academic stress is among the most prevalent wellbeing challenges facing students today. The pressure to perform well in examinations, meet parental expectations, compete with peers, and secure future opportunities creates a significant psychological burden for many young people. When this stress becomes chronic or overwhelming, it can seriously impair both mental health and academic performance.</p>
+    <p>Stress is not inherently harmful. Moderate, manageable stress — known as <em>eustress</em> — can actually enhance motivation, focus, and performance. The challenge arises when stress becomes excessive, chronic, or unmanageable. This <em>distress</em> activates the body's fight-or-flight response in ways that interfere with learning, emotional regulation, and physical health.</p>
+    <div class="callout"><strong>Academic Stress Warning Signs:</strong> Difficulty concentrating, persistent worry about grades, physical symptoms (headaches, stomach aches), sleep disturbances, withdrawal from friends and activities, negative self-talk, feeling overwhelmed or hopeless.</div>
+    <h4>Sources of Academic Pressure</h4>
+    <p>Pressure comes from multiple sources. <strong>Internal pressure</strong> — personal perfectionism and self-imposed expectations — can be just as intense as external demands. <strong>Family expectations</strong>, whether explicit or implied, create powerful motivational forces that can either inspire or overwhelm. <strong>Competitive school culture</strong> — where rankings, comparisons, and grades dominate — can undermine intrinsic motivation and wellbeing. <strong>Future uncertainty</strong> — anxiety about careers, universities, and life outcomes — adds another layer of stress.</p>
+    <p>Effective stress management requires addressing both the sources of stress (where possible) and building the individual's capacity to respond to stress skillfully. This dual approach — changing environments AND building resilience — is the hallmark of effective wellbeing programs.</p>
+    <div class="tip-box"><div class="tip-title">⚡ Stress Management Tip</div><p>The Pomodoro Technique: Study for 25 minutes, then take a 5-minute break. After 4 cycles, take a 20-minute break. This method reduces fatigue and maintains concentration.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What are your main sources of academic stress?</li><li>How does your body signal that you are stressed?</li><li>What has helped you manage pressure effectively in the past?</li></ul></div>`
+  },
+  {
+    num: 5, title: "Anxiety & Coping Mechanisms",
+    content: `<p>Anxiety is one of the most common emotional experiences among students worldwide. It is a natural, adaptive response to perceived threats or uncertainties — but when anxiety becomes excessive, persistent, or disproportionate to the situation, it can significantly interfere with daily functioning, relationships, and academic engagement.</p>
+    <p>It is important to understand that anxiety exists on a spectrum. Mild anxiety before an exam, a presentation, or a new social situation is normal and can even improve performance by sharpening focus and attention. However, clinical anxiety disorders — characterized by persistent, uncontrollable worry that significantly impairs functioning — affect a substantial proportion of adolescents and require professional support.</p>
+    <div class="callout"><strong>Types of Anxiety Common in Students:</strong> Test/performance anxiety, social anxiety (fear of judgment or embarrassment), generalized anxiety (persistent worry about many things), separation anxiety (distress when away from home or caregivers), and specific phobias.</div>
+    <h4>Evidence-Based Coping Mechanisms</h4>
+    <p><strong>Deep breathing</strong> is one of the most accessible and effective anxiety management tools. Slow, diaphragmatic breathing activates the parasympathetic nervous system, counteracting the physiological symptoms of anxiety. The 4-7-8 technique (inhale 4 seconds, hold 7, exhale 8) is particularly effective. <strong>Cognitive restructuring</strong> involves identifying and challenging anxious thoughts — asking whether the worry is realistic, whether there is evidence for the fear, and what a more balanced perspective might be.</p>
+    <p><strong>Progressive muscle relaxation</strong> involves systematically tensing and releasing muscle groups throughout the body, releasing physical tension held due to anxiety. <strong>Grounding techniques</strong> — such as the 5-4-3-2-1 method (notice 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste) — help anchor awareness in the present moment, interrupting anxious thought spirals.</p>
+    <div class="tip-box"><div class="tip-title">🌬️ Breathing Exercise</div><p>Try box breathing: Inhale for 4 counts → Hold for 4 counts → Exhale for 4 counts → Hold for 4 counts. Repeat 4 times. This takes only 2 minutes and significantly reduces anxiety.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What situations tend to trigger your anxiety?</li><li>Which coping strategies have you tried? Which worked best?</li><li>What would you tell a friend who was feeling very anxious?</li></ul></div>`
+  },
+  {
+    num: 6, title: "Resilience Explained",
+    content: `<p>Resilience is the capacity to adapt, recover, and even grow in response to adversity, stress, trauma, or significant challenges. It is perhaps one of the most important psychological qualities a young person can develop — not because it makes life pain-free, but because it equips students to navigate difficulty without losing their sense of self or direction.</p>
+    <p>A crucial misconception about resilience is that it means being tough, emotionless, or invulnerable. Resilient people are not those who never struggle — they are those who feel difficulty fully but find their way through it. Research by leading psychologists like Dr. Ann Masten demonstrates that resilience is not a rare gift possessed by exceptional individuals — it is an ordinary capacity that develops through relationships, experiences, and deliberate practice.</p>
+    <div class="callout"><strong>The 4 Core Components of Resilience:</strong> Connection (supportive relationships), Competence (confidence in one's abilities), Coping skills (strategies for managing stress), and Contribution (sense of purpose and meaning).</div>
+    <h4>Building Resilience as a Skill</h4>
+    <p>Resilience is not a fixed trait — it is a dynamic capacity that can be intentionally developed. Key resilience-building practices include: <strong>developing strong, supportive relationships</strong> with family, friends, teachers, and community members who provide encouragement and guidance; <strong>practicing positive self-talk</strong> — replacing self-critical narratives with compassionate, growth-oriented inner dialogue; <strong>building problem-solving skills</strong> — learning to approach challenges systematically rather than feeling overwhelmed.</p>
+    <p><strong>Maintaining routines and structure</strong> provides stability during turbulent periods. <strong>Finding meaning and purpose</strong> — connecting daily activities to larger values and goals — sustains motivation even through difficulty. <strong>Practicing self-care</strong> — adequate sleep, nutrition, exercise, and relaxation — maintains the physiological foundation for psychological resilience.</p>
+    <div class="tip-box"><div class="tip-title">💪 Resilience Builder</div><p>After each difficult experience, ask yourself: "What did I learn from this? How did I grow? What strength did I discover?" This reflective practice gradually builds resilience over time.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>Think of a difficult experience you overcame. What helped you get through it?</li><li>Who are the resilience role models in your life?</li><li>What is one resilience skill you would like to strengthen?</li></ul></div>`
+  },
+  {
+    num: 7, title: "Emotional Regulation Skills",
+    content: `<p>Emotional regulation refers to the ability to recognize, understand, manage, and express emotions in healthy, constructive ways. It is a foundational life skill that underlies virtually every aspect of wellbeing — from academic performance and social relationships to mental health and physical vitality.</p>
+    <p>The process of emotional regulation begins with <strong>awareness</strong> — simply noticing what you are feeling and naming it. Research by neuroscientist Dr. Matthew Lieberman shows that labeling emotions ("I feel anxious" rather than simply experiencing anxiety) activates the prefrontal cortex and reduces amygdala activity — essentially helping the thinking brain gain influence over the emotional brain.</p>
+    <div class="callout"><strong>The RULER Approach to Emotional Literacy:</strong> Recognizing emotions → Understanding their causes → Labeling them accurately → Expressing them appropriately → Regulating them effectively. Developed by Dr. Marc Brackett at Yale Center for Emotional Intelligence.</div>
+    <h4>Practical Emotional Regulation Strategies</h4>
+    <p><strong>The STOP technique</strong> provides a quick intervention for moments of emotional intensity: Stop what you are doing → Take a breath → Observe what you are feeling and thinking → Proceed with greater intentionality. This brief pause interrupts automatic, reactive responses and creates space for more considered action.</p>
+    <p><strong>Cognitive reappraisal</strong> involves changing the interpretation or meaning of an emotion-inducing situation. Rather than catastrophizing before an exam ("I'm going to fail and ruin my future"), a student might reappraise: "This exam is a challenge I've prepared for. I'll do my best and learn regardless of the outcome." This is not positive thinking in a superficial sense — it is a genuine shift in the lens through which a situation is viewed.</p>
+    <p><strong>Opposite action</strong>, drawn from Dialectical Behavior Therapy, involves intentionally acting opposite to the emotion's urge — not to suppress the feeling, but to change its trajectory. When feeling like withdrawing due to sadness, reaching out to a friend; when feeling angry, speaking softly; when feeling fearful of an activity, approaching it calmly.</p>
+    <div class="tip-box"><div class="tip-title">🎯 Daily Practice</div><p>Keep an emotion journal: each evening, note three emotions you felt during the day, what triggered them, and how you responded. This builds emotional intelligence over time.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>Which emotions do you find most difficult to regulate?</li><li>What tends to happen when you express emotions impulsively?</li><li>Try the STOP technique next time you feel a strong emotion — what do you notice?</li></ul></div>`
+  },
+  {
+    num: 8, title: "Self-Awareness & Reflection",
+    content: `<p>Self-awareness — the ability to see oneself clearly and objectively — is the cornerstone of emotional intelligence and personal development. It involves knowing your emotions, recognizing your patterns of thought and behavior, understanding your strengths and limitations, and seeing how you affect others. It is the foundation from which all growth is possible.</p>
+    <p>Organizational psychologist Tasha Eurich's research distinguishes between two forms of self-awareness: <strong>internal self-awareness</strong> (understanding your own values, thoughts, and emotions) and <strong>external self-awareness</strong> (understanding how others perceive you). Both are important, and genuinely self-aware individuals cultivate both.</p>
+    <div class="callout"><strong>Self-Awareness Practices:</strong> Journaling, meditation, seeking honest feedback, reflective dialogue, mindfulness, personality exploration, values clarification, and quiet self-inquiry.</div>
+    <h4>The Power of Reflective Practice</h4>
+    <p>Reflection transforms experience into learning. Without reflection, we repeat patterns indefinitely. With it, we can intentionally shape our development. <strong>Regular journaling</strong> is one of the most powerful and accessible reflective practices — a daily 5–10 minutes of free writing can reveal patterns, clarify values, and generate insights that wouldn't emerge from busy daily activity.</p>
+    <p>Questions like "What went well today and why?" "What challenged me and what did I learn?" "What am I avoiding and why?" and "What kind of person am I becoming?" are powerful prompts for meaningful self-inquiry. The goal is not self-criticism but honest, compassionate self-understanding.</p>
+    <div class="tip-box"><div class="tip-title">✍️ Journaling Starter</div><p>Complete this daily: Today I felt ___. This was because ___. What helped me was ___. Tomorrow I intend to ___. Three minutes each day builds profound self-knowledge over time.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What are your three greatest strengths as a student and person?</li><li>What patterns do you notice in your emotional responses?</li><li>How do others experience you? What might you learn from their perspective?</li></ul></div>`
+  },
+  {
+    num: 9, title: "Social Support Systems",
+    content: `<p>Human beings are fundamentally social creatures. Our brains are wired for connection — social belonging is not a want but a deep neurological need. Research consistently demonstrates that the quality of social relationships is one of the strongest predictors of mental health, resilience, academic performance, and even physical health outcomes.</p>
+    <p>For students, social support exists in multiple overlapping circles: the immediate family, close friends, classmates, teachers and school staff, mentors, and broader community networks. Each type of relationship offers different kinds of support — emotional (feeling understood and cared for), informational (advice and guidance), instrumental (practical help), and affiliational (a sense of belonging).</p>
+    <div class="callout"><strong>Key Types of Social Support:</strong> Emotional support (empathy, listening), Informational support (advice, guidance), Instrumental support (practical help, resources), Affiliational support (shared activities, belonging), and Validation support (affirmation, encouragement).</div>
+    <h4>Building and Strengthening Support Networks</h4>
+    <p>Strong support networks don't just happen — they require intentional cultivation. <strong>Vulnerability and authenticity</strong> are the building blocks of genuine connection. Being willing to share your real experiences, struggles, and feelings with trusted others creates the depth that makes relationships truly supportive. <strong>Reciprocity</strong> — being willing to offer support as well as receive it — maintains healthy relational balance.</p>
+    <p>For students who feel isolated or disconnected, the first step is often small: speaking to one trusted person, joining one activity that aligns with interests, or approaching one potential friend with genuine curiosity. Connection grows from these small, consistent acts of reaching out. Teachers, counselors, and school leaders play a crucial role in creating conditions where students feel safe enough to be known and supported.</p>
+    <div class="tip-box"><div class="tip-title">🤝 Connection Tip</div><p>Identify one person in your school you trust and have not yet opened up to. Consider sharing one genuine thought or feeling with them this week. Real connections grow from real conversations.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>Who do you turn to when you feel overwhelmed? Does this feel sufficient?</li><li>What makes it easy or difficult for you to ask for support?</li><li>How could you strengthen one important relationship this week?</li></ul></div>`
+  },
+  {
+    num: 10, title: "Safe School Climate",
+    content: `<p>A safe school climate is one in which every student feels physically secure, emotionally supported, respected, and valued — regardless of their background, ability, identity, or academic performance. Safety in this sense goes far beyond the absence of physical violence; it encompasses psychological safety — the confidence that one can speak, question, make mistakes, and be oneself without fear of humiliation or rejection.</p>
+    <p>Research by education psychologist Amy Edmondson on psychological safety in learning environments demonstrates that when students feel safe to take intellectual and social risks, learning outcomes improve dramatically. Conversely, environments of fear, shame, or persistent comparison undermine the cognitive and emotional conditions for genuine learning.</p>
+    <div class="callout"><strong>Characteristics of a Safe School:</strong> Respectful relationships between students and teachers, clear and consistently applied behavior standards, anti-bullying policies, inclusive practices, confidential support systems, celebration of diversity, restorative rather than purely punitive discipline approaches.</div>
+    <h4>Students as Builders of School Climate</h4>
+    <p>While school leaders and teachers bear primary responsibility for school climate, students are powerful co-creators of their learning environment. Simple acts — responding to bullying, including marginalized peers, using respectful language, supporting a struggling classmate — cumulatively shape the culture experienced by everyone.</p>
+    <p>Peer support programs, student wellbeing councils, and peer mentoring initiatives can significantly enhance school climate. When students take ownership of their community's wellbeing, they develop leadership, empathy, and civic responsibility alongside academic skills.</p>
+    <div class="tip-box"><div class="tip-title">🏫 School Climate Action</div><p>One kind word to a struggling classmate, one act of inclusion toward someone who feels left out, one time you speak up against unkindness — these are not small acts. They build the culture you want to learn in.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>Do you feel safe to make mistakes and ask questions in your school?</li><li>Have you ever witnessed a student being treated unkindly? How did you respond?</li><li>What is one thing you could do to make your school feel safer for others?</li></ul></div>`
+  },
+  {
+    num: 11, title: "Exam Stress Management",
+    content: `<p>Examination-related stress is nearly universal among students, but the intensity and impact of this stress varies enormously depending on mindset, preparation, support, and coping strategies. Learning to manage exam stress effectively is one of the most valuable skills a student can develop — both for immediate academic wellbeing and for lifelong capacity to perform under pressure.</p>
+    <p>Understanding the neuroscience of exam stress helps demystify the experience. When facing a perceived threat (an upcoming exam), the amygdala signals danger, triggering cortisol and adrenaline release. This can sharpen attention in the short term but, when sustained chronically, impairs memory consolidation, narrows thinking, and physically exhausts the body. Managing exam stress is therefore not about eliminating the stress response but about regulating it so it enhances rather than impairs performance.</p>
+    <div class="callout"><strong>Evidence-Based Exam Stress Strategies:</strong> Structured revision schedules, practice tests under exam conditions, regular sleep (especially in the week before exams), physical exercise, relaxation techniques, positive visualization, and avoiding comparison with peers.</div>
+    <h4>The Night Before and Day of Exam</h4>
+    <p>The night before an exam is crucial. <strong>Avoid late-night cramming</strong> — sleep consolidates memory far more effectively than additional review. Instead, do a light review, prepare all materials, eat well, and sleep at your normal time. <strong>Morning routines matter</strong> — a consistent, calm morning routine signals safety to your nervous system. Eat breakfast, avoid comparing notes with anxious peers, and use a brief breathing exercise to center yourself.</p>
+    <p>During the exam, if anxiety peaks: pause, take three slow breaths, and remind yourself that you have prepared and you can only do your best. If you encounter a difficult question, move on and return to it. Perspective is essential: examinations measure one dimension of your intelligence on one particular day — they do not define your worth, character, or future potential.</p>
+    <div class="tip-box"><div class="tip-title">📝 Revision Strategy</div><p>Use spaced repetition: review material at increasing intervals (1 day, 3 days, 1 week, 2 weeks). This dramatically improves long-term retention compared to massed (last-minute) studying.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What are your personal signs that exam stress is becoming excessive?</li><li>Which exam preparation strategy has worked best for you in the past?</li><li>What would you say to your younger self about exam pressure?</li></ul></div>`
+  },
+  {
+    num: 12, title: "Digital Balance & Mental Health",
+    content: `<p>Digital technology has transformed every dimension of student life — from learning and socializing to entertainment and self-expression. While digital tools offer extraordinary opportunities for connection, creativity, and learning, unmanaged screen time and digital habits pose significant risks to student wellbeing, particularly when social media use, gaming, or passive consumption displaces sleep, physical activity, and face-to-face connection.</p>
+    <p>Research on social media and adolescent mental health paints a complex picture. While digital connection can support social belonging — particularly for students who feel marginalized in school — social media platforms are also associated with social comparison, cyberbullying, body image concerns, fear of missing out (FOMO), sleep disruption, and reduced attention span when used excessively or in unmoderated ways.</p>
+    <div class="callout"><strong>Digital Wellbeing Principles:</strong> Intentional use (choosing when and why to engage), screen-free times (especially before sleep), social media audits (who and what feeds your growth vs. drains energy), digital fasting, and face-to-face connection as the primary social medium.</div>
+    <h4>Creating Healthy Digital Habits</h4>
+    <p>Digital balance is not about eliminating technology — it is about using it intentionally in ways that support rather than undermine wellbeing. <strong>Screen-free sleep</strong> is foundational: devices should be kept out of the bedroom, and screens should be avoided for at least 30 minutes before sleep, as blue light suppresses melatonin production and disrupts sleep quality. <strong>Intentional social media use</strong> — following accounts that inspire, inform, and uplift rather than those that trigger comparison or anxiety — can transform the psychological impact of digital engagement.</p>
+    <p>Students are encouraged to periodically conduct a <strong>digital audit</strong>: reviewing how much time is spent on each app, what emotional states follow use, and whether digital habits align with personal values and goals. This reflective practice brings unconscious habits into awareness, where they can be intentionally shaped.</p>
+    <div class="tip-box"><div class="tip-title">📱 Digital Health Rule</div><p>No phone in the bedroom after 9pm. This single habit can improve sleep quality by 30-40%, with cascading benefits for mood, focus, and emotional regulation the following day.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>How much time do you spend on social media daily? How does it make you feel?</li><li>What digital habits serve your wellbeing? Which ones drain it?</li><li>What would you do with the time if you reduced screen time by one hour per day?</li></ul></div>`
+  },
+  {
+    num: 13, title: "Peer Relationships",
+    content: `<p>Peer relationships are the central social world of adolescence. During this developmental period, the peer group takes on an importance that rivals — and sometimes surpasses — the family in its influence on daily experience, identity formation, behavior, and emotional wellbeing. Understanding the dynamics of peer relationships is essential for building the social intelligence that supports lifelong flourishing.</p>
+    <p>Healthy peer relationships are characterized by mutual respect, genuine care, honest communication, and the freedom to be authentic. These friendships serve as practice grounds for the relational skills — empathy, conflict resolution, negotiation, vulnerability — that underpin all meaningful adult relationships.</p>
+    <div class="callout"><strong>Signs of a Healthy Friendship:</strong> You feel comfortable being yourself, conflict is addressed honestly and kindly, your friend celebrates your successes, you feel energized (not depleted) by their company, there is mutual respect and reciprocity, and you encourage each other's growth.</div>
+    <h4>Navigating Peer Challenges</h4>
+    <p><strong>Peer pressure</strong> — the social influence toward conformity with group norms — is a powerful force during adolescence. Healthy peer influence encourages positive behaviors: studying, sports, community service. Negative peer pressure pushes toward risk-taking, dishonesty, or behaviors that conflict with one's values. Developing the confidence to maintain one's own standards while still belonging to a social group is one of the significant developmental challenges of adolescence.</p>
+    <p><strong>Social conflict</strong> — arguments, misunderstandings, exclusion, and the loss of friendships — is painful but inevitable. How students navigate these experiences shapes their relational competence for life. Skills like active listening ("I hear that you feel..."), assertive communication ("I felt hurt when..."), and conflict repair ("Can we talk about what happened?") transform social conflicts from purely damaging experiences into opportunities for growth.</p>
+    <div class="tip-box"><div class="tip-title">👥 Social Intelligence Tip</div><p>Practice listening to understand rather than listening to respond. Ask one genuine question in every significant conversation. This simple habit builds deeper, more meaningful relationships.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>Who are the most positive influences in your peer group?</li><li>Have you experienced peer pressure? How did you respond?</li><li>What kind of friend do you want to be? What steps can you take toward this?</li></ul></div>`
+  },
+  {
+    num: 14, title: "Sleep & Emotional Stability",
+    content: `<p>Sleep is perhaps the most underappreciated pillar of student wellbeing and academic performance. Despite its profound importance, sleep is routinely sacrificed in favor of studying, socializing, or screen time — with consequences that extend far beyond tiredness. The science of sleep and its relationship to emotional health, cognitive function, and physical wellbeing is unambiguous: adequate, quality sleep is non-negotiable for thriving students.</p>
+    <p>Adolescents require 8–10 hours of sleep per night — more than adults — due to the intensity of neurological development occurring during this period. Yet research consistently shows that most adolescents sleep significantly less than this, particularly on school days. The consequences of chronic sleep deprivation are severe: impaired memory consolidation, reduced emotional regulation capacity, heightened anxiety and depression risk, compromised immune function, and — ironically — significantly reduced academic performance.</p>
+    <div class="callout"><strong>Sleep's Role in Learning:</strong> During sleep, the brain consolidates memories and transfers learning from short-term to long-term storage. This process cannot be shortcut. Studying all night before an exam is less effective — and more harmful — than studying moderately and sleeping well.</div>
+    <h4>Building a Sleep-Supportive Routine</h4>
+    <p><strong>Consistent sleep and wake times</strong> — even on weekends — regulate the body's circadian rhythm, improving both sleep quality and morning alertness. <strong>A pre-sleep wind-down routine</strong> of 20–30 minutes signals to the brain that sleep is approaching: dimming lights, reducing stimulation, gentle relaxation activities (reading, gentle stretching, warm water). <strong>Sleep environment optimization</strong> — cool, dark, quiet, and device-free — creates the conditions for deep, restorative sleep.</p>
+    <p>Students should understand that the commonly recommended strategy of "catching up" on sleep during weekends offers limited benefit and disrupts the circadian rhythm further. The solution is not weekend sleep marathons but consistent, adequate sleep every night. This requires prioritizing sleep as seriously as studying — because in terms of academic outcomes, it is.</p>
+    <div class="tip-box"><div class="tip-title">😴 Sleep Hygiene Guide</div><p>Set a sleep alarm — not just a wake alarm — to remind you when it's time to start winding down. Going to bed at the same time each night is the most powerful thing you can do for sleep quality.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>How many hours of sleep do you typically get on school nights?</li><li>How does your mood and focus differ after a good night's sleep versus a poor one?</li><li>What is one change you could make to improve your sleep quality starting tonight?</li></ul></div>`
+  },
+  {
+    num: 15, title: "Physical Activity & Mood",
+    content: `<p>The relationship between physical activity and emotional wellbeing is one of the most robustly established findings in health science. Regular exercise is not merely beneficial for physical fitness — it is a powerful, evidence-based intervention for mood regulation, stress management, anxiety reduction, and even the prevention and treatment of depression. For students who feel overwhelmed, anxious, or low, movement is often the most accessible and effective first intervention.</p>
+    <p>Exercise influences mental health through multiple pathways. <strong>Neurochemically</strong>, physical activity stimulates the release of endorphins (natural mood-elevating compounds), serotonin (the wellbeing neurotransmitter), dopamine (the reward chemical), and brain-derived neurotrophic factor (BDNF) — a protein that promotes the growth of new brain cells and enhances learning and memory.</p>
+    <div class="callout"><strong>Mental Health Benefits of Regular Exercise:</strong> Reduced symptoms of anxiety and depression, improved sleep quality, enhanced self-esteem, better stress tolerance, improved concentration and memory, increased energy levels, and stronger social connection through team sports.</div>
+    <h4>Making Movement Accessible and Sustainable</h4>
+    <p>The common misconception is that exercise requires intensive gym sessions or competitive sports. In reality, even moderate physical activity — a 30-minute walk, casual cycling, traditional games, yoga, or dance — confers significant mental health benefits. The key is consistency over intensity. <strong>Daily movement</strong>, even for 20–30 minutes, is more beneficial for emotional wellbeing than occasional intense exercise sessions.</p>
+    <p>For students in Kashmir, traditional physical activities — walking through natural landscapes, local games, community sports — offer not just physical benefits but also social connection and cultural rootedness. Physical activity in natural settings carries additional mood benefits through what researchers call "nature connectedness."</p>
+    <div class="tip-box"><div class="tip-title">🏃 Movement Prescription</div><p>Even a 20-minute walk can reduce anxiety for 2-4 hours. When you feel stressed, overwhelmed, or low — before reaching for a screen, try moving your body. The shift in emotional state is often remarkable.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What physical activities do you genuinely enjoy?</li><li>How does your mood shift after physical activity?</li><li>What is one way you could incorporate more movement into your daily routine?</li></ul></div>`
+  },
+  {
+    num: 16, title: "Growth Mindset & Resilience",
+    content: `<p>Stanford psychologist Carol Dweck's research on mindset has transformed how educators and students understand intelligence, talent, and potential. A <strong>growth mindset</strong> — the belief that abilities and intelligence can be developed through effort, learning, and persistence — is strongly associated with academic resilience, creative problem-solving, intrinsic motivation, and recovery from setbacks. Its opposite, the <strong>fixed mindset</strong> — the belief that abilities are innate and unchangeable — is associated with avoidance of challenges, fear of failure, and fragile self-esteem.</p>
+    <p>The good news is that mindset is malleable. Through awareness, deliberate practice, and supportive feedback, students can shift from a fixed to a growth orientation — and this shift has profound implications for academic achievement, emotional resilience, and lifelong learning.</p>
+    <div class="callout"><strong>Growth vs Fixed Mindset in Practice:</strong> Growth: "I haven't mastered this yet" vs Fixed: "I'm not good at this." Growth: "Mistakes help me learn" vs Fixed: "Mistakes prove I'm not smart." Growth: "Challenges make me stronger" vs Fixed: "Challenges should be avoided."</div>
+    <h4>Cultivating Growth Mindset in Daily Life</h4>
+    <p>The power of the word <strong>"yet"</strong> cannot be overstated. When a student says "I can't do mathematics," adding "yet" — "I can't do mathematics yet" — fundamentally shifts the orientation from fixed failure to growth possibility. This linguistic shift is simple but psychologically powerful. <strong>Praising process rather than outcome</strong> — "You worked really hard on this" rather than "You're so smart" — reinforces growth orientation and builds intrinsic motivation.</p>
+    <p><strong>Embracing challenge</strong> rather than avoiding it is the behavioral expression of growth mindset. When students choose the more difficult task, persist through confusion, and treat errors as information rather than indictments of their worth, they are practicing and deepening growth mindset simultaneously. Teachers and parents who model their own learning journeys — showing students that adults also struggle, learn, and grow — powerfully reinforce this orientation.</p>
+    <div class="tip-box"><div class="tip-title">🌱 Growth Mindset Practice</div><p>At the end of each day, complete: "Today I struggled with ___. What I learned from it was ___. Tomorrow I will try ___." This three-part reflection builds growth mindset through consistent practice.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>In which areas of your life do you have a growth mindset? A fixed mindset?</li><li>How do you typically respond to failure or criticism?</li><li>What would change for you if you fully believed your intelligence could grow?</li></ul></div>`
+  },
+  {
+    num: 17, title: "Teacher's Role in Wellbeing",
+    content: `<p>Teachers are among the most powerful influences on student wellbeing. Research consistently demonstrates that the quality of the student-teacher relationship is a stronger predictor of student engagement, motivation, and emotional security than curriculum content, school facilities, or class size. A caring, attuned teacher can profoundly buffer the effects of adversity in a student's life — and an unsupportive or harsh teacher can significantly damage wellbeing even in an otherwise positive environment.</p>
+    <p>The wellbeing-promoting teacher is characterized not primarily by technical teaching skill but by relational qualities: <strong>genuine care and interest</strong> in each student as a person; <strong>consistent reliability</strong> that creates emotional safety; <strong>high expectations coupled with high support</strong> — believing in students and providing the scaffolding they need to succeed; and <strong>the capacity to notice and respond to student distress</strong> with compassion and appropriate action.</p>
+    <div class="callout"><strong>What Students Need from Teachers:</strong> To feel seen and known as individuals, to know their teacher believes in them, to feel safe to make mistakes, to receive specific and encouraging feedback, to have emotional concerns acknowledged, and to experience fairness and respect.</div>
+    <h4>Trauma-Informed and Wellbeing-Sensitive Teaching</h4>
+    <p>Many students carry invisible burdens — family difficulties, economic stress, loss, illness, discrimination, or previous traumatic experiences — that profoundly shape how they engage in the classroom. A trauma-informed teacher understands that behaviors commonly labeled as "challenging" — withdrawal, aggression, inability to focus, emotional outbursts — are often expressions of distress, not character deficits. This understanding shifts the question from "What is wrong with this student?" to "What has happened to this student? What do they need?"</p>
+    <p>Simple, consistent acts of relational care — greeting students by name, noticing when someone seems unwell, checking in privately with struggling students, celebrating growth rather than just achievement — cumulatively create a classroom culture of safety and belonging that is the optimal environment for both learning and emotional development.</p>
+    <div class="tip-box"><div class="tip-title">👩‍🏫 To Students</div><p>If a teacher's style is affecting your wellbeing, remember you can approach a trusted teacher, counselor, or parent for support. You deserve to learn in an environment where you feel respected and safe.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>Who is a teacher who has positively impacted your wellbeing? What did they do?</li><li>What would you most want teachers to understand about student wellbeing?</li><li>How does the classroom atmosphere affect your ability to learn?</li></ul></div>`
+  },
+  {
+    num: 18, title: "Recognizing Early Warning Signs",
+    content: `<p>Early identification of mental health difficulties is one of the most powerful forms of prevention available. When students, teachers, and families learn to recognize the early warning signs of emotional distress — before difficulties escalate into crisis — they can access support at the point where intervention is most effective and least disruptive to development.</p>
+    <p>Mental health challenges rarely emerge suddenly. They typically develop gradually, with early signs that are often subtle and easy to attribute to "normal adolescent behavior" or situational stress. Learning to distinguish between temporary distress (which resolves naturally with support) and emerging mental health difficulties (which require more deliberate intervention) is a critical skill for all members of a school community.</p>
+    <div class="callout"><strong>Early Warning Signs in Students:</strong> Persistent changes in mood, energy, or behavior lasting more than 2 weeks; withdrawal from friends, family, and activities; declining academic performance; changes in sleep and appetite; expressions of hopelessness or worthlessness; increased irritability or anger; difficulty concentrating; somatic complaints (unexplained headaches, stomach aches); loss of interest in previously enjoyed activities.</div>
+    <h4>How to Respond Helpfully</h4>
+    <p>When you notice warning signs in yourself, the first step is honest self-awareness: acknowledging that something feels persistently wrong and that you deserve support. Reaching out to a trusted adult — a teacher, counselor, parent, or family member — is an act of courage and wisdom, not weakness. <strong>Early help-seeking is associated with better outcomes</strong> and faster recovery.</p>
+    <p>When you notice warning signs in a peer, the most powerful response is simple, genuine connection: "I've noticed you seem a bit different lately — I just wanted to check in. How are you really doing?" This kind of caring inquiry can be literally life-changing. If you are concerned about a peer's safety, always inform a trusted adult immediately — this is not betrayal, it is the deepest expression of care.</p>
+    <div class="tip-box"><div class="tip-title">🔍 Self-Monitoring</div><p>A helpful personal wellbeing check: Rate your overall mood, sleep, energy, and social connection on a scale of 1-10 each week. If any area drops below 4 for more than 2 weeks, consider reaching out for support.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What personal warning signs tell you that your wellbeing needs attention?</li><li>How comfortable are you asking for help when you're struggling? What gets in the way?</li><li>If you noticed a friend's warning signs, what would you do?</li></ul></div>`
+  },
+  {
+    num: 19, title: "Building Emotional Strength",
+    content: `<p>Emotional strength is not the ability to suppress, ignore, or transcend difficult emotions. It is the capacity to experience the full spectrum of human emotion — including pain, fear, grief, and anger — without being overwhelmed, without acting destructively, and without losing one's sense of self and direction. It is a quality built not in easy times but precisely through the experience of navigating difficulty with support and intentionality.</p>
+    <p>The metaphor of physical strength is instructive: muscles grow not during rest but during and after exertion. Similarly, emotional strength develops through encountering challenges, drawing on coping resources, and discovering — often to one's surprise — that one can endure and recover. Each successfully navigated difficulty deposits into what researchers call the "resilience bank" — an accumulating store of self-efficacy, adaptive coping memories, and confidence in one's own capacity.</p>
+    <div class="callout"><strong>Pillars of Emotional Strength:</strong> Self-compassion (treating yourself with the kindness you would offer a dear friend), emotional literacy (naming what you feel accurately), help-seeking courage (reaching out when needed), values clarity (knowing what matters most), and consistent self-care practices.</div>
+    <h4>Self-Compassion: The Foundation of Emotional Strength</h4>
+    <p>Psychologist Dr. Kristin Neff's groundbreaking research on self-compassion demonstrates that self-compassion — not self-esteem or self-confidence — is the most powerful predictor of emotional resilience. Self-compassion has three components: <strong>mindfulness</strong> (acknowledging pain without dramatizing or suppressing it), <strong>common humanity</strong> (recognizing that suffering and difficulty are universal human experiences, not personal failures), and <strong>self-kindness</strong> (responding to one's own distress with warmth rather than harsh self-judgment).</p>
+    <p>The research is counterintuitive to many students raised in competitive, achievement-oriented cultures: self-compassion does not reduce motivation — it actually increases it, because when students are not afraid of self-judgment, they take more risks, learn more from failures, and persist longer through difficulty. Being kind to yourself is not weakness; it is the most effective foundation for genuine strength.</p>
+    <div class="tip-box"><div class="tip-title">💙 Self-Compassion Practice</div><p>When you make a mistake or face a setback, try this: Place your hand on your heart, take a breath, and say: "This is a moment of difficulty. Difficulty is part of life. May I be kind to myself in this moment." This activates the same neurological pathways as receiving care from others.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>How do you typically talk to yourself after making a mistake?</li><li>Would you speak that way to a friend in the same situation?</li><li>What would it feel like to treat yourself with the same compassion you show others?</li></ul></div>`
+  },
+  {
+    num: 20, title: "Designing a Wellbeing-Oriented School Culture",
+    content: `<p>A wellbeing-oriented school culture is not a program — it is a living, breathing quality of community life that pervades every interaction, decision, and practice within a school. It is the cumulative result of thousands of small choices: how teachers greet students, how conflicts are resolved, how achievement is defined, how struggling students are supported, and how every member of the community is invited to belong and contribute.</p>
+    <p>Schools that successfully embed wellbeing in their culture typically demonstrate several consistent characteristics. They have <strong>explicit, shared values</strong> around care, respect, and learning — not as wall decorations but as lived guides for daily decision-making. They maintain <strong>consistent structures and routines</strong> that create predictability and safety for students who may experience chaos outside school. They practice <strong>restorative approaches to conflict and discipline</strong> — focusing on repairing harm and rebuilding relationship rather than purely punitive responses.</p>
+    <div class="callout"><strong>Whole-School Wellbeing Framework:</strong> Universal wellbeing education for all students, targeted support for students at risk, specialist services for students with identified needs, professional development for staff in mental health literacy, family and community partnerships, and data-informed continuous improvement.</div>
+    <h4>Students as Wellbeing Leaders</h4>
+    <p>The most transformative wellbeing schools actively engage students as co-designers and leaders of their wellbeing culture. When students have genuine voice and agency in shaping their school environment — through student councils, peer support programs, wellbeing committees, and genuine consultation in school decision-making — they develop ownership, responsibility, and the leadership skills that serve them throughout life.</p>
+    <p>The vision of NEP 2020 — a school system that holistically develops every student — will be realized not through policy mandates alone but through the daily actions of teachers, students, leaders, families, and communities who choose to prioritize human flourishing. This studio — developed by Mateen Yousuf — is one small contribution to that great and important work. Every student deserves a school that knows their name, sees their worth, and walks alongside them through the joys and challenges of growing up.</p>
+    <div class="tip-box"><div class="tip-title">🏫 Your Role</div><p>You are not just a student in your school — you are a culture-builder. Every act of kindness, inclusion, courage, and authenticity you bring to your school contributes to a community where everyone can flourish. Start today.</p></div>
+    <div class="reflection-box"><div class="ref-title">📖 Reflection Exercise</div><ul><li>What kind of school culture do you most want to learn in?</li><li>What is one specific change you would propose to improve wellbeing in your school?</li><li>How can you personally contribute to a more supportive school community starting this week?</li></ul></div>`
+  }
+];
+
+function initFoundations() {
+  const navEl = document.getElementById('pageNav');
+  const pagesEl = document.getElementById('foundationPages');
+
+  if (navEl.children.length > 0) return; // already initialized
+
+  navEl.innerHTML = foundationPages.map((p, i) =>
+    `<button class="page-pill ${i === 0 ? 'active' : ''}" onclick="showPage(${i})" id="pill_${i}">Page ${p.num}</button>`
+  ).join('');
+
+  pagesEl.innerHTML = foundationPages.map((p, i) => `
+    <div class="foundation-page ${i === 0 ? 'active' : ''}" id="page_${i}">
+      <div class="page-card">
+        <div class="page-tag">Page ${p.num} of 20</div>
+        <h3>${p.title}</h3>
+        ${p.content}
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        ${i > 0 ? `<button class="calc-btn" style="background:var(--text-mid)" onclick="showPage(${i-1})">← Previous</button>` : ''}
+        ${i < foundationPages.length - 1 ? `<button class="calc-btn" onclick="showPage(${i+1})">Next →</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function showPage(idx) {
+  document.querySelectorAll('.foundation-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page-pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('page_' + idx).classList.add('active');
+  document.getElementById('pill_' + idx).classList.add('active');
+  document.getElementById('pill_' + idx).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  window.scrollTo(0, 120);
+}
+
+// ========================================
+// EARLY WARNING SYSTEM (integrated into dashboard)
+// ========================================
+
+function getWarningLevel() {
+  const s = getScores();
+  let riskCount = 0;
+  if (s.wellbeing && s.wellbeing.wbi < 40) riskCount += 2;
+  else if (s.wellbeing && s.wellbeing.wbi < 65) riskCount += 1;
+  if (s.wellbeing && s.wellbeing.sls < 40) riskCount += 1;
+  if (s.balance && s.balance.burnout > 60) riskCount += 1;
+  if (s.support && s.support.sns < 40) riskCount += 1;
+  if (riskCount >= 3) return 'high';
+  if (riskCount >= 1) return 'moderate';
+  return 'stable';
+}
+
+// ========================================
+// INIT
+// ========================================
+
+initEmotionWheel();
+
+// Init slider backgrounds
+document.querySelectorAll('input[type=range]').forEach(input => {
+  const pct = ((input.value - input.min) / (input.max - input.min) * 100).toFixed(0);
+  input.style.background = `linear-gradient(to right, var(--light-blue) 0%, var(--light-blue) ${pct}%, #e0e8f0 ${pct}%)`;
+});
+
+// Service Worker — inline blob registration (works in all environments)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swCode = `
+const CACHE = 'wellbeing-v1';
+const ASSETS = ['./'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+  ).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('./'))));
+});
+    `;
+    try {
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl)
+        .then(() => URL.revokeObjectURL(swUrl))
+        .catch(() => {}); // silent fail — app works fully without SW
+    } catch(e) {}
+  });
+}
+</script>
+</body>
+</html>

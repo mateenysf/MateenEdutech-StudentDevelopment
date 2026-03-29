@@ -1,0 +1,27 @@
+{
+  "name": "LearnSpark – Learning Motivation Booster",
+  "short_name": "LearnSpark",
+  "description": "AI-powered Learning Motivation Booster aligned with NEP 2020 and NCF 2023",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#0a1628",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "author.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "author.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "en-IN",
+  "scope": "./"
+}

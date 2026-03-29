@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#0a1628"/>
+<meta name="description" content="Student Motivation, Engagement & Academic Energy Development Studio"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<title>Student Motivation Studio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@300;400;600;700&display=swap');
+
+:root{
+  --bg:#0a1628;
+  --bg2:#0f1f3d;
+  --bg3:#132447;
+  --card:#162b52;
+  --card2:#1a3260;
+  --accent:#00d4ff;
+  --accent2:#00ffb3;
+  --accent3:#7c5cfc;
+  --gold:#ffd166;
+  --warn:#ff6b6b;
+  --text:#e8f4ff;
+  --text2:#93b4d4;
+  --radius:16px;
+  --shadow:0 8px 32px rgba(0,212,255,0.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Sora',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1,h2,h3,h4{font-family:'Nunito',sans-serif;font-weight:800}
+h1{font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.15}
+h2{font-size:clamp(1.3rem,3vw,2rem)}
+h3{font-size:1.2rem}
+p{line-height:1.75;color:var(--text2);font-size:.95rem}
+
+/* ===== LAYOUT ===== */
+.page{display:none;min-height:100vh;padding:1rem}
+.page.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.container{max-width:800px;margin:0 auto}
+
+/* ===== NAVIGATION ===== */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,22,40,.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,212,255,.15);
+  padding:.7rem 1rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;color:var(--accent);letter-spacing:.5px}
+.nav-back{
+  background:none;border:1px solid rgba(0,212,255,.3);
+  color:var(--accent);padding:.4rem .9rem;border-radius:8px;
+  cursor:pointer;font-size:.85rem;font-family:'Sora',sans-serif;
+  display:flex;align-items:center;gap:.4rem;
+}
+.nav-back:hover{background:rgba(0,212,255,.1)}
+
+/* ===== HOME PAGE ===== */
+#home{background:linear-gradient(160deg,#0a1628 0%,#0d1e3a 50%,#0a1628 100%)}
+
+.hero-bg{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
+  border-bottom:1px solid rgba(0,212,255,.1);
+  padding:3rem 1.5rem 2.5rem;
+  text-align:center;
+}
+.hero-bg::before{
+  content:'';position:absolute;top:-60px;left:-60px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);
+  border-radius:50%;
+}
+.hero-bg::after{
+  content:'';position:absolute;bottom:-80px;right:-40px;
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(124,92,252,.12) 0%,transparent 70%);
+  border-radius:50%;
+}
+
+.author-pic{
+  width:90px;height:90px;border-radius:50%;
+  border:3px solid var(--accent);
+  box-shadow:0 0 24px rgba(0,212,255,.4);
+  object-fit:cover;margin-bottom:1rem;
+}
+.author-fallback{
+  width:90px;height:90px;border-radius:50%;
+  border:3px solid var(--accent);
+  box-shadow:0 0 24px rgba(0,212,255,.4);
+  background:linear-gradient(135deg,var(--accent3),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;margin:0 auto 1rem;
+}
+
+.badge-row{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin:1rem 0}
+.badge{
+  font-size:.72rem;font-weight:700;font-family:'Nunito',sans-serif;
+  padding:.3rem .8rem;border-radius:20px;
+  border:1px solid;letter-spacing:.5px;text-transform:uppercase;
+}
+.badge-blue{color:var(--accent);border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.08)}
+.badge-green{color:var(--accent2);border-color:rgba(0,255,179,.4);background:rgba(0,255,179,.08)}
+.badge-purple{color:var(--accent3);border-color:rgba(124,92,252,.4);background:rgba(124,92,252,.08)}
+
+.hero-title{color:var(--text);margin:.5rem 0 .3rem;position:relative;z-index:1}
+.hero-sub{color:var(--text2);font-size:.9rem;position:relative;z-index:1}
+.hero-author{color:var(--accent2);font-size:.85rem;font-weight:600;margin-top:.4rem;position:relative;z-index:1}
+
+/* ===== MENU GRID ===== */
+.menu-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1rem;padding:1.5rem;max-width:700px;margin:0 auto;
+}
+.menu-card{
+  background:var(--card);
+  border:1px solid rgba(0,212,255,.12);
+  border-radius:var(--radius);
+  padding:1.4rem 1rem;
+  text-align:center;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+  position:relative;overflow:hidden;
+}
+.menu-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:3px;border-radius:var(--radius) var(--radius) 0 0;
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+}
+.menu-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3);border-color:rgba(0,212,255,.25)}
+.menu-icon{font-size:2.2rem;margin-bottom:.7rem;display:block}
+.menu-label{font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;color:var(--text);margin-bottom:.3rem}
+.menu-desc{font-size:.75rem;color:var(--text2)}
+
+.mc1{--c1:#00d4ff;--c2:#00ffb3}
+.mc2{--c1:#7c5cfc;--c2:#00d4ff}
+.mc3{--c1:#ffd166;--c2:#ff6b6b}
+.mc4{--c1:#00ffb3;--c2:#7c5cfc}
+.mc5{--c1:#ff6b6b;--c2:#ffd166}
+.mc6{--c1:#00d4ff;--c2:#7c5cfc}
+
+/* ===== CARDS / SECTIONS ===== */
+.section-header{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border-bottom:1px solid rgba(0,212,255,.12);
+  padding:1.5rem;text-align:center;
+}
+.section-icon{font-size:2.5rem;display:block;margin-bottom:.5rem}
+
+.card{
+  background:var(--card);
+  border:1px solid rgba(0,212,255,.1);
+  border-radius:var(--radius);
+  padding:1.3rem;margin-bottom:1rem;
+}
+.card-title{
+  font-family:'Nunito',sans-serif;font-weight:800;
+  color:var(--accent);margin-bottom:.7rem;font-size:1rem;
+}
+
+/* ===== FORM ELEMENTS ===== */
+label{font-size:.85rem;color:var(--text2);display:block;margin-bottom:.3rem;font-weight:600}
+input[type=range]{
+  width:100%;accent-color:var(--accent);
+  margin:.4rem 0;cursor:pointer;
+}
+.range-row{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text2);margin-top:-.3rem}
+input[type=number],input[type=text],select,textarea{
+  width:100%;background:rgba(255,255,255,.06);
+  border:1px solid rgba(0,212,255,.2);
+  border-radius:10px;padding:.7rem .9rem;
+  color:var(--text);font-family:'Sora',sans-serif;font-size:.9rem;
+  outline:none;transition:border-color .2s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:80px}
+select option{background:var(--bg2)}
+
+.form-group{margin-bottom:1.1rem}
+
+/* ===== BUTTONS ===== */
+.btn{
+  width:100%;padding:.85rem;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+  cursor:pointer;transition:transform .15s,box-shadow .2s;
+  letter-spacing:.3px;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#0a1628;
+  box-shadow:0 4px 20px rgba(0,212,255,.3);
+}
+.btn-secondary{
+  background:transparent;
+  border:1.5px solid var(--accent);
+  color:var(--accent);
+}
+.btn-warn{
+  background:linear-gradient(135deg,var(--warn),#ff9a3c);
+  color:#fff;
+}
+.btn-purple{
+  background:linear-gradient(135deg,var(--accent3),#b06cfa);
+  color:#fff;
+  box-shadow:0 4px 20px rgba(124,92,252,.3);
+}
+.btn-sm{
+  width:auto;padding:.5rem 1.1rem;font-size:.85rem;border-radius:9px;
+}
+
+/* ===== SCORE DISPLAY ===== */
+.score-board{
+  background:linear-gradient(135deg,var(--bg2),var(--card));
+  border:1px solid rgba(0,212,255,.2);
+  border-radius:var(--radius);
+  padding:1.5rem;margin:1rem 0;text-align:center;
+}
+.score-main{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:3rem;color:var(--accent);line-height:1;
+}
+.score-label{color:var(--text2);font-size:.85rem;margin-top:.3rem}
+
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem;margin:1rem 0}
+.score-item{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(0,212,255,.1);
+  border-radius:12px;padding:.9rem;text-align:center;
+}
+.score-item .val{
+  font-family:'Nunito',sans-serif;font-weight:800;
+  font-size:1.5rem;color:var(--accent2);
+}
+.score-item .lbl{font-size:.72rem;color:var(--text2);margin-top:.2rem}
+
+/* ===== PROGRESS BAR ===== */
+.progress-wrap{margin:.5rem 0}
+.progress-label{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text2);margin-bottom:.3rem}
+.progress-track{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.progress-fill{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .6s ease;
+}
+
+/* ===== ALERT / INSIGHT BOX ===== */
+.insight{
+  padding:.9rem 1.1rem;border-radius:12px;
+  margin:.8rem 0;font-size:.88rem;line-height:1.6;
+  border-left:3px solid;
+}
+.insight-info{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--text)}
+.insight-warn{background:rgba(255,107,107,.1);border-color:var(--warn);color:var(--text)}
+.insight-good{background:rgba(0,255,179,.08);border-color:var(--accent2);color:var(--text)}
+.insight-gold{background:rgba(255,209,102,.08);border-color:var(--gold);color:var(--text)}
+
+/* ===== FOUNDATIONS (CONTENT PAGES) ===== */
+.chapter-list{padding:1rem}
+.chapter-item{
+  background:var(--card);border:1px solid rgba(0,212,255,.1);
+  border-radius:12px;padding:1rem 1.2rem;margin-bottom:.7rem;
+  cursor:pointer;display:flex;align-items:center;gap:.9rem;
+  transition:border-color .2s,transform .2s;
+}
+.chapter-item:hover{border-color:var(--accent);transform:translateX(4px)}
+.ch-num{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:1.1rem;color:var(--accent);min-width:2rem;text-align:center;
+}
+.ch-info .ch-title{font-weight:700;color:var(--text);font-size:.9rem}
+.ch-info .ch-sub{font-size:.75rem;color:var(--text2);margin-top:.15rem}
+
+/* content reader */
+.content-reader{padding:1.2rem;max-width:700px;margin:0 auto}
+.content-reader h3{
+  color:var(--accent);margin:1.5rem 0 .6rem;font-size:1.05rem;
+  border-left:3px solid var(--accent);padding-left:.7rem;
+}
+.content-reader p{margin-bottom:.9rem;color:var(--text2);font-size:.9rem;line-height:1.8}
+.content-reader ul{padding-left:1.3rem;margin:.5rem 0 .9rem}
+.content-reader ul li{color:var(--text2);font-size:.9rem;margin-bottom:.35rem;line-height:1.65}
+.checklist{list-style:none;padding:0;margin:.5rem 0}
+.checklist li{
+  padding:.5rem .7rem;margin-bottom:.3rem;
+  background:rgba(0,212,255,.05);border-radius:8px;
+  color:var(--text2);font-size:.88rem;
+  display:flex;align-items:flex-start;gap:.6rem;
+}
+.checklist li::before{content:'☐';color:var(--accent);flex-shrink:0;font-size:1rem}
+
+/* ===== TREND CHART ===== */
+.chart-wrap{
+  background:var(--card);border:1px solid rgba(0,212,255,.1);
+  border-radius:var(--radius);padding:1rem;margin:.8rem 0;
+}
+canvas{max-width:100%;border-radius:8px}
+
+/* ===== LOG TABLE ===== */
+.log-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.5rem}
+.log-table th{
+  background:rgba(0,212,255,.1);color:var(--accent);
+  padding:.6rem .7rem;text-align:left;font-family:'Nunito',sans-serif;
+}
+.log-table td{
+  padding:.55rem .7rem;border-bottom:1px solid rgba(255,255,255,.04);
+  color:var(--text2);
+}
+.log-table tr:last-child td{border-bottom:none}
+
+/* ===== SUGGESTION CARDS ===== */
+.sug-card{
+  background:var(--card);border-radius:12px;
+  padding:1rem 1.1rem;margin-bottom:.7rem;
+  border-left:3px solid var(--c,var(--accent));
+}
+.sug-card .sug-title{font-weight:700;color:var(--text);font-size:.9rem;margin-bottom:.3rem}
+.sug-card p{font-size:.83rem}
+
+/* ===== REPORT STYLES ===== */
+.report-block{
+  background:var(--card);border:1px solid rgba(0,212,255,.1);
+  border-radius:var(--radius);padding:1.3rem;margin-bottom:1rem;
+}
+.report-block h3{color:var(--gold);margin-bottom:.7rem}
+
+/* ===== JOYFUL COMPOSITE ===== */
+.joyful-ring{
+  width:140px;height:140px;border-radius:50%;
+  background:conic-gradient(var(--accent) 0deg, var(--accent2) 120deg, var(--accent3) 240deg, transparent 240deg);
+  display:flex;align-items:center;justify-content:center;
+  margin:1rem auto;position:relative;
+  box-shadow:0 0 40px rgba(0,212,255,.2);
+}
+.joyful-inner{
+  width:105px;height:105px;border-radius:50%;
+  background:var(--bg2);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.joyful-score{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:2rem;color:var(--accent);line-height:1;
+}
+.joyful-label{font-size:.65rem;color:var(--text2);letter-spacing:.5px;text-transform:uppercase}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .menu-grid{grid-template-columns:1fr 1fr;gap:.7rem;padding:1rem}
+  .menu-card{padding:1rem .7rem}
+  .menu-icon{font-size:1.8rem}
+  .menu-label{font-size:.85rem}
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(0,212,255,.3);border-radius:99px}
+
+/* ===== INSTALL BANNER ===== */
+#installBanner{
+  display:none;position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
+  background:var(--card2);border:1px solid rgba(0,212,255,.3);
+  border-radius:14px;padding:.8rem 1.2rem;
+  font-size:.85rem;color:var(--text);z-index:200;
+  display:flex;align-items:center;gap:.8rem;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+#installBanner button{
+  background:var(--accent);color:#0a1628;border:none;
+  border-radius:8px;padding:.4rem .9rem;font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:.85rem;
+}
+
+/* chart tooltip */
+.tooltip{
+  position:absolute;background:var(--card2);border:1px solid rgba(0,212,255,.2);
+  border-radius:8px;padding:.4rem .7rem;font-size:.78rem;
+  pointer-events:none;display:none;color:var(--text);z-index:50;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="topNav">
+  <div class="nav-brand">📚 Motivation Studio</div>
+  <button class="nav-back" id="backBtn" onclick="goHome()" style="display:none">← Home</button>
+</nav>
+
+<!-- ============================== HOME PAGE ============================== -->
+<div class="page active" id="home">
+  <div class="hero-bg">
+    <img src="author.jpg" class="author-pic" alt="Mateen Yousuf" onerror="this.style.display='none';document.getElementById('authorFallback').style.display='flex'"/>
+    <div class="author-fallback" id="authorFallback" style="display:none">👨‍🏫</div>
+    <h1 class="hero-title">Student Motivation, Engagement &amp; Academic Energy Development Studio</h1>
+    <p class="hero-sub" style="margin-top:.5rem">A comprehensive offline learning companion</p>
+    <p class="hero-author">✍️ Developed by Mateen Yousuf | Teacher, School Education Department Kashmir</p>
+    <div class="badge-row">
+      <span class="badge badge-blue">🇮🇳 Aligned with NEP 2020</span>
+      <span class="badge badge-green">🌱 Joyful Learning</span>
+      <span class="badge badge-purple">🎯 Student Agency</span>
+    </div>
+  </div>
+
+  <div class="menu-grid">
+    <div class="menu-card mc1" onclick="showPage('selfCheck')">
+      <span class="menu-icon">🔍</span>
+      <div class="menu-label">Motivation Self-Check</div>
+      <div class="menu-desc">Discover your motivation strength</div>
+    </div>
+    <div class="menu-card mc2" onclick="showPage('engagementTracker')">
+      <span class="menu-icon">📊</span>
+      <div class="menu-label">Engagement Tracker</div>
+      <div class="menu-desc">Track class participation & effort</div>
+    </div>
+    <div class="menu-card mc3" onclick="showPage('energyMonitor')">
+      <span class="menu-icon">⚡</span>
+      <div class="menu-label">Academic Energy Dashboard</div>
+      <div class="menu-desc">Monitor sleep, focus & burnout risk</div>
+    </div>
+    <div class="menu-card mc4" onclick="showPage('goalAnalyzer')">
+      <span class="menu-icon">🎯</span>
+      <div class="menu-label">Goal Alignment</div>
+      <div class="menu-desc">Align daily effort to big dreams</div>
+    </div>
+    <div class="menu-card mc5" onclick="showPage('trendTracker')">
+      <span class="menu-icon">📈</span>
+      <div class="menu-label">Motivation Trends</div>
+      <div class="menu-desc">View weekly progress charts</div>
+    </div>
+    <div class="menu-card mc6" onclick="showPage('foundations')">
+      <span class="menu-icon">📖</span>
+      <div class="menu-label">Framework & Theory</div>
+      <div class="menu-desc">20 pages on joyful learning</div>
+    </div>
+  </div>
+
+  <div style="padding:0 1rem 1.5rem;max-width:700px;margin:0 auto">
+    <div class="menu-card" onclick="showPage('joyfulDashboard')" style="--c1:#ffd166;--c2:#ff6b6b;grid-column:span 2">
+      <span class="menu-icon">🌟</span>
+      <div class="menu-label">Joyful Learning Index & Full Report</div>
+      <div class="menu-desc">Composite score + intervention suggestions + PDF export</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== SELF CHECK ============================== -->
+<div class="page" id="selfCheck">
+  <div class="section-header">
+    <span class="section-icon">🔍</span>
+    <h2>Motivation Self-Check Tool</h2>
+    <p>Rate yourself honestly (1 = Very Low, 5 = Very High)</p>
+  </div>
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="card">
+      <div class="card-title">📝 Rate Your Motivation Factors</div>
+
+      <div class="form-group" id="scForm">
+        <!-- Rendered by JS -->
+      </div>
+      <button class="btn btn-primary" onclick="calcSelfCheck()">Calculate My Motivation Score ✨</button>
+    </div>
+
+    <div id="scResult" style="display:none">
+      <div class="score-board">
+        <div class="score-main" id="msiVal">--</div>
+        <div class="score-label">Motivation Strength Index (out of 100)</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item"><div class="val" id="imsVal">--</div><div class="lbl">Intrinsic Score</div></div>
+        <div class="score-item"><div class="val" id="edrVal">--</div><div class="lbl">Extrinsic Ratio %</div></div>
+        <div class="score-item"><div class="val" id="msiLvl">--</div><div class="lbl">Level</div></div>
+      </div>
+      <div id="scInsight" class="insight insight-info"></div>
+      <button class="btn btn-secondary" style="margin-top:.5rem" onclick="saveSelfCheck()">💾 Save This Entry</button>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">📋 Past Entries</div>
+      <div id="scHistory"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== ENGAGEMENT TRACKER ============================== -->
+<div class="page" id="engagementTracker">
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <h2>Engagement Tracker</h2>
+    <p>Rate your academic engagement this week (1–5)</p>
+  </div>
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="card">
+      <div class="card-title">🏫 Engagement Indicators</div>
+      <div id="etForm"></div>
+      <button class="btn btn-purple" onclick="calcEngagement()">Analyze Engagement 📊</button>
+    </div>
+    <div id="etResult" style="display:none">
+      <div class="score-board">
+        <div class="score-main" id="aeiVal">--</div>
+        <div class="score-label">Academic Engagement Index (out of 100)</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item"><div class="val" id="pcsVal">--</div><div class="lbl">Participation Score</div></div>
+        <div class="score-item"><div class="val" id="alrVal">--</div><div class="lbl">Active Learning %</div></div>
+        <div class="score-item"><div class="val" id="etLvl">--</div><div class="lbl">Level</div></div>
+      </div>
+      <div id="etInsight" class="insight insight-info"></div>
+      <button class="btn btn-secondary" style="margin-top:.5rem" onclick="saveEngagement()">💾 Save Entry</button>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">📋 History</div>
+      <div id="etHistory"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== ENERGY MONITOR ============================== -->
+<div class="page" id="energyMonitor">
+  <div class="section-header">
+    <span class="section-icon">⚡</span>
+    <h2>Academic Energy Monitor</h2>
+    <p>Track your daily habits & energy levels</p>
+  </div>
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="card">
+      <div class="card-title">🌙 Daily Inputs</div>
+      <div class="form-group">
+        <label>😴 Sleep Hours Last Night</label>
+        <input type="number" id="sleepHr" min="0" max="12" step=".5" value="7" placeholder="e.g. 7"/>
+      </div>
+      <div class="form-group">
+        <label>📱 Screen Time (non-study) hours</label>
+        <input type="number" id="screenHr" min="0" max="12" step=".5" value="3" placeholder="e.g. 3"/>
+      </div>
+      <div class="form-group">
+        <label>📚 Study Duration (hours)</label>
+        <input type="number" id="studyHr" min="0" max="12" step=".5" value="3" placeholder="e.g. 3"/>
+      </div>
+      <div class="form-group">
+        <label>🏃 Physical Activity (minutes)</label>
+        <input type="number" id="physMin" min="0" max="180" step="5" value="30" placeholder="e.g. 30"/>
+      </div>
+      <button class="btn btn-primary" onclick="calcEnergy()">Calculate Energy Score ⚡</button>
+    </div>
+
+    <div id="emResult" style="display:none">
+      <div class="score-board">
+        <div class="score-main" id="essVal">--</div>
+        <div class="score-label">Energy Stability Score (out of 100)</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item"><div class="val" id="briVal">--</div><div class="lbl">Burnout Risk %</div></div>
+        <div class="score-item"><div class="val" id="fsiVal">--</div><div class="lbl">Focus Sustainability</div></div>
+        <div class="score-item"><div class="val" id="emLvl">--</div><div class="lbl">Status</div></div>
+      </div>
+      <div id="emInsight" class="insight"></div>
+      <button class="btn btn-secondary" style="margin-top:.5rem" onclick="saveEnergy()">💾 Save Entry</button>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">📋 History</div>
+      <div id="emHistory"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== GOAL ANALYZER ============================== -->
+<div class="page" id="goalAnalyzer">
+  <div class="section-header">
+    <span class="section-icon">🎯</span>
+    <h2>Goal Alignment Analyzer</h2>
+    <p>Connect your daily effort to your dreams</p>
+  </div>
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="card">
+      <div class="card-title">✍️ Your Academic Goals</div>
+      <div class="form-group">
+        <label>🎯 Short-term Academic Goal (this month)</label>
+        <textarea id="stGoal" placeholder="e.g. Complete all chapters in Mathematics, score 85% in next test..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>🌟 Long-term Aspiration (career / life)</label>
+        <textarea id="ltGoal" placeholder="e.g. Become a doctor, engineer, civil servant..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>⏰ Daily Effort (study hours per day)</label>
+        <input type="number" id="effortHr" min="0" max="12" step=".5" value="3"/>
+      </div>
+      <div class="form-group">
+        <label>📅 Days studying per week</label>
+        <input type="number" id="effortDays" min="0" max="7" step="1" value="5"/>
+      </div>
+      <div class="form-group">
+        <label>🎯 How clearly do you see your goal? (1–10)</label>
+        <input type="range" id="goalClarity" min="1" max="10" value="7"/>
+        <div class="range-row"><span>1 – Vague</span><span>10 – Crystal Clear</span></div>
+      </div>
+      <button class="btn btn-primary" onclick="calcGoal()">Analyze Goal Alignment 🎯</button>
+    </div>
+
+    <div id="gaResult" style="display:none">
+      <div class="score-board">
+        <div class="score-main" id="gaiVal">--</div>
+        <div class="score-label">Goal Alignment Index (out of 100)</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item"><div class="val" id="ecrVal">--</div><div class="lbl">Effort Consistency</div></div>
+        <div class="score-item"><div class="val" id="pcsGVal">--</div><div class="lbl">Purpose Clarity</div></div>
+        <div class="score-item"><div class="val" id="gaLvl">--</div><div class="lbl">Alignment</div></div>
+      </div>
+      <div id="gaInsight" class="insight insight-info"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== TREND TRACKER ============================== -->
+<div class="page" id="trendTracker">
+  <div class="section-header">
+    <span class="section-icon">📈</span>
+    <h2>Motivation Trend Tracker</h2>
+    <p>Your weekly progress at a glance</p>
+  </div>
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="card">
+      <div class="card-title">📈 Motivation Over Time</div>
+      <div class="chart-wrap">
+        <canvas id="trendChart" height="180"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Energy Over Time</div>
+      <div class="chart-wrap">
+        <canvas id="energyChart" height="150"></canvas>
+      </div>
+    </div>
+    <div id="trendAlerts"></div>
+    <div class="card">
+      <div class="card-title">📊 Stats Summary</div>
+      <div id="trendStats"></div>
+    </div>
+    <button class="btn btn-secondary" onclick="clearAllData()" style="margin-top:.5rem">🗑️ Clear All Data</button>
+  </div>
+</div>
+
+<!-- ============================== JOYFUL DASHBOARD ============================== -->
+<div class="page" id="joyfulDashboard">
+  <div class="section-header">
+    <span class="section-icon">🌟</span>
+    <h2>Joyful Learning Index</h2>
+    <p>Your holistic academic wellness score</p>
+  </div>
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="card" style="text-align:center">
+      <div class="card-title">🌈 Joyful Learning Composite Score</div>
+      <div class="joyful-ring" id="joyRing">
+        <div class="joyful-inner">
+          <div class="joyful-score" id="joyScore">--</div>
+          <div class="joyful-label">out of 100</div>
+        </div>
+      </div>
+      <div id="joyLabel" style="color:var(--text2);font-size:.9rem;margin-top:.3rem"></div>
+    </div>
+
+    <div class="score-grid" id="joyComponents"></div>
+
+    <div class="card">
+      <div class="card-title">💡 Intervention Suggestions</div>
+      <div id="interventions"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Weekly Reflection Prompts</div>
+      <div id="reflectionPrompts"></div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">📄 Export Report</div>
+      <p style="margin-bottom:1rem">Generate a printable motivation & engagement report.</p>
+      <button class="btn btn-primary" onclick="generateReport()">🖨️ Generate & Print Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== FOUNDATIONS ============================== -->
+<div class="page" id="foundations">
+  <div class="section-header">
+    <span class="section-icon">📖</span>
+    <h2>Framework & Joyful Learning Theory</h2>
+    <p>20 detailed chapters on motivation science</p>
+  </div>
+  <div class="chapter-list" id="chapterList"></div>
+</div>
+
+<!-- ============================== CHAPTER READER ============================== -->
+<div class="page" id="chapterReader">
+  <div style="padding:1rem;max-width:700px;margin:0 auto">
+    <div class="content-reader" id="chapterContent"></div>
+    <div style="padding-bottom:2rem;display:flex;gap:.7rem;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" id="prevChBtn" onclick="prevChapter()">← Previous</button>
+      <button class="btn btn-primary btn-sm" id="nextChBtn" onclick="nextChapter()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="installBanner" style="display:none">
+  📲 Install this app on your device!
+  <button onclick="installApp()">Install</button>
+  <button onclick="document.getElementById('installBanner').style.display='none'" style="background:transparent;color:var(--text2);border:none;cursor:pointer;font-size:1rem">✕</button>
+</div>
+
+<script>
+// ============================================================
+// DATA STRUCTURES (local JSON equivalents)
+// ============================================================
+const motivationFactors = [
+  {id:'interest', label:'Interest in Subject', weight:0.25, icon:'💡'},
+  {id:'goals',    label:'Clarity of Goals',    weight:0.20, icon:'🎯'},
+  {id:'confidence',label:'Confidence Level',   weight:0.20, icon:'💪'},
+  {id:'distraction',label:'Distraction Frequency (reverse)',weight:0.15, icon:'📵'},
+  {id:'consistency',label:'Daily Study Consistency',weight:0.15, icon:'📅'},
+  {id:'enjoyment',label:'Enjoyment of Learning',weight:0.05, icon:'😊'},
+];
+const engagementIndicators = [
+  {id:'participation', label:'Class Participation',  weight:0.25, icon:'🙋'},
+  {id:'questioning',   label:'Question Asking',      weight:0.20, icon:'❓'},
+  {id:'homework',      label:'Homework Completion',  weight:0.20, icon:'📝'},
+  {id:'project',       label:'Project Involvement',  weight:0.20, icon:'🛠️'},
+  {id:'peer',          label:'Peer Collaboration',   weight:0.15, icon:'🤝'},
+];
+const energyWeights = {sleep:0.35, screen:0.20, study:0.25, physical:0.20};
+const goalAlignmentRules = {
+  effortIdeal:4, daysIdeal:6, clarityMax:10
+};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let currentPage = 'home';
+let currentChapter = 0;
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('backBtn').style.display = id==='home'?'none':'flex';
+  currentPage = id;
+  window.scrollTo(0,0);
+  if(id==='trendTracker') renderTrends();
+  if(id==='joyfulDashboard') renderJoyful();
+  if(id==='foundations') renderChapterList();
+  if(id==='selfCheck'){ renderSCForm(); renderSCHistory(); }
+  if(id==='engagementTracker'){ renderETForm(); renderETHistory(); }
+  if(id==='energyMonitor') renderEMHistory();
+}
+function goHome(){ showPage('home'); }
+
+// ============================================================
+// SELF CHECK
+// ============================================================
+function renderSCForm(){
+  const el = document.getElementById('scForm');
+  if(el.innerHTML.trim()) return;
+  el.innerHTML = motivationFactors.map(f=>`
+    <div class="form-group">
+      <label>${f.icon} ${f.label}</label>
+      <input type="range" id="sc_${f.id}" min="1" max="5" value="3"/>
+      <div class="range-row"><span>1 – Low</span><span id="sc_${f.id}_val">3</span><span>5 – High</span></div>
+    </div>
+  `).join('');
+  motivationFactors.forEach(f=>{
+    const el2 = document.getElementById(`sc_${f.id}`);
+    el2.oninput = ()=>document.getElementById(`sc_${f.id}_val`).textContent = el2.value;
+  });
+}
+
+function calcSelfCheck(){
+  const vals = {};
+  motivationFactors.forEach(f=>{ vals[f.id]=+document.getElementById(`sc_${f.id}`).value; });
+
+  // Distraction is reverse scored
+  const adjVals = {...vals, distraction: 6 - vals.distraction};
+
+  // Motivation Strength Index: weighted sum → normalize to 100
+  const msi = Math.round(
+    motivationFactors.reduce((acc,f)=>acc + adjVals[f.id]*f.weight, 0) / 5 * 100
+  );
+
+  // Intrinsic = interest + enjoyment + confidence (these 3 are intrinsic)
+  const intrinsicRaw = (adjVals.interest + adjVals.enjoyment + adjVals.confidence)/3;
+  const ims = Math.round(intrinsicRaw/5*100);
+
+  // Extrinsic Dependence = if clarity & consistency high but interest/enjoyment low
+  const extrinsicRaw = ((5-vals.interest)+(5-vals.enjoyment))/2;
+  const edr = Math.round(extrinsicRaw/5*100);
+
+  const level = msi>=80?'🌟 High':msi>=55?'📈 Moderate':msi>=35?'⚠️ Low':'🆘 Critical';
+
+  document.getElementById('msiVal').textContent = msi;
+  document.getElementById('imsVal').textContent = ims+'%';
+  document.getElementById('edrVal').textContent = edr+'%';
+  document.getElementById('msiLvl').textContent = level;
+
+  const insight = msi>=80
+    ? '🎉 Excellent! Your motivation is strong. Keep nurturing your intrinsic drive by connecting studies to personal interests.'
+    : msi>=55
+    ? '📈 Good motivation level. Focus on building daily consistency and reducing distractions to reach the next level.'
+    : msi>=35
+    ? '⚠️ Motivation needs attention. Try breaking goals into small wins. Celebrate small achievements every day.'
+    : '🆘 Motivation is critically low. Start with 10-minute study sessions, find a study buddy, and talk to your teacher.';
+
+  const insightEl = document.getElementById('scInsight');
+  insightEl.textContent = insight;
+  insightEl.className = `insight ${msi>=55?'insight-good':msi>=35?'insight-gold':'insight-warn'}`;
+  document.getElementById('scResult').style.display='block';
+}
+
+function saveSelfCheck(){
+  const vals = {};
+  motivationFactors.forEach(f=>{ vals[f.id]=+document.getElementById(`sc_${f.id}`).value; });
+  const adjVals = {...vals, distraction: 6-vals.distraction};
+  const msi = Math.round(motivationFactors.reduce((a,f)=>a+adjVals[f.id]*f.weight,0)/5*100);
+  const logs = JSON.parse(localStorage.getItem('motivationLogs')||'[]');
+  logs.push({date:new Date().toLocaleDateString(),msi,...vals});
+  localStorage.setItem('motivationLogs',JSON.stringify(logs));
+  renderSCHistory();
+  alert('✅ Entry saved!');
+}
+
+function renderSCHistory(){
+  const logs = JSON.parse(localStorage.getItem('motivationLogs')||'[]');
+  const el = document.getElementById('scHistory');
+  if(!logs.length){ el.innerHTML='<p style="color:var(--text2);font-size:.85rem">No saved entries yet.</p>'; return; }
+  el.innerHTML=`<table class="log-table"><thead><tr><th>Date</th><th>MSI</th><th>Interest</th><th>Confidence</th></tr></thead><tbody>
+    ${logs.slice(-8).reverse().map(l=>`<tr><td>${l.date}</td><td style="color:var(--accent);font-weight:700">${l.msi}</td><td>${l.interest}</td><td>${l.confidence}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ============================================================
+// ENGAGEMENT TRACKER
+// ============================================================
+function renderETForm(){
+  const el = document.getElementById('etForm');
+  if(el.innerHTML.trim()) return;
+  el.innerHTML = engagementIndicators.map(f=>`
+    <div class="form-group">
+      <label>${f.icon} ${f.label}</label>
+      <input type="range" id="et_${f.id}" min="1" max="5" value="3"/>
+      <div class="range-row"><span>1 – Low</span><span id="et_${f.id}_val">3</span><span>5 – High</span></div>
+    </div>
+  `).join('') + '<br/>';
+  engagementIndicators.forEach(f=>{
+    const e2=document.getElementById(`et_${f.id}`);
+    e2.oninput=()=>document.getElementById(`et_${f.id}_val`).textContent=e2.value;
+  });
+}
+
+function calcEngagement(){
+  const vals={};
+  engagementIndicators.forEach(f=>{vals[f.id]=+document.getElementById(`et_${f.id}`).value;});
+  const aei = Math.round(engagementIndicators.reduce((a,f)=>a+vals[f.id]*f.weight,0)/5*100);
+  const pcs = Math.round((vals.participation*0.6+vals.questioning*0.4)/5*100);
+  const alr = Math.round((vals.project*0.5+vals.peer*0.5)/5*100);
+  const level = aei>=80?'🌟 Highly Engaged':aei>=55?'📊 Moderately Engaged':'⚠️ Needs Boost';
+
+  document.getElementById('aeiVal').textContent=aei;
+  document.getElementById('pcsVal').textContent=pcs+'%';
+  document.getElementById('alrVal').textContent=alr+'%';
+  document.getElementById('etLvl').textContent=level;
+  const insight = aei>=80
+    ? '🌟 You are highly engaged! Great participation and collaboration skills. Try mentoring peers.'
+    : aei>=55
+    ? '📊 Decent engagement. Push yourself to ask more questions and join group activities.'
+    : '⚠️ Low engagement detected. Start by answering one question per class. Small steps matter!';
+  const ie=document.getElementById('etInsight');
+  ie.textContent=insight; ie.className=`insight ${aei>=55?'insight-good':'insight-warn'}`;
+  document.getElementById('etResult').style.display='block';
+}
+
+function saveEngagement(){
+  const vals={};
+  engagementIndicators.forEach(f=>{vals[f.id]=+document.getElementById(`et_${f.id}`).value;});
+  const aei=Math.round(engagementIndicators.reduce((a,f)=>a+vals[f.id]*f.weight,0)/5*100);
+  const logs=JSON.parse(localStorage.getItem('engagementLogs')||'[]');
+  logs.push({date:new Date().toLocaleDateString(),aei,...vals});
+  localStorage.setItem('engagementLogs',JSON.stringify(logs));
+  renderETHistory();
+  alert('✅ Engagement entry saved!');
+}
+
+function renderETHistory(){
+  const logs=JSON.parse(localStorage.getItem('engagementLogs')||'[]');
+  const el=document.getElementById('etHistory');
+  if(!logs.length){el.innerHTML='<p style="color:var(--text2);font-size:.85rem">No entries yet.</p>';return;}
+  el.innerHTML=`<table class="log-table"><thead><tr><th>Date</th><th>AEI</th><th>Participation</th><th>Homework</th></tr></thead><tbody>
+    ${logs.slice(-8).reverse().map(l=>`<tr><td>${l.date}</td><td style="color:var(--accent3);font-weight:700">${l.aei}</td><td>${l.participation}</td><td>${l.homework}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ============================================================
+// ENERGY MONITOR
+// ============================================================
+function calcEnergy(){
+  const sleep=+document.getElementById('sleepHr').value;
+  const screen=+document.getElementById('screenHr').value;
+  const study=+document.getElementById('studyHr').value;
+  const phys=+document.getElementById('physMin').value;
+
+  // Sleep score: optimal 7-9 hrs
+  const sleepScore = sleep>=7&&sleep<=9?100:sleep>=6&&sleep<7?75:sleep>=9&&sleep<=10?75:sleep>=5&&sleep<6?50:25;
+  // Screen: less is better, >4hrs = bad
+  const screenScore = screen<=1?100:screen<=2?85:screen<=3?65:screen<=4?45:25;
+  // Study: 2-5 hrs optimal
+  const studyScore = study>=2&&study<=5?100:study>=1&&study<2?70:study>5&&study<=7?80:study>7?60:30;
+  // Physical: 30+ min ideal
+  const physScore = phys>=60?100:phys>=30?85:phys>=15?65:phys>=5?40:15;
+
+  const ess = Math.round(
+    sleepScore*energyWeights.sleep +
+    screenScore*energyWeights.screen +
+    studyScore*energyWeights.study +
+    physScore*energyWeights.physical
+  );
+
+  // Burnout Risk: inverse of sleep + high screen + no exercise
+  const bri = Math.min(100, Math.round(
+    ((5-sleep/2)*15 + screen*8 + (60-Math.min(60,phys))*0.4)
+  ));
+  const fsi = Math.round((sleepScore*0.5+physScore*0.3+studyScore*0.2));
+  const lvl = bri>=70?'🔴 Burnout Risk':bri>=40?'🟡 Moderate Strain':ess>=70?'🟢 Energized':'🟡 Low Energy';
+
+  document.getElementById('essVal').textContent=ess;
+  document.getElementById('briVal').textContent=bri+'%';
+  document.getElementById('fsiVal').textContent=fsi+'%';
+  document.getElementById('emLvl').textContent=lvl;
+
+  let insightText, insightClass;
+  if(bri>=70){
+    insightText='🔴 HIGH BURNOUT RISK! You need an urgent energy reset. Prioritise 8 hours of sleep tonight, reduce screen time, and take tomorrow\'s studies lightly.';
+    insightClass='insight-warn';
+  } else if(bri>=40){
+    insightText='🟡 Moderate strain detected. Add 30 mins of walk/exercise, limit social media after 9pm, and schedule one complete rest hour daily.';
+    insightClass='insight-gold';
+  } else if(ess>=70){
+    insightText='🟢 Great energy balance! Your sleep and activity routine is supporting good academic focus. Keep it consistent.';
+    insightClass='insight-good';
+  } else {
+    insightText='⚡ Energy is low. Ensure 7-8 hrs sleep, reduce screen time, and include at least 20 mins of physical movement daily.';
+    insightClass='insight-info';
+  }
+  const ie=document.getElementById('emInsight');
+  ie.textContent=insightText; ie.className=`insight ${insightClass}`;
+  document.getElementById('emResult').style.display='block';
+}
+
+function saveEnergy(){
+  const sleep=+document.getElementById('sleepHr').value;
+  const screen=+document.getElementById('screenHr').value;
+  const study=+document.getElementById('studyHr').value;
+  const phys=+document.getElementById('physMin').value;
+  const sleepScore=sleep>=7&&sleep<=9?100:sleep>=6?75:sleep>=5?50:25;
+  const screenScore=screen<=1?100:screen<=2?85:screen<=3?65:screen<=4?45:25;
+  const studyScore=study>=2&&study<=5?100:study>=1?70:study>5?80:30;
+  const physScore=phys>=60?100:phys>=30?85:phys>=15?65:phys>=5?40:15;
+  const ess=Math.round(sleepScore*.35+screenScore*.20+studyScore*.25+physScore*.20);
+  const bri=Math.min(100,Math.round(((5-sleep/2)*15+screen*8+(60-Math.min(60,phys))*.4)));
+  const logs=JSON.parse(localStorage.getItem('energyData')||'[]');
+  logs.push({date:new Date().toLocaleDateString(),ess,bri,sleep,screen,study,phys});
+  localStorage.setItem('energyData',JSON.stringify(logs));
+  renderEMHistory();
+  alert('✅ Energy entry saved!');
+}
+
+function renderEMHistory(){
+  const logs=JSON.parse(localStorage.getItem('energyData')||'[]');
+  const el=document.getElementById('emHistory');
+  if(!el)return;
+  if(!logs.length){el.innerHTML='<p style="color:var(--text2);font-size:.85rem">No entries yet.</p>';return;}
+  el.innerHTML=`<table class="log-table"><thead><tr><th>Date</th><th>ESS</th><th>Burnout%</th><th>Sleep</th></tr></thead><tbody>
+    ${logs.slice(-8).reverse().map(l=>`<tr><td>${l.date}</td><td style="color:var(--gold);font-weight:700">${l.ess}</td><td style="color:${l.bri>=70?'var(--warn)':'var(--accent2)'}">${l.bri}%</td><td>${l.sleep}h</td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ============================================================
+// GOAL ANALYZER
+// ============================================================
+function calcGoal(){
+  const effort=+document.getElementById('effortHr').value;
+  const days=+document.getElementById('effortDays').value;
+  const clarity=+document.getElementById('goalClarity').value;
+  const stGoal=document.getElementById('stGoal').value.trim();
+  const ltGoal=document.getElementById('ltGoal').value.trim();
+
+  const effortScore = Math.min(100, effort/goalAlignmentRules.effortIdeal*100);
+  const daysScore = Math.min(100, days/goalAlignmentRules.daysIdeal*100);
+  const clarityScore = clarity/goalAlignmentRules.clarityMax*100;
+  const goalFilledBonus = (stGoal?10:0)+(ltGoal?10:0);
+
+  const ecr = Math.round((effortScore*.6+daysScore*.4));
+  const pcs = Math.round(clarityScore);
+  const gai = Math.min(100, Math.round(ecr*.45 + pcs*.35 + goalFilledBonus*.1 + (stGoal&&ltGoal?10:0)));
+
+  document.getElementById('gaiVal').textContent=gai;
+  document.getElementById('ecrVal').textContent=ecr+'%';
+  document.getElementById('pcsGVal').textContent=pcs+'%';
+  const alv = gai>=80?'🌟 Aligned':gai>=55?'📊 Partially Aligned':'⚠️ Misaligned';
+  document.getElementById('gaLvl').textContent=alv;
+  const insight = gai>=80
+    ? '🌟 Excellent alignment! Your daily effort strongly supports your goals. Keep reviewing your goals weekly.'
+    : gai>=55
+    ? '📊 Partial alignment. Try writing down your goals each morning and reflect: "Does today\'s study bring me closer?"'
+    : '⚠️ Your effort and goals are misaligned. Define clearer short-term milestones and increase daily study hours gradually.';
+  const ie=document.getElementById('gaInsight');
+  ie.textContent=insight; ie.className=`insight ${gai>=55?'insight-good':'insight-warn'}`;
+  document.getElementById('gaResult').style.display='block';
+}
+
+// ============================================================
+// TREND TRACKER
+// ============================================================
+function renderTrends(){
+  const mLogs=JSON.parse(localStorage.getItem('motivationLogs')||'[]');
+  const eLogs=JSON.parse(localStorage.getItem('energyData')||'[]');
+
+  drawLineChart('trendChart',
+    mLogs.slice(-10).map(l=>l.date),
+    mLogs.slice(-10).map(l=>l.msi),
+    'Motivation Strength Index','#00d4ff'
+  );
+  drawLineChart('energyChart',
+    eLogs.slice(-10).map(l=>l.date),
+    eLogs.slice(-10).map(l=>l.ess),
+    'Energy Stability Score','#ffd166'
+  );
+
+  // Alerts
+  const alerts=document.getElementById('trendAlerts');
+  alerts.innerHTML='';
+  if(mLogs.length>=2){
+    const last=mLogs[mLogs.length-1].msi, prev=mLogs[mLogs.length-2].msi;
+    if(last<prev-10) alerts.innerHTML+=`<div class="insight insight-warn">⚠️ Motivation dropped by ${prev-last} points since last entry. Consider revisiting your goals and energy habits.</div>`;
+    else if(last>prev+5) alerts.innerHTML+=`<div class="insight insight-good">📈 Motivation improved by ${last-prev} points! Great progress — keep building on this momentum.</div>`;
+  }
+  if(eLogs.length){
+    const lastE=eLogs[eLogs.length-1];
+    if(lastE.bri>=70) alerts.innerHTML+=`<div class="insight insight-warn">🔴 Burnout risk is high (${lastE.bri}%). Prioritize rest today!</div>`;
+  }
+
+  // Stats
+  const statsEl=document.getElementById('trendStats');
+  if(mLogs.length){
+    const avg=Math.round(mLogs.reduce((a,l)=>a+l.msi,0)/mLogs.length);
+    const growth = mLogs.length>=2?mLogs[mLogs.length-1].msi-mLogs[0].msi:0;
+    statsEl.innerHTML=`
+      <div class="score-grid">
+        <div class="score-item"><div class="val" style="color:var(--accent)">${avg}</div><div class="lbl">Avg Motivation</div></div>
+        <div class="score-item"><div class="val" style="color:${growth>=0?'var(--accent2)':'var(--warn)'}">${growth>=0?'+':''}${growth}</div><div class="lbl">Overall Growth</div></div>
+        <div class="score-item"><div class="val" style="color:var(--gold)">${mLogs.length}</div><div class="lbl">Entries</div></div>
+      </div>`;
+  } else {
+    statsEl.innerHTML='<p style="color:var(--text2);font-size:.85rem">No data yet. Complete the Self-Check and save entries to see trends.</p>';
+  }
+}
+
+function drawLineChart(canvasId, labels, data, title, color){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.offsetWidth||300;
+  canvas.width=W; canvas.height=canvas.height||180;
+  const H=canvas.height;
+  const pad={t:30,r:20,b:40,l:45};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+
+  if(!data.length){
+    ctx.fillStyle='#93b4d4'; ctx.font='13px Sora,sans-serif'; ctx.textAlign='center';
+    ctx.fillText('No data yet',W/2,H/2); return;
+  }
+
+  const min=Math.min(...data,0), max=Math.max(...data,100);
+  const range=max-min||1;
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,.06)'; ctx.lineWidth=1;
+  [0,.25,.5,.75,1].forEach(t=>{
+    const y=pad.t+cH*(1-t);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+cW,y); ctx.stroke();
+    ctx.fillStyle='#93b4d4'; ctx.font='10px Sora,sans-serif'; ctx.textAlign='right';
+    ctx.fillText(Math.round(min+range*t),pad.l-6,y+4);
+  });
+
+  // Title
+  ctx.fillStyle='#e8f4ff'; ctx.font='bold 11px Nunito,sans-serif'; ctx.textAlign='left';
+  ctx.fillText(title,pad.l,18);
+
+  // Line
+  const xs=data.map((_,i)=>pad.l+i/(data.length-1||1)*cW);
+  const ys=data.map(v=>pad.t+cH*(1-(v-min)/range));
+
+  // Area fill
+  const grad=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
+  grad.addColorStop(0,color+'44'); grad.addColorStop(1,color+'00');
+  ctx.beginPath(); ctx.moveTo(xs[0],ys[0]);
+  xs.forEach((x,i)=>ctx.lineTo(x,ys[i]));
+  ctx.lineTo(xs[xs.length-1],pad.t+cH); ctx.lineTo(xs[0],pad.t+cH); ctx.closePath();
+  ctx.fillStyle=grad; ctx.fill();
+
+  // Line
+  ctx.beginPath(); ctx.moveTo(xs[0],ys[0]);
+  xs.forEach((x,i)=>ctx.lineTo(x,ys[i]));
+  ctx.strokeStyle=color; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+
+  // Points & labels
+  xs.forEach((x,i)=>{
+    ctx.beginPath(); ctx.arc(x,ys[i],4,0,Math.PI*2);
+    ctx.fillStyle=color; ctx.fill();
+    ctx.strokeStyle='#0a1628'; ctx.lineWidth=1.5; ctx.stroke();
+    if(labels[i]){
+      ctx.fillStyle='#93b4d4'; ctx.font='9px Sora,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(labels[i].slice(-5),x,H-5);
+    }
+  });
+}
+
+function clearAllData(){
+  if(confirm('⚠️ Clear ALL saved data? This cannot be undone.')){
+    ['motivationLogs','engagementLogs','energyData','trendHistory','reports'].forEach(k=>localStorage.removeItem(k));
+    renderTrends();
+    alert('✅ All data cleared.');
+  }
+}
+
+// ============================================================
+// JOYFUL LEARNING COMPOSITE
+// ============================================================
+function renderJoyful(){
+  const mLogs=JSON.parse(localStorage.getItem('motivationLogs')||'[]');
+  const eLogs=JSON.parse(localStorage.getItem('engagementLogs')||'[]');
+  const nLogs=JSON.parse(localStorage.getItem('energyData')||'[]');
+
+  const latestM = mLogs.length?mLogs[mLogs.length-1].msi:null;
+  const latestE = eLogs.length?eLogs[eLogs.length-1].aei:null;
+  const latestN = nLogs.length?nLogs[nLogs.length-1].ess:null;
+
+  const hasData = latestM||latestE||latestN;
+  const mScore = latestM||0;
+  const eScore = latestE||0;
+  const nScore = latestN||0;
+
+  // Joyful Learning Composite = weighted average
+  let jlc, weights = 0;
+  let components = [];
+  if(latestM){ jlc=(jlc||0)+mScore*.35; weights+=.35; components.push({lbl:'Motivation',val:mScore,c:'var(--accent)'}); }
+  if(latestE){ jlc=(jlc||0)+eScore*.35; weights+=.35; components.push({lbl:'Engagement',val:eScore,c:'var(--accent3)'}); }
+  if(latestN){ jlc=(jlc||0)+nScore*.30; weights+=.30; components.push({lbl:'Energy',val:nScore,c:'var(--gold)'}); }
+
+  const composite = weights>0?Math.round(jlc/weights):null;
+
+  const joyScore=document.getElementById('joyScore');
+  const joyLabel=document.getElementById('joyLabel');
+  const joyRing=document.getElementById('joyRing');
+
+  if(composite!==null){
+    joyScore.textContent=composite;
+    const pct=composite/100;
+    joyRing.style.background=`conic-gradient(var(--accent) 0deg, var(--accent2) ${pct*120}deg, var(--accent3) ${pct*240}deg, rgba(255,255,255,.05) ${pct*360}deg, rgba(255,255,255,.05) 360deg)`;
+    joyLabel.textContent = composite>=80?'🌟 Joyful Learner!':composite>=60?'📈 Growing Learner':composite>=40?'🌱 Emerging Learner':'🆘 Needs Support';
+  } else {
+    joyScore.textContent='--';
+    joyLabel.textContent='Complete tools above & save entries to see your score';
+  }
+
+  document.getElementById('joyComponents').innerHTML = components.map(c=>`
+    <div class="score-item">
+      <div class="val" style="color:${c.c}">${c.val}</div>
+      <div class="lbl">${c.lbl} Score</div>
+    </div>
+  `).join('') || '<p style="color:var(--text2);font-size:.85rem;padding:.5rem">No scores yet. Use the tools and save entries.</p>';
+
+  // Interventions
+  renderInterventions(composite, mLogs, eLogs, nLogs);
+  renderReflectionPrompts();
+}
+
+function renderInterventions(jlc, mLogs, eLogs, nLogs){
+  const container=document.getElementById('interventions');
+  let html='';
+  const latestM=mLogs.length?mLogs[mLogs.length-1]:null;
+  const latestN=nLogs.length?nLogs[nLogs.length-1]:null;
+
+  if(!jlc){ container.innerHTML='<p style="color:var(--text2);font-size:.85rem">Save entries first to get personalised interventions.</p>'; return; }
+
+  if(latestM&&latestM.msi<50){
+    html+=`<div class="sug-card" style="--c:var(--warn)"><div class="sug-title">⚠️ Low Motivation Detected</div>
+      <p>• Revise your short-term goals to make them smaller and achievable<br>
+      • Break today's study into 25-min focused blocks (Pomodoro)<br>
+      • Find one thing genuinely interesting about your weakest subject<br>
+      • Ask your teacher for one-to-one guidance this week</p></div>`;
+  }
+  if(latestN&&latestN.bri>=70){
+    html+=`<div class="sug-card" style="--c:var(--warn)"><div class="sug-title">🔴 Burnout Risk – Immediate Reset Needed</div>
+      <p>• Take a 1-day academic rest (no intensive study)<br>
+      • Sleep at fixed times for the next 7 nights (10pm–6am ideal)<br>
+      • Reduce screen time to max 1 hr today<br>
+      • 20-min outdoor walk can reset cortisol levels significantly</p></div>`;
+  }
+  if(latestN&&latestN.sleep<6){
+    html+=`<div class="sug-card" style="--c:var(--gold)"><div class="sug-title">😴 Sleep Deficit Warning</div>
+      <p>Sleep is memory consolidation time. Without 7-8 hrs, the brain cannot retain what it studied. Set a strict sleep schedule starting tonight.</p></div>`;
+  }
+  if(!html){
+    html=`<div class="sug-card" style="--c:var(--accent2)"><div class="sug-title">✅ You're Doing Well!</div>
+      <p>Keep maintaining your study habits, sleep schedule, and engagement. Review your long-term goals monthly to stay purposeful.</p></div>
+      <div class="sug-card" style="--c:var(--accent3)"><div class="sug-title">💡 Growth Tip</div>
+      <p>Even high performers benefit from peer teaching — explaining a concept to classmates solidifies your own understanding (Protégé Effect).</p></div>`;
+  }
+  container.innerHTML=html;
+}
+
+function renderReflectionPrompts(){
+  const prompts=[
+    '📝 What is one thing I studied this week that genuinely excited me?',
+    '🎯 Am I one step closer to my long-term goal compared to last week?',
+    '⚡ What drained my energy most this week, and how can I address it?',
+    '🤝 Did I help a classmate learn something this week?',
+    '🌱 What habit, if done every day, would most improve my academic performance?',
+    '💪 What is one fear about studies I can challenge next week?',
+    '📚 Which subject needs more of my attention and why?',
+  ];
+  document.getElementById('reflectionPrompts').innerHTML=
+    prompts.map((p,i)=>`<div style="padding:.6rem .8rem;border-left:2px solid var(--accent${i%2===0?'':'3'});margin:.4rem 0;font-size:.85rem;color:var(--text2)">${p}</div>`).join('');
+}
+
+// ============================================================
+// REPORT GENERATOR
+// ============================================================
+function generateReport(){
+  const mLogs=JSON.parse(localStorage.getItem('motivationLogs')||'[]');
+  const eLogs=JSON.parse(localStorage.getItem('engagementLogs')||'[]');
+  const nLogs=JSON.parse(localStorage.getItem('energyData')||'[]');
+
+  const latestM=mLogs.length?mLogs[mLogs.length-1]:null;
+  const latestE=eLogs.length?eLogs[eLogs.length-1]:null;
+  const latestN=nLogs.length?nLogs[nLogs.length-1]:null;
+
+  const reportWin=window.open('','_blank');
+  const today=new Date().toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'});
+
+  reportWin.document.write(`<!DOCTYPE html><html><head>
+<meta charset="UTF-8"/><title>Motivation Report</title>
+<style>
+  body{font-family:'Segoe UI',sans-serif;max-width:800px;margin:0 auto;padding:2rem;color:#1a1a2e}
+  h1{color:#0a1628;text-align:center;font-size:1.6rem}
+  h2{color:#132447;font-size:1.1rem;border-bottom:2px solid #00d4ff;padding-bottom:.3rem;margin-top:1.5rem}
+  .meta{text-align:center;color:#666;font-size:.85rem;margin:.3rem 0}
+  .score-box{display:inline-block;background:#f0f8ff;border:2px solid #00d4ff;border-radius:10px;padding:.8rem 1.5rem;margin:.4rem;text-align:center}
+  .score-box .num{font-size:2rem;font-weight:900;color:#0a1628}
+  .score-box .lbl{font-size:.75rem;color:#666}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin:.7rem 0}
+  th{background:#e8f4ff;padding:.5rem;text-align:left;color:#0a1628}
+  td{padding:.45rem;border-bottom:1px solid #eee}
+  .highlight{background:#fffbf0;border-left:3px solid #ffd166;padding:.6rem .9rem;margin:.5rem 0;font-size:.85rem}
+  .good{color:#00884a;font-weight:700} .warn{color:#cc4444;font-weight:700}
+  footer{text-align:center;color:#999;font-size:.75rem;margin-top:2rem;border-top:1px solid #eee;padding-top:1rem}
+  @media print{body{padding:1rem}}
+</style></head><body>
+<h1>📚 Student Motivation, Engagement & Academic Energy Report</h1>
+<p class="meta">Developed by Mateen Yousuf | Teacher, School Education Department Kashmir</p>
+<p class="meta">Report Generated: ${today} | Aligned with NEP 2020 Joyful Learning Framework</p>
+
+<h2>📊 Score Summary</h2>
+<div style="text-align:center">
+  ${latestM?`<div class="score-box"><div class="num">${latestM.msi}</div><div class="lbl">Motivation Strength</div></div>`:''}
+  ${latestE?`<div class="score-box"><div class="num">${latestE.aei}</div><div class="lbl">Engagement Index</div></div>`:''}
+  ${latestN?`<div class="score-box"><div class="num">${latestN.ess}</div><div class="lbl">Energy Stability</div></div>`:''}
+  ${!latestM&&!latestE&&!latestN?'<p style="color:#666">No saved data found. Please save entries in each tool first.</p>':''}
+</div>
+
+${mLogs.length?`<h2>💡 Motivation History (Last 5 Entries)</h2>
+<table><thead><tr><th>Date</th><th>MSI</th><th>Interest</th><th>Confidence</th><th>Consistency</th></tr></thead><tbody>
+${mLogs.slice(-5).map(l=>`<tr><td>${l.date}</td><td class="${l.msi>=60?'good':'warn'}">${l.msi}</td><td>${l.interest}/5</td><td>${l.confidence}/5</td><td>${l.consistency}/5</td></tr>`).join('')}
+</tbody></table>`:''}
+
+${eLogs.length?`<h2>🎓 Engagement History (Last 5 Entries)</h2>
+<table><thead><tr><th>Date</th><th>AEI</th><th>Participation</th><th>Homework</th><th>Collaboration</th></tr></thead><tbody>
+${eLogs.slice(-5).map(l=>`<tr><td>${l.date}</td><td class="${l.aei>=60?'good':'warn'}">${l.aei}</td><td>${l.participation}/5</td><td>${l.homework}/5</td><td>${l.peer}/5</td></tr>`).join('')}
+</tbody></table>`:''}
+
+${nLogs.length?`<h2>⚡ Energy History (Last 5 Entries)</h2>
+<table><thead><tr><th>Date</th><th>ESS</th><th>Burnout%</th><th>Sleep</th><th>Study</th></tr></thead><tbody>
+${nLogs.slice(-5).map(l=>`<tr><td>${l.date}</td><td class="${l.ess>=60?'good':'warn'}">${l.ess}</td><td class="${l.bri>=60?'warn':'good'}">${l.bri}%</td><td>${l.sleep}h</td><td>${l.study}h</td></tr>`).join('')}
+</tbody></table>`:''}
+
+<h2>📝 Weekly Reflection Prompts</h2>
+<div class="highlight">What is one thing I studied this week that genuinely excited me?</div>
+<div class="highlight">Am I one step closer to my long-term goal compared to last week?</div>
+<div class="highlight">What drained my energy most this week, and how can I address it?</div>
+<div class="highlight">Which habit, if practiced daily, would most improve my academic performance?</div>
+
+<h2>🗺️ Improvement Roadmap</h2>
+<ol style="line-height:2;font-size:.9rem">
+  <li>Complete the Self-Check every Friday and track your Motivation trend weekly.</li>
+  <li>Log your energy data daily to catch burnout risk early.</li>
+  <li>Review and update your Goal Alignment every month.</li>
+  <li>Read at least 2 Foundation chapters per week for deeper motivation science understanding.</li>
+  <li>Share your insights with your teacher or a trusted peer for accountability.</li>
+</ol>
+
+<footer>Student Motivation, Engagement & Academic Energy Development Studio | Developed by Mateen Yousuf | School Education Department Kashmir | Aligned with NEP 2020</footer>
+</body></html>`);
+  reportWin.document.close();
+  setTimeout(()=>reportWin.print(),500);
+}
+
+// ============================================================
+// FOUNDATIONS – CHAPTERS
+// ============================================================
+const chapters=[
+  {
+    title:'What is Motivation in Learning?',
+    sub:'The engine behind every academic achievement',
+    content:`
+<p>Motivation is the psychological force that initiates, guides, and sustains goal-oriented behaviour. In the context of education, it is the invisible engine that determines whether a student opens their textbook with enthusiasm or reluctant resignation. Understanding motivation is not merely an academic exercise — it is the foundation upon which all meaningful learning is built.</p>
+
+<h3>Defining Academic Motivation</h3>
+<p>Psychologists define motivation as the internal state that energises behaviour, directs it toward specific goals, and sustains it in the face of obstacles. For students, motivation determines how long they study, how deeply they think, and how much of what they learn actually stays with them. A motivated student doesn't just memorise — they engage, question, connect, and create.</p>
+<p>Academic motivation operates along several dimensions: its <strong>direction</strong> (what a student chooses to do), its <strong>intensity</strong> (how hard they try), and its <strong>persistence</strong> (how long they keep trying when things get difficult). All three dimensions matter for genuine learning.</p>
+
+<h3>Why Motivation Matters More Than Intelligence</h3>
+<p>Decades of educational research consistently show that motivation is a stronger predictor of academic success than raw intelligence or socioeconomic background. A highly motivated student with average ability will outperform an unmotivated student with superior intellect. This is because motivation determines how fully a student uses whatever cognitive resources they have.</p>
+<p>Neuroscience supports this: dopamine, the brain's "reward" neurotransmitter, is released both when we anticipate a meaningful goal AND when we make progress toward it. A motivated brain is chemically primed for deeper encoding of information, better recall, and more creative problem-solving.</p>
+
+<h3>The NEP 2020 Perspective on Student Motivation</h3>
+<p>India's National Education Policy 2020 explicitly recognises that rote learning and examination pressure have suppressed students' natural curiosity and intrinsic motivation. The policy advocates for joyful learning environments, experiential education, and reduced assessment anxiety — all of which are scientifically proven to nurture internal motivation rather than fear-based compliance.</p>
+<p>When learning is perceived as meaningful, safe, and enjoyable, students develop what researchers call "mastery motivation" — the desire to understand deeply rather than merely perform. This is the kind of motivation that lasts a lifetime, not just until the next exam.</p>
+
+<h3>Sources of Motivation in Students</h3>
+<p>Motivation in students comes from multiple overlapping sources:</p>
+<ul>
+<li><strong>Personal values:</strong> When a subject connects to something the student cares about</li>
+<li><strong>Competence beliefs:</strong> The belief that effort leads to success</li>
+<li><strong>Social belonging:</strong> Feeling accepted, seen, and valued by teachers and peers</li>
+<li><strong>Autonomy:</strong> Having some control over what and how to learn</li>
+<li><strong>Purpose:</strong> Connecting today's lesson to tomorrow's meaningful life</li>
+</ul>
+
+<h3>Practical Example</h3>
+<p>Consider two students studying the water cycle. Student A memorises the definitions of evaporation and condensation because they appear in the exam. Student B is curious about why Kashmir's Dal Lake is shrinking and connects this to the same concepts. Student B experiences intrinsic motivation — the material is personally meaningful. Their retention, understanding, and interest will all be far superior to Student A's.</p>
+
+<h3>Reflection Exercise</h3>
+<ul class="checklist">
+<li>Think of a subject you genuinely enjoy. What makes it interesting to you?</li>
+<li>Think of a subject you find boring. Can you connect one topic from it to something you care about in real life?</li>
+<li>On a scale of 1–10, how motivated do you feel about your studies right now? What would move that number up by 2?</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I understand why I am studying, not just what I am studying</li>
+<li>I can connect at least one school subject to something meaningful in my life</li>
+<li>I know the difference between studying for marks and studying for understanding</li>
+<li>I have a basic idea of my short-term and long-term academic goals</li>
+</ul>`
+  },
+  {
+    title:'Intrinsic vs Extrinsic Motivation',
+    sub:'Understanding the two engines of learning',
+    content:`
+<p>Among the most important distinctions in motivation science is the difference between intrinsic and extrinsic motivation. These two types represent fundamentally different relationships between a student and their learning — and they have profoundly different effects on long-term academic success, creativity, and psychological wellbeing.</p>
+
+<h3>Intrinsic Motivation: Learning for Its Own Sake</h3>
+<p>Intrinsic motivation refers to engaging in an activity for the inherent satisfaction, curiosity, or personal interest it provides — not for any external reward. When a student reads beyond the textbook because a scientific concept genuinely fascinates them, or practises mathematics problems late into the night because they enjoy the challenge, they are intrinsically motivated.</p>
+<p>Research by Edward Deci and Richard Ryan (Self-Determination Theory) shows that intrinsically motivated students show deeper learning, greater creativity, stronger retention, better problem-solving, and higher subjective wellbeing. Intrinsic motivation also tends to be self-sustaining — it grows as competence grows.</p>
+
+<h3>Extrinsic Motivation: Learning for Rewards</h3>
+<p>Extrinsic motivation comes from external sources: grades, prizes, parental approval, fear of failure, or social recognition. It is not inherently harmful — external rewards can initiate engagement in activities a student might not otherwise try. The problem arises when extrinsic motivation replaces intrinsic motivation, a phenomenon called the "overjustification effect."</p>
+<p>Research shows that when children who already love drawing are given prizes for drawing, their interest in drawing actually <em>decreases</em> once the prizes stop. The external reward replaces the internal joy. In education, this manifests as students who study only during exam season, forget content immediately after the paper, and feel empty after achieving good marks.</p>
+
+<h3>The NEP 2020 Shift</h3>
+<p>NEP 2020's emphasis on joyful learning, project-based work, art integration, and reduced high-stakes examinations is essentially a systemic attempt to protect and cultivate intrinsic motivation. When a student builds a working model of a solar system rather than memorising its components, they are far more likely to develop genuine, lasting interest in astronomy.</p>
+
+<h3>Building Intrinsic Motivation</h3>
+<p>Intrinsic motivation is not a fixed trait — it can be developed. Key strategies include:</p>
+<ul>
+<li><strong>Choice:</strong> Allow yourself some control over what to explore within a subject</li>
+<li><strong>Challenge:</strong> Seek tasks that are slightly above your current ability (flow state zone)</li>
+<li><strong>Curiosity triggers:</strong> Ask "Why?" and "What if?" regularly</li>
+<li><strong>Meaning-making:</strong> Actively connect lessons to real life and personal goals</li>
+<li><strong>Progress celebration:</strong> Acknowledge your own growth, not just your rank</li>
+</ul>
+
+<h3>Healthy Use of Extrinsic Motivation</h3>
+<p>Extrinsic rewards work best as short-term scaffolding — a way to get started — not as permanent motivational infrastructure. A student can use a grade target to begin studying a subject and then actively work to find what is genuinely interesting about it, gradually shifting toward intrinsic engagement.</p>
+
+<h3>Reflection Exercise</h3>
+<ul class="checklist">
+<li>List three school activities you do purely because you enjoy them, not because you are graded on them</li>
+<li>For your least-liked subject, write one genuinely interesting question you've never explored about it</li>
+<li>Reflect: "Am I studying to understand, or studying to perform?"</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I can identify at least one subject where I have genuine intrinsic interest</li>
+<li>I understand that grades are a measure, not the purpose, of learning</li>
+<li>I sometimes study something just because I'm curious, not because it's in the syllabus</li>
+<li>I don't feel completely empty after exams — learning still matters to me beyond results</li>
+</ul>`
+  },
+  {
+    title:'NEP 2020 & Joyful Learning',
+    sub:'India\'s vision for transforming education',
+    content:`
+<p>The National Education Policy 2020 is the most comprehensive transformation of India's educational framework in over three decades. At its philosophical core lies a simple but revolutionary idea: learning should be joyful. This single principle, if implemented fully, has the power to transform millions of students from passive information receivers into engaged, creative, lifelong learners.</p>
+
+<h3>What NEP 2020 Changes</h3>
+<p>The policy moves away from rote memorisation toward conceptual understanding, critical thinking, and experiential learning. It restructures the curriculum into a 5+3+3+4 system (Foundational, Preparatory, Middle, Secondary stages), reduces content load, introduces mother-tongue medium instruction in early years, integrates arts and vocational education into mainstream schooling, and fundamentally reimagines the purpose of assessment.</p>
+<p>Under NEP 2020, assessment is not merely a gate to rank students, but a tool to understand where each child is in their learning journey and what support they need. This is a profound psychological shift — it moves learning away from the anxiety of comparison toward the curiosity of growth.</p>
+
+<h3>Joyful Learning: The Scientific Foundation</h3>
+<p>Joy in learning is not a soft, sentimental idea — it has hard neuroscientific backing. When students experience positive emotions during learning, the amygdala (emotional processing centre) and hippocampus (memory consolidation centre) work together more effectively. Positive emotional states during learning have been shown to improve encoding, retrieval, creativity, and motivation to continue learning.</p>
+<p>Conversely, fear, anxiety, and chronic stress — common in high-pressure examination systems — activate the brain's threat response. Cortisol floods the prefrontal cortex, impairing the very capacities needed for complex thinking: reasoning, planning, and creativity. A stressed student cannot learn optimally, no matter how hard they try.</p>
+
+<h3>Key NEP 2020 Joyful Learning Practices</h3>
+<ul>
+<li><strong>Activity-based and experiential learning:</strong> Students learn by doing, experimenting, and creating</li>
+<li><strong>Art integration:</strong> Every subject is connected to performing arts, visual arts, or craft</li>
+<li><strong>Local context:</strong> Curriculum connects to students' own geography, culture, and language</li>
+<li><strong>Student agency:</strong> Students have voice in their learning — choosing projects, topics, and presentation formats</li>
+<li><strong>Holistic report cards:</strong> Assessment of creativity, collaboration, empathy, and resilience alongside academics</li>
+</ul>
+
+<h3>Implications for Students in Kashmir</h3>
+<p>For students in Jammu & Kashmir, NEP 2020 offers a unique opportunity. The region's rich cultural heritage, unique geography, and diverse traditions are a treasure trove of learning contexts. Understanding the water cycle through the lens of the Jhelum's ecology, or learning history through Kashmiri architecture and handicrafts, transforms abstract content into lived experience.</p>
+
+<h3>Reflection Exercise</h3>
+<ul class="checklist">
+<li>Think of one lesson in school that you genuinely enjoyed. What made it joyful?</li>
+<li>How could one of your least favourite subjects be made more experiential or connected to local life?</li>
+<li>Write three ways your school environment could better support joyful learning</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I understand that NEP 2020 aims to make learning more meaningful and less stressful</li>
+<li>I recognise that joy and rigour are not opposites — deep learning can be both challenging and enjoyable</li>
+<li>I actively look for ways to make my own study experience more engaging and creative</li>
+<li>I appreciate that my cultural background and local context are learning resources</li>
+</ul>`
+  },
+  {
+    title:'Academic Engagement Explained',
+    sub:'Going beyond attendance to active participation',
+    content:`
+<p>Attendance is the lowest possible bar for academic participation. True academic engagement is something far richer and more meaningful — it is the quality of a student's cognitive, emotional, and behavioural investment in the learning process. Engaged students don't just sit in classrooms; they think, question, connect, and contribute.</p>
+
+<h3>Three Dimensions of Engagement</h3>
+<p>Research identifies three interconnected dimensions of academic engagement:</p>
+<ul>
+<li><strong>Behavioural engagement:</strong> Attending class, completing assignments, participating in discussions, following school norms</li>
+<li><strong>Cognitive engagement:</strong> Thinking deeply about content, using learning strategies, making connections across subjects</li>
+<li><strong>Emotional engagement:</strong> Feeling interested, curious, and a sense of belonging; caring about learning outcomes</li>
+</ul>
+<p>Truly engaged students exhibit all three. A student can be behaviourally compliant (present, quiet, submitting assignments) while being cognitively and emotionally absent. This surface-level engagement is common in rote-learning environments — and it is precisely what NEP 2020 seeks to dismantle.</p>
+
+<h3>Why Engagement Predicts Success</h3>
+<p>Longitudinal studies consistently show that academic engagement in secondary school is one of the strongest predictors of higher education completion, career achievement, and life satisfaction. Engagement is not just about current grades — it shapes the entire trajectory of a student's intellectual development.</p>
+
+<h3>Signals of Genuine Engagement</h3>
+<ul>
+<li>Asking questions that go beyond the textbook</li>
+<li>Connecting a new concept to something learned in a different subject</li>
+<li>Feeling absorbed in a problem or project (experiencing "flow")</li>
+<li>Voluntarily reading or exploring topics from class</li>
+<li>Discussing academic topics with peers outside of class</li>
+<li>Persisting through confusion rather than giving up</li>
+</ul>
+
+<h3>Barriers to Engagement</h3>
+<p>Students disengage for many reasons, including: irrelevant or disconnected curriculum, lack of student voice, competitive and shame-based assessment, poor teacher-student relationships, social anxiety, and mental health challenges. Understanding these barriers helps students and teachers address disengagement rather than dismiss it as laziness.</p>
+
+<h3>Self-Reflection Exercise</h3>
+<ul class="checklist">
+<li>In your last week of school, how often did you ask a genuine question in class?</li>
+<li>Did you make any connection between different subjects this week?</li>
+<li>Was there any moment where you felt genuinely absorbed in learning?</li>
+<li>Did you voluntarily explore any topic from your classes outside of school hours?</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I understand the difference between being present and being engaged</li>
+<li>I can identify moments of genuine cognitive and emotional engagement in my learning</li>
+<li>I know at least two things I can do today to increase my engagement level</li>
+<li>I believe that my participation makes the classroom experience better for everyone</li>
+</ul>`
+  },
+  {
+    title:'Cognitive vs Emotional Engagement',
+    sub:'Thinking and feeling in the learning process',
+    content:`
+<p>Learning is not a purely intellectual activity. Every time a student sits down to study, they bring with them a rich interior world of emotions, attitudes, and beliefs that profoundly shape what gets learned and retained. Understanding the interplay between cognitive and emotional engagement is key to becoming a more effective, self-aware learner.</p>
+
+<h3>Cognitive Engagement: The Thinking Dimension</h3>
+<p>Cognitive engagement refers to the mental effort, strategies, and depth of processing a student brings to learning. It includes surface processing (memorising, copying) and deep processing (analysing, synthesising, evaluating, applying). Deep cognitive engagement is what produces genuine understanding, transferable knowledge, and intellectual growth.</p>
+<p>Cognitively engaged students use metacognitive strategies — they think about their own thinking. They monitor their comprehension ("Do I really understand this, or am I just recognising the words?"), identify gaps in their knowledge, and select appropriate study strategies to address those gaps.</p>
+
+<h3>Emotional Engagement: The Feeling Dimension</h3>
+<p>Emotional engagement encompasses the feelings, attitudes, and sense of belonging a student experiences in relation to learning, school, and their teachers and peers. Students who feel safe, valued, and interested are emotionally engaged. This emotional safety is a neurological prerequisite for deep cognitive processing.</p>
+<p>The neuroscience is clear: the brain's threat-detection system (amygdala) has to be calm for the prefrontal cortex — the centre of reasoning, creativity, and complex thought — to function optimally. A student who feels anxious, judged, or excluded simply cannot think as well, regardless of their natural ability.</p>
+
+<h3>The Engagement Spiral</h3>
+<p>Cognitive and emotional engagement form a virtuous spiral: when a student understands a concept, they feel competent; feeling competent creates positive emotion; positive emotion increases motivation to engage further; more engagement leads to deeper understanding. Conversely, failure, confusion, or shame can initiate a downward spiral of disengagement.</p>
+
+<h3>Strategies for Deeper Engagement</h3>
+<ul>
+<li>After reading a section, pause and ask: "What surprised me here? What confused me?"</li>
+<li>Connect new material to a personal experience or emotion</li>
+<li>Teach the concept to an imaginary student or explain it aloud to yourself</li>
+<li>Create visual representations (mind maps, diagrams) of what you've learned</li>
+<li>Write one personal reflection after each study session: "What did this make me think or feel?"</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I notice when I am reading without actually understanding</li>
+<li>I am aware of how my emotions affect my study quality on a given day</li>
+<li>I use at least one deep-processing strategy (e.g. summarising in own words) regularly</li>
+<li>I feel emotionally safe enough in my classroom to ask questions and make mistakes</li>
+</ul>`
+  },
+  {
+    title:'Purpose & Meaning in Study',
+    sub:'Connecting academic work to a larger life vision',
+    content:`
+<p>Purpose is arguably the most powerful motivational force available to a student. When a young person understands why they are studying — not just what they are studying — they develop the kind of sustainable, self-directed motivation that no external reward system can replicate. Purpose transforms obligation into direction, and effort into meaning.</p>
+
+<h3>What Research Says About Purpose</h3>
+<p>Stanford researcher William Damon, who has studied purpose in adolescent development extensively, defines purpose as "a stable and generalised intention to accomplish something that is both personally meaningful and of consequence to the world beyond the self." Students with a clear sense of purpose show greater academic persistence, higher emotional wellbeing, stronger resilience in the face of setbacks, and more prosocial behaviour.</p>
+
+<h3>The Three Layers of Academic Purpose</h3>
+<ul>
+<li><strong>Personal meaning:</strong> "This subject connects to something I care deeply about"</li>
+<li><strong>Social purpose:</strong> "This knowledge will help me contribute to my family, community, or society"</li>
+<li><strong>Transcendent purpose:</strong> "Learning this is part of becoming the person I aspire to be"</li>
+</ul>
+<p>Students who have even one layer of genuine purpose consistently outperform those studying purely for grades — because purpose provides a "why" that endures through difficult stretches, when motivation from grades or parental pressure has faded.</p>
+
+<h3>Finding Your Purpose in Studies</h3>
+<p>Purpose is not always obvious. Adolescence is precisely the developmental stage during which purpose is being constructed. Some practices that help:</p>
+<ul>
+<li>Write a "future self" letter — imagine yourself 10 years from now and describe your life. What do you wish you had studied and prepared for?</li>
+<li>Identify three problems in the world (or in your community) that you would like to help solve. What subjects and skills would help you do that?</li>
+<li>Interview someone whose career you admire. What knowledge and character qualities helped them get there?</li>
+<li>Reflect regularly: "Why does what I'm learning today matter — to me, and to others?"</li>
+</ul>
+
+<h3>Purpose and Kashmir's Young Generation</h3>
+<p>Kashmir's students live in a region of extraordinary beauty and extraordinary complexity. This context creates both unique challenges and unique opportunities for purpose. From environmental stewardship of the Himalayas to building bridges between communities, the problems worth solving are right at hand. Education is the most powerful tool available to shape this future.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I have at least a rough sense of what I want to contribute to the world through my work</li>
+<li>I can name at least one subject that connects, however loosely, to my long-term purpose</li>
+<li>When I feel like giving up, I can remind myself of a deeper "why" that helps me continue</li>
+<li>I regularly reflect on whether my daily effort is aligned with my long-term direction</li>
+</ul>`
+  },
+  {
+    title:'Growth Mindset',
+    sub:'The belief that abilities can be developed',
+    content:`
+<p>In the 1980s, Stanford psychologist Carol Dweck made a discovery that transformed how the world thinks about human potential. She identified two fundamentally different belief systems about intelligence and ability — beliefs that children hold as young as five or six — that predict their entire trajectory of academic achievement and personal development.</p>
+
+<h3>Fixed vs Growth Mindset</h3>
+<p>Students with a <strong>fixed mindset</strong> believe that intelligence, talent, and ability are static — you either have them or you don't. They interpret challenges as threats (what if I fail and prove I'm not smart?), avoid effort (why try hard if you're already good?), and crumble in the face of setbacks.</p>
+<p>Students with a <strong>growth mindset</strong> believe that abilities are developed through dedication, strategy, and effort. They embrace challenges as opportunities, view effort as the path to mastery, learn from criticism, and find inspiration rather than threat in others' success.</p>
+<p>Crucially, Dweck found that mindset is not fixed — it can be changed with specific, deliberate practices.</p>
+
+<h3>Neuroplasticity: The Science Behind Growth Mindset</h3>
+<p>Growth mindset is not merely positive thinking — it has a biological foundation. Neuroplasticity research demonstrates that the brain forms new neural connections in response to challenge, practice, and learning. Every time a student struggles with a difficult problem and persists, neurons in relevant brain regions are strengthened. Intelligence is genuinely "grown" through engaged effort — not just expressed through genetics.</p>
+
+<h3>Mindset in the Classroom</h3>
+<p>How teachers respond to students powerfully shapes their mindset. Praising intelligence ("You're so smart!") actually reinforces a fixed mindset — students start to avoid challenges to protect their "smart" identity. Praising process ("You worked so persistently on that — your strategy improved!") cultivates growth mindset. Students praised for effort are more likely to choose harder challenges, persist longer, and recover more quickly from failure.</p>
+
+<h3>Developing a Growth Mindset</h3>
+<ul>
+<li>Add "...yet" to negative self-statements: "I don't understand trigonometry... yet"</li>
+<li>Treat every mistake as data, not judgment: "What does this error tell me about my understanding?"</li>
+<li>Deliberately seek out the most challenging problems in your weakest subject</li>
+<li>Keep a "learning journal" recording what was difficult today and how you overcame it</li>
+<li>Study the learning stories of people you admire — almost all involved extended struggle before mastery</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>When I fail a test, my first instinct is to understand what went wrong, not to feel permanently inadequate</li>
+<li>I seek out challenging problems rather than only practising what I already know</li>
+<li>I believe that my intelligence and abilities are genuinely improvable through effort</li>
+<li>I respond to criticism with curiosity rather than defensiveness</li>
+</ul>`
+  },
+  {
+    title:'Self-Efficacy & Confidence',
+    sub:'Believing in your capacity to succeed',
+    content:`
+<p>Self-efficacy — the belief in one's ability to execute the behaviours necessary to produce specific outcomes — is one of the most robust predictors of academic achievement ever identified. Developed by Albert Bandura in his Social Cognitive Theory, this concept explains why two students with identical ability can perform dramatically differently: the one who believes they can succeed will, and the one who doesn't will not — regardless of what their actual ability would permit.</p>
+
+<h3>Self-Efficacy vs Self-Esteem</h3>
+<p>Self-efficacy is not the same as general self-esteem. Self-esteem is a global evaluation of one's worth; self-efficacy is task-specific confidence. A student can have low general self-esteem but high self-efficacy in mathematics, or high self-esteem but low self-efficacy for public speaking. This distinction matters because it means self-efficacy can be built specifically and strategically, one skill domain at a time.</p>
+
+<h3>Four Sources of Self-Efficacy</h3>
+<ul>
+<li><strong>Mastery experiences:</strong> Successfully completing tasks — the most powerful source. Each small academic win builds the belief that more wins are possible.</li>
+<li><strong>Vicarious experiences:</strong> Seeing similar others succeed. "If my classmate with similar ability solved this, I can too."</li>
+<li><strong>Social persuasion:</strong> Encouragement and genuine feedback from trusted figures (teachers, parents, mentors).</li>
+<li><strong>Physiological states:</strong> Interpreting nervousness as excitement rather than fear when facing academic challenges.</li>
+</ul>
+
+<h3>Building Academic Self-Efficacy</h3>
+<p>The most reliable way to build self-efficacy is through carefully designed mastery experiences — starting with achievable challenges and progressively increasing difficulty. This is why breaking large tasks into small steps is so psychologically powerful: each completed step provides a genuine success experience that builds the belief "I can do this."</p>
+
+<h3>The Confidence-Performance Loop</h3>
+<p>Self-efficacy and performance form a self-reinforcing loop: belief in capability leads to greater effort and persistence, which leads to better performance, which strengthens self-efficacy. Conversely, low self-efficacy leads to avoidance or half-hearted effort, which leads to poor performance, which confirms the negative belief. Breaking into the positive loop is possible — and the entry point is small, intentional, guaranteed successes.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I believe I can improve in any subject I invest effort in</li>
+<li>When I face a difficult problem, my first response is "Let me try a strategy" not "I can't do this"</li>
+<li>I can identify at least three academic areas where I have genuine confidence</li>
+<li>I recognise that confidence comes from doing, not from waiting to feel ready</li>
+</ul>`
+  },
+  {
+    title:'Attention & Focus Cycles',
+    sub:'Working with your brain\'s natural rhythms',
+    content:`
+<p>The modern student faces an unprecedented attention crisis. Smartphones, social media, notifications, and the constant availability of entertainment have created an environment where deep, sustained focus — the kind required for genuine learning — is increasingly rare and increasingly valuable. Understanding the science of attention and working with rather than against your brain's natural rhythms can dramatically improve study quality.</p>
+
+<h3>The Limits of Sustained Attention</h3>
+<p>The human brain is not designed for indefinite sustained attention. Research shows that most people can maintain focused attention on a single, cognitively demanding task for approximately 25–50 minutes before cognitive performance begins to decline. Forcing concentration beyond this point often produces diminishing — or even negative — returns, with increased error rates and reduced memory consolidation.</p>
+
+<h3>Ultradian Rhythms and the 90-Minute Cycle</h3>
+<p>Beyond the immediate attention window, the brain operates in approximately 90-minute ultradian cycles — alternating between higher and lower alertness. Students who plan study sessions around these natural cycles, building in genuine rest periods rather than forcing continuous concentration, consistently report better focus quality and better learning outcomes.</p>
+
+<h3>The Pomodoro Technique: Evidence-Based Focus</h3>
+<p>One practical application of attention science is the Pomodoro Technique: 25 minutes of focused study followed by a 5-minute break, with a longer break (15–30 minutes) every four cycles. This rhythm works because it respects the brain's natural attention limits, creates a sense of urgency within each session, and prevents the mental fatigue that erodes quality. The technique is particularly valuable for students whose study sessions are frequently interrupted by distractions.</p>
+
+<h3>Attention Thieves</h3>
+<ul>
+<li><strong>Smartphone notifications:</strong> Even the presence of a phone reduces available cognitive capacity, even when not in use</li>
+<li><strong>Multitasking:</strong> The brain cannot genuinely multitask on complex activities — it rapidly switches, which costs time and increases errors</li>
+<li><strong>Sleep deprivation:</strong> A single night of poor sleep significantly impairs prefrontal cortex function</li>
+<li><strong>Unresolved emotional stress:</strong> Anxiety and rumination compete with focus for cognitive resources</li>
+</ul>
+
+<h3>Building a Focus Practice</h3>
+<p>Attention is a trainable capacity. Regular meditation, even 10 minutes per day, has been shown in randomised controlled trials to improve sustained attention, working memory, and emotional regulation. Physical exercise, particularly aerobic activity, elevates brain-derived neurotrophic factor (BDNF), which supports neuroplasticity and cognitive performance. And perhaps most powerfully, simply practising single-tasking — doing one thing at a time, with full attention — builds the mental muscle of focus over time.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I put my phone in another room (or on airplane mode) during focused study sessions</li>
+<li>I take genuine breaks rather than switching between tasks and calling it rest</li>
+<li>I study in 25–50 minute focused blocks rather than trying to grind for hours</li>
+<li>I get adequate sleep before important study sessions and exams</li>
+</ul>`
+  },
+  {
+    title:'Avoiding Burnout',
+    sub:'Sustainable strategies for long-term academic health',
+    content:`
+<p>Academic burnout is a state of chronic emotional, mental, and physical exhaustion caused by sustained, unrelieved academic stress. It is not simply being tired after a hard week of study — it is a deeper depletion of the internal resources that fuel motivation, engagement, and wellbeing. Understanding burnout and actively preventing it is not a luxury for students; it is a prerequisite for sustainable academic performance.</p>
+
+<h3>The Three Dimensions of Burnout</h3>
+<p>Pioneering researcher Christina Maslach identifies three core components of burnout:</p>
+<ul>
+<li><strong>Exhaustion:</strong> Profound depletion of emotional and physical resources; feeling drained even after rest</li>
+<li><strong>Cynicism/Detachment:</strong> Developing a cold, negative, or disconnected attitude toward school, teachers, and learning itself</li>
+<li><strong>Reduced efficacy:</strong> Feeling that nothing you do makes a difference; doubting your own competence and value</li>
+</ul>
+<p>Academic burnout typically follows an identifiable pattern: initial enthusiasm → increasing stress → chronic pressure without relief → exhaustion → cynicism → breakdown. Recognising the early signs — increasing irritability, declining interest, growing avoidance — is key to early intervention.</p>
+
+<h3>Root Causes of Student Burnout</h3>
+<ul>
+<li>Excessive workload without adequate recovery time</li>
+<li>Perfectionism — the belief that anything less than perfect is failure</li>
+<li>Comparison with peers and constant competitive pressure</li>
+<li>Lack of autonomy and sense of control over one's academic life</li>
+<li>Sleep deprivation and neglect of physical health</li>
+<li>Absent or inadequate social support</li>
+</ul>
+
+<h3>Prevention Strategies</h3>
+<p>The most effective burnout prevention is proactive, not reactive — building recovery into the system before exhaustion hits. Key strategies include: scheduling regular rest days, maintaining sleep hygiene as a non-negotiable priority, cultivating interests and relationships outside academics, practising self-compassion and relinquishing perfectionism, and actively building social support networks.</p>
+<p>NEP 2020's vision of holistic education — sport, arts, social engagement alongside academics — is essentially a burnout prevention policy. Students who have rich lives outside pure academic pressure are consistently more resilient and more capable of sustained intellectual engagement.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I have at least one genuine non-academic activity I engage in regularly</li>
+<li>I have at least one day per week with minimal academic pressure</li>
+<li>I sleep 7–9 hours consistently, including during exam preparation periods</li>
+<li>I can talk to at least one trusted person when academic stress feels overwhelming</li>
+</ul>`
+  },
+  {
+    title:'Academic Fatigue & Recovery',
+    sub:'Recognising and reversing mental depletion',
+    content:`<p>Academic fatigue is the gradual accumulation of mental and physical tiredness that comes from sustained intellectual effort, often compounded by poor sleep, inadequate nutrition, social isolation, or persistent anxiety. Unlike ordinary tiredness, which is resolved by a night's sleep, academic fatigue is a deeper state of depletion that requires intentional recovery strategies.</p>
+
+<h3>Signs of Academic Fatigue</h3>
+<ul>
+<li>Difficulty concentrating even on familiar material</li>
+<li>Reading the same paragraph multiple times without retention</li>
+<li>Increased irritability and emotional sensitivity</li>
+<li>Loss of interest in subjects previously found engaging</li>
+<li>Physical symptoms: headaches, eye strain, disrupted sleep despite tiredness</li>
+</ul>
+
+<h3>Recovery Strategies</h3>
+<ul>
+<li><strong>Sleep first:</strong> 7–9 hours of quality sleep is the most powerful cognitive reset available</li>
+<li><strong>Physical movement:</strong> 30 minutes of aerobic exercise increases BDNF and provides genuine mental restoration</li>
+<li><strong>Nature exposure:</strong> 20 minutes in natural environments (gardens, parks, riverside) reduces cortisol measurably</li>
+<li><strong>Social connection:</strong> Meaningful conversations with friends or family replenish emotional resources</li>
+<li><strong>Deliberate "brain rest":</strong> Activities that require no cognitive effort — listening to music, light cooking, drawing — allow the default mode network to consolidate learning</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I can recognise when I am genuinely fatigued rather than just unmotivated</li>
+<li>I have concrete recovery strategies I use, not just passive screen time</li>
+<li>I treat rest as productive, not as wasted time</li>
+<li>I plan for recovery the same way I plan for study</li>
+</ul>`
+  },
+  {
+    title:'Goal Setting for Students',
+    sub:'Transforming dreams into structured daily action',
+    content:`<p>Goal setting is one of the most empirically validated strategies in all of motivational psychology. Locke and Latham's Goal-Setting Theory, built on decades of research, shows that specific, challenging, and time-bound goals consistently produce better performance than vague aspirations or the common student instruction to "try your best."</p>
+
+<h3>SMART Goals in Academic Context</h3>
+<p>The SMART framework — Specific, Measurable, Achievable, Relevant, Time-bound — provides a practical structure for goal setting:</p>
+<ul>
+<li><strong>Specific:</strong> "Score 85% in Physics Chapter 6" not "Do better in physics"</li>
+<li><strong>Measurable:</strong> "Complete 20 practice problems" not "Practise more"</li>
+<li><strong>Achievable:</strong> Challenging but realistic given current ability and available time</li>
+<li><strong>Relevant:</strong> Connected to broader academic and life goals</li>
+<li><strong>Time-bound:</strong> "By Friday" not "sometime this week"</li>
+</ul>
+
+<h3>Process Goals vs Outcome Goals</h3>
+<p>Outcome goals (marks, ranks) are important for direction but can be anxiety-inducing if used exclusively. Process goals (study hours, practice problems completed, chapters revised) are fully within a student's control and consistently build both confidence and competence. The most effective students use both: outcome goals for direction and process goals for daily action.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I have written down at least one specific academic goal for the current month</li>
+<li>My goals include both outcome targets and process commitments</li>
+<li>I review my goals at least once per week</li>
+<li>I celebrate goal achievement before moving to the next target</li>
+</ul>`
+  },
+  {
+    title:'Habit & Energy Management',
+    sub:'Building the routines that sustain academic performance',
+    content:`<p>Motivation fluctuates — habits don't. One of the most important insights from behavioural psychology is that waiting for motivation before studying is a losing strategy. High-performing students don't rely on feeling motivated; they rely on routines and habits that carry them through the inevitable low-motivation periods.</p>
+
+<h3>How Habits Form</h3>
+<p>Charles Duhigg's habit loop model — Cue → Routine → Reward — explains how behaviours become automatic. Every habit is triggered by a cue (time, location, preceding behaviour), performed as a routine, and reinforced by a reward. Understanding this structure allows students to deliberately design and install productive academic habits.</p>
+
+<h3>Keystone Habits</h3>
+<p>Some habits — called keystone habits — have a disproportionate positive effect because they trigger chain reactions. For students, the most powerful keystone habits are: a consistent sleep and wake schedule, a fixed daily study time, and regular physical exercise. These three habits, consistently maintained, create the physiological and psychological conditions for sustained academic performance.</p>
+
+<h3>Energy Management</h3>
+<p>Beyond time management, high performers practise energy management — aligning the most demanding tasks with peak cognitive energy periods. Most students have peak alertness in the mid-morning (10am–12pm) or early evening. Scheduling the hardest subjects during peak energy and lighter tasks during low-energy periods maximises both performance and sustainability.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I have at least one consistent daily study routine (same time, same place)</li>
+<li>I know roughly when my peak cognitive energy occurs during the day</li>
+<li>I schedule my most challenging subjects during peak energy periods</li>
+<li>I use my habits to carry me through low-motivation periods</li>
+</ul>`
+  },
+  {
+    title:'Reflection & Motivation',
+    sub:'The power of looking inward to move forward',
+    content:`<p>Reflection — the practice of deliberately thinking about one's own experiences, strategies, and progress — is among the most underused and most powerful tools available to students. Research consistently shows that students who regularly reflect on their learning demonstrate better retention, deeper understanding, stronger metacognitive skills, and higher motivation.</p>
+
+<h3>Why Reflection Builds Motivation</h3>
+<p>Reflection rebuilds the sense of purpose and progress that daily academic grind can erode. When students take time to notice how far they have come, identify what strategies have worked, acknowledge their growth, and reconnect with their reasons for studying, motivation is renewed rather than depleted.</p>
+
+<h3>Types of Academic Reflection</h3>
+<ul>
+<li><strong>Content reflection:</strong> "What did I learn today? What do I not yet understand?"</li>
+<li><strong>Process reflection:</strong> "What study strategies worked well? What wasted my time?"</li>
+<li><strong>Progress reflection:</strong> "How have I improved since last month? What specific evidence shows this?"</li>
+<li><strong>Purpose reflection:</strong> "Why does what I'm doing matter? Am I still aligned with my goals?"</li>
+</ul>
+
+<h3>The Weekly Reflection Practice</h3>
+<p>A structured 15-minute weekly reflection practice — writing responses to 3–5 questions — has been shown to produce measurable improvements in both academic performance and subjective wellbeing. It is one of the highest-return-on-investment practices available to any student.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I spend some time each week deliberately reflecting on my learning and progress</li>
+<li>I can identify at least three specific ways I have improved academically this month</li>
+<li>I adjust my study strategies based on what reflection reveals works best for me</li>
+<li>I regularly reconnect with my deeper reasons for studying</li>
+</ul>`
+  },
+  {
+    title:'Teacher\'s Role in Engagement',
+    sub:'How educators ignite and sustain student motivation',
+    content:`<p>Teachers are among the most powerful environmental determinants of student motivation and engagement. Research consistently shows that teacher behaviour — how they explain, question, respond to errors, praise, challenge, and relate — can either ignite a lifelong passion for learning or extinguish a student's natural curiosity within a single academic year.</p>
+
+<h3>The Motivating Teacher: Key Behaviours</h3>
+<ul>
+<li><strong>Genuine enthusiasm:</strong> Teachers who are visibly passionate about their subject transmit that passion to students through emotional contagion</li>
+<li><strong>High expectations + support:</strong> The Pygmalion effect shows that teacher expectations significantly shape student outcomes. High expectations communicated with warm support (not pressure) are powerfully motivating</li>
+<li><strong>Autonomy support:</strong> Offering choices, explaining the rationale for tasks, and acknowledging students' perspectives</li>
+<li><strong>Process praise:</strong> Praising effort and strategy rather than intelligence or innate ability</li>
+<li><strong>Caring relationships:</strong> Students who believe their teacher genuinely cares about them work harder, take more intellectual risks, and persist longer through difficulty</li>
+</ul>
+
+<h3>For Students: Engaging Your Teachers</h3>
+<p>Students often don't realise how much influence they have over the teacher-student dynamic. A student who demonstrates curiosity, asks thoughtful questions, and shows genuine effort tends to elicit more engaged, enthusiastic teaching. Engagement is not only student-to-subject — it is also student-to-teacher, and it flows in both directions.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I have at least one teacher whose class I genuinely look forward to</li>
+<li>I make an effort to ask questions and participate in class</li>
+<li>I treat my teachers with respect and openness, even in subjects I find difficult</li>
+<li>I understand that my attitude in class affects the learning environment for everyone</li>
+</ul>`
+  },
+  {
+    title:'Classroom Climate & Motivation',
+    sub:'How your learning environment shapes your drive',
+    content:`<p>The psychological climate of a classroom — the shared perceptions students have about the social, emotional, and intellectual environment they inhabit — is a powerful determinant of motivation, engagement, and learning outcomes. Students don't just learn content; they learn in a climate, and that climate shapes everything.</p>
+
+<h3>Dimensions of Classroom Climate</h3>
+<ul>
+<li><strong>Safety:</strong> Are mistakes treated as learning opportunities or sources of shame?</li>
+<li><strong>Challenge:</strong> Are students intellectually stimulated or bored by low expectations?</li>
+<li><strong>Support:</strong> Do students feel that both their teacher and peers want them to succeed?</li>
+<li><strong>Cohesion:</strong> Do students feel a sense of belonging to the class community?</li>
+<li><strong>Voice:</strong> Are students' ideas, questions, and perspectives genuinely valued?</li>
+</ul>
+
+<h3>Students as Climate Co-Creators</h3>
+<p>Classroom climate is not solely the teacher's responsibility — students are active co-creators. A class that celebrates peers' successes, helps struggling students, disagrees respectfully, and brings genuine curiosity creates a climate that elevates everyone's motivation. Students who complain, compete unkindly, or mock failure drag the entire climate downward.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I contribute positively to my classroom environment</li>
+<li>I celebrate rather than resent classmates' successes</li>
+<li>I feel safe enough in my class to ask questions and make mistakes</li>
+<li>I treat every member of my class with respect and support</li>
+</ul>`
+  },
+  {
+    title:'Balancing Challenge & Skill',
+    sub:'Finding the flow zone in your studies',
+    content:`<p>Mihaly Csikszentmihalyi's concept of "flow" — the state of optimal experience characterised by complete absorption in a challenging, intrinsically rewarding activity — is one of the most valuable frameworks for understanding peak academic performance. Flow is the feeling of being "in the zone": time passing differently, self-consciousness dissolving, and a powerful sense of energised focus.</p>
+
+<h3>The Flow Channel</h3>
+<p>Flow occurs at the intersection of high challenge and high skill. When a task is too easy relative to skill, boredom results. When it is too difficult, anxiety results. The "flow channel" is the sweet spot where challenge slightly exceeds current skill — enough to demand full engagement, not so much as to overwhelm.</p>
+<p>For students, this means that both boredom (unchallenging work) and anxiety (impossibly difficult content) are enemies of deep learning. The optimal learning zone is always slightly beyond current comfort — what Vygotsky called the "Zone of Proximal Development."</p>
+
+<h3>Designing Flow in Study</h3>
+<ul>
+<li>Seek out the slightly harder problems in your practice sets</li>
+<li>Break overwhelming tasks into pieces that are challenging but achievable</li>
+<li>Remove distractions that pull you out of focus states</li>
+<li>Set clear goals for each study session (not just "study chemistry" but "understand stoichiometry ratios")</li>
+<li>Receive and act on feedback quickly — the faster the feedback loop, the better the flow</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I can identify when I am bored in class and take steps to increase my own challenge level</li>
+<li>I can identify when I am overwhelmed and take steps to reduce difficulty temporarily</li>
+<li>I have experienced flow — genuine absorption — in at least one academic activity</li>
+<li>I deliberately seek tasks at the edge of my current ability</li>
+</ul>`
+  },
+  {
+    title:'Tracking Engagement Growth',
+    sub:'Measuring and celebrating your academic progress',
+    content:`<p>What gets measured gets managed. Systematic self-tracking of motivation, engagement, and energy is not merely bureaucratic — it is one of the most effective tools a student can use to maintain momentum, catch early warning signs of decline, and build a genuine evidence base for their own growth.</p>
+
+<h3>Why Track?</h3>
+<p>Human memory is selectively biased toward recent experiences. Without data, students often underestimate their long-term progress because they remember last week's difficult session more vividly than their overall improvement over three months. Tracking creates an objective record that corrects this bias and provides genuine motivational fuel through visible evidence of growth.</p>
+
+<h3>What to Track</h3>
+<ul>
+<li>Weekly motivation ratings (this app's self-check tool)</li>
+<li>Daily study hours and quality ratings</li>
+<li>Weekly engagement behaviours (questions asked, homework quality)</li>
+<li>Sleep and energy data</li>
+<li>Specific academic achievements and struggles</li>
+</ul>
+
+<h3>Using Data to Improve</h3>
+<p>Tracking data is only valuable if it is reviewed and acted upon. A brief weekly review — 10–15 minutes — where a student looks at their data, identifies patterns, and adjusts strategies accordingly is a form of systematic self-coaching that consistently outperforms reactive, crisis-driven studying.</p>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I track at least one aspect of my academic habits weekly</li>
+<li>I review my tracking data and adjust my strategies accordingly</li>
+<li>I use evidence of my own progress as a source of motivation</li>
+<li>I celebrate genuine growth, not just high grades</li>
+</ul>`
+  },
+  {
+    title:'Peer Influence & Academic Energy',
+    sub:'Harnessing the power of social learning',
+    content:`<p>Human beings are fundamentally social learners. Long before formal schooling, our species learned by watching, imitating, discussing, and collaborating. The social dimensions of learning — peer relationships, collaboration, competition, and mentorship — are not peripheral to academic achievement; they are central to it.</p>
+
+<h3>The Social Contagion of Motivation</h3>
+<p>Motivation is contagious. Students who spend time with curious, engaged, academically motivated peers consistently show higher motivation and better academic outcomes than those in low-motivation social networks — regardless of their own initial motivation level. This is the principle behind study groups, book clubs, and collaborative learning communities.</p>
+<p>Conversely, spending significant time with peers who are dismissive of academic effort, who mock intellectual curiosity, or who use group pressure to discourage achievement, can erode even initially strong motivation. The social environment is a powerful shaper of academic identity and effort.</p>
+
+<h3>Peer Learning Strategies</h3>
+<ul>
+<li><strong>Study groups:</strong> Small, focused, accountable groups significantly outperform solo studying for complex material</li>
+<li><strong>Peer teaching:</strong> Explaining concepts to classmates deepens understanding and builds both parties' confidence</li>
+<li><strong>Accountability partnerships:</strong> A single trusted study partner can dramatically increase consistency and effort</li>
+<li><strong>Collaborative projects:</strong> Working together on real problems develops both academic skills and social-emotional competencies</li>
+</ul>
+
+<h3>Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I have at least one peer who genuinely supports and motivates my academic growth</li>
+<li>I am the kind of study partner who encourages rather than undermines others</li>
+<li>I have participated in genuine peer learning (not just homework copying) in the past month</li>
+<li>I actively build social environments that support my academic goals</li>
+</ul>`
+  },
+  {
+    title:'Designing a Sustainable Academic Journey',
+    sub:'Building a lifelong love of learning',
+    content:`<p>The ultimate purpose of education is not to pass examinations — it is to produce human beings who are curious, capable, caring, and continuously growing throughout their entire lives. A sustainable academic journey is one designed not just for this year's marks, but for a lifetime of intellectual vitality and purposeful contribution.</p>
+
+<h3>The Four Pillars of Sustainability</h3>
+<ul>
+<li><strong>Purpose:</strong> A clear and personally meaningful "why" that anchors effort through difficulty</li>
+<li><strong>Balance:</strong> Proportional investment in academics, relationships, physical health, creative expression, and rest</li>
+<li><strong>Progression:</strong> A growth orientation that celebrates improvement over time rather than demanding perfection now</li>
+<li><strong>Reflection:</strong> Regular inward examination to ensure the academic journey remains aligned with one's evolving values and aspirations</li>
+</ul>
+
+<h3>Designing Your Academic Ecosystem</h3>
+<p>Think of your academic life as an ecosystem rather than a machine. A machine runs on fuel and breaks down. An ecosystem is self-renewing — it produces the energy it needs through the diversity and health of its components. When sleep, movement, relationships, creativity, rest, and purposeful study are all maintained, the system regenerates rather than depletes.</p>
+
+<h3>A Message for Kashmir's Students</h3>
+<p>You are studying in one of the world's most beautiful and historically rich environments. You carry within you a cultural inheritance of remarkable depth. Your education — approached with joy, purpose, and sustained effort — is not merely a path to personal achievement. It is a contribution to the transformation of your community, your region, and your nation. Every concept mastered, every book read deeply, every question pursued with genuine curiosity, is part of that larger story.</p>
+<p>Study not just for marks. Study to become the person who can make a difference. That is joyful learning. That is what NEP 2020 aspires to build. That is what this studio is designed to support.</p>
+
+<h3>Final Self-Evaluation Checklist</h3>
+<ul class="checklist">
+<li>I approach my education as a long-term journey, not a series of short-term crises</li>
+<li>I maintain balance between academic effort and other essential aspects of life</li>
+<li>I connect my studies to a larger sense of purpose and contribution</li>
+<li>I experience moments of genuine joy, curiosity, and flow in my learning</li>
+<li>I am becoming, slowly and steadily, the learner and person I aspire to be</li>
+</ul>`
+  }
+];
+
+function renderChapterList(){
+  const el=document.getElementById('chapterList');
+  el.innerHTML=chapters.map((ch,i)=>`
+    <div class="chapter-item" onclick="openChapter(${i})">
+      <div class="ch-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="ch-info">
+        <div class="ch-title">${ch.title}</div>
+        <div class="ch-sub">${ch.sub}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openChapter(idx){
+  currentChapter=idx;
+  const ch=chapters[idx];
+  document.getElementById('chapterContent').innerHTML=`
+    <div style="margin-bottom:1.5rem">
+      <div style="color:var(--text2);font-size:.8rem;margin-bottom:.3rem">Chapter ${idx+1} of ${chapters.length}</div>
+      <h2 style="color:var(--accent)">${ch.title}</h2>
+      <p style="color:var(--accent2);font-size:.9rem;margin-top:.2rem">${ch.sub}</p>
+    </div>
+    ${ch.content}
+  `;
+  document.getElementById('prevChBtn').style.display=idx===0?'none':'inline-block';
+  document.getElementById('nextChBtn').style.display=idx===chapters.length-1?'none':'inline-block';
+  showPage('chapterReader');
+}
+function prevChapter(){ if(currentChapter>0) openChapter(currentChapter-1); }
+function nextChapter(){ if(currentChapter<chapters.length-1) openChapter(currentChapter+1); }
+
+// ============================================================
+// PWA INSTALL
+// ============================================================
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  document.getElementById('installBanner').style.display='flex';
+});
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('installBanner').style.display='none'; });
+  }
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

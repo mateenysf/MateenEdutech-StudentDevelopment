@@ -1,0 +1,20 @@
+{
+  "name": "BrainSpark – Train Your Brain. Strengthen Your Memory.",
+  "short_name": "BrainSpark",
+  "description": "AI-powered Memory Training Game App aligned with NEP 2020 and NCF 2023. Developed by Mateen Yousuf, Teacher, School Education Department J&K.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d001a",
+  "theme_color": "#6c2bd9",
+  "orientation": "portrait",
+  "categories": ["education", "games"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%236c2bd9'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='120' fill='white'>🧠</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

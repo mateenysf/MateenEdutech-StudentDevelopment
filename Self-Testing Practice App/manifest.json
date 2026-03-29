@@ -1,0 +1,11 @@
+{
+  "name": "QuizMaster – AI Self-Testing App",
+  "short_name": "QuizMaster",
+  "description": "AI-powered Self-Testing Practice App aligned with NEP 2020 & NCF 2023",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1a0e",
+  "theme_color": "#d97706",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"]
+}

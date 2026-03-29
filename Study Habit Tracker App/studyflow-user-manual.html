@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Manual – StudyFlow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+:root {
+  --paper:#f7f3ed;--paper2:#ede8df;--ink:#1a1612;--ink3:#5c5248;--muted:#9e9080;
+  --rust:#c4522a;--rust-lt:#f4ddd3;--teal:#2d7d6e;--teal-lt:#d0eae6;
+  --gold:#c9860a;--gold-lt:#faecd0;--violet:#5e4ea0;--violet-lt:#e8e4f5;
+  --border:rgba(26,22,18,0.1);--r:14px;
+  --ff:'Fraunces',Georgia,serif;--fb:'DM Sans','Segoe UI',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--paper);color:var(--ink);font-family:var(--fb);line-height:1.7;}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px;}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:0.82rem;margin-bottom:32px;border:1px solid var(--border);padding:8px 16px;border-radius:50px;transition:color 0.2s;}
+.back-link:hover{color:var(--rust);border-color:var(--rust);}
+.doc-header{text-align:center;margin-bottom:44px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+.badge-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:20px;}
+.badge{background:var(--rust-lt);border:1px solid rgba(196,82,42,0.25);color:var(--rust);font-size:0.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 13px;border-radius:50px;}
+.badge-t{background:var(--teal-lt);border:1px solid rgba(45,125,110,0.25);color:var(--teal);}
+h1.dt{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);color:var(--rust);margin-bottom:10px;}
+.dsub{font-size:0.9rem;color:var(--ink3);max-width:560px;margin:0 auto 22px;}
+.author-block{display:inline-flex;align-items:center;gap:16px;background:var(--paper2);border:1px solid var(--border);border-radius:var(--r);padding:13px 20px;}
+.author-block img{width:54px;height:54px;border-radius:50%;border:2px solid var(--rust);object-fit:cover;}
+.an{font-family:var(--ff);font-size:0.92rem;}.at{font-size:0.7rem;color:var(--rust);font-weight:600;margin-top:2px;}
+.toc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;margin-bottom:40px;box-shadow:0 2px 10px rgba(26,22,18,0.05);}
+.toc-t{font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.toc ol{padding-left:18px;}.toc li{font-size:0.84rem;color:var(--ink3);padding:2px 0;}
+.toc a{color:var(--ink3);text-decoration:none;transition:color 0.2s;}.toc a:hover{color:var(--rust);}
+.section{margin-bottom:48px;}
+.eyebrow{font-size:0.66rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+h2{font-family:var(--ff);font-size:clamp(1.3rem,3vw,1.9rem);color:var(--ink);margin-bottom:12px;}
+h3{font-family:var(--ff);font-size:1.05rem;color:var(--rust);margin:20px 0 8px;}
+p{font-size:0.86rem;color:var(--ink3);margin-bottom:10px;line-height:1.7;}
+strong{color:var(--ink);font-weight:600;}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:0 2px 8px rgba(26,22,18,0.05);}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0;}
+.ci{font-size:1.5rem;margin-bottom:8px;}.ct{font-size:0.86rem;font-weight:700;margin-bottom:4px;}.cd{font-size:0.76rem;color:var(--muted);line-height:1.5;}
+.steps{display:flex;flex-direction:column;gap:10px;margin:12px 0;}
+.step{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:13px 16px;box-shadow:0 1px 4px rgba(26,22,18,0.04);}
+.sn{width:26px;height:26px;border-radius:50%;background:var(--rust);color:#fff;font-weight:700;font-size:0.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.st{font-size:0.86rem;font-weight:700;color:var(--ink);margin-bottom:2px;}.sd{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.table-wrap{overflow-x:auto;margin:12px 0;}
+table{width:100%;border-collapse:collapse;font-size:0.8rem;}
+th{background:var(--paper2);color:var(--ink);font-weight:700;padding:9px 13px;text-align:left;border-bottom:2px solid var(--border);}
+td{padding:9px 13px;border-bottom:1px solid rgba(26,22,18,0.05);color:var(--ink3);vertical-align:top;}
+td strong{color:var(--ink);}tr:last-child td{border-bottom:none;}
+.tip-box{background:var(--teal-lt);border:1px solid rgba(45,125,110,0.2);border-radius:var(--r);padding:13px 16px;margin:12px 0;display:flex;gap:10px;align-items:flex-start;}
+.tip-box p{font-size:0.8rem;margin:0;color:var(--ink3);}
+.warn-box{background:var(--gold-lt);border:1px solid rgba(201,134,10,0.2);border-radius:var(--r);padding:13px 16px;margin:12px 0;display:flex;gap:10px;align-items:flex-start;}
+.warn-box p{font-size:0.8rem;margin:0;color:var(--ink3);}
+.info-box{background:var(--rust-lt);border:1px solid rgba(196,82,42,0.2);border-radius:var(--r);padding:13px 16px;margin:12px 0;display:flex;gap:10px;align-items:flex-start;}
+.info-box p{font-size:0.8rem;margin:0;color:var(--ink3);}
+.install-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin:10px 0;box-shadow:0 2px 8px rgba(26,22,18,0.05);}
+.ip{font-size:0.66rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:7px;}
+.it{font-size:0.92rem;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.is ol{padding-left:18px;}.is li{font-size:0.8rem;color:var(--ink3);padding:3px 0;line-height:1.5;}
+code{background:var(--paper2);padding:2px 7px;border-radius:5px;font-family:monospace;font-size:0.82rem;color:var(--rust);}
+@media(max-width:600px){.wrap{padding:30px 13px 60px;}.card-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="index.html" class="back-link">← Back to StudyFlow</a>
+
+  <div class="doc-header">
+    <div class="badge-row">
+      <span class="badge">User Manual</span>
+      <span class="badge badge-t">Complete Guide</span>
+      <span class="badge">NEP 2020 · NCF 2023</span>
+    </div>
+    <h1 class="dt">User Manual</h1>
+    <p class="dsub">Complete guide to every feature, tab, and function of the StudyFlow Study Habit Tracker PWA</p>
+    <div class="author-block">
+      <img src="author.jpg" alt="Mateen Yousuf" onerror="this.style.display='none'">
+      <div>
+        <div class="an">Mateen Yousuf</div>
+        <div class="at">Teacher – School Education Department, J&K</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">StudyFlow · NEP 2020 & NCF 2023 Aligned</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-t">Table of Contents</div>
+    <ol>
+      <li><a href="#overview">1. App Overview</a></li>
+      <li><a href="#install">2. Installing the App</a></li>
+      <li><a href="#home">3. Home Tab</a></li>
+      <li><a href="#log">4. Daily Log Tab</a></li>
+      <li><a href="#progress">5. Progress Tab</a></li>
+      <li><a href="#streak">6. Streaks & Goals Tab</a></li>
+      <li><a href="#journal">7. Reflection Journal Tab</a></li>
+      <li><a href="#badges">8. Achievements Tab</a></li>
+      <li><a href="#classroom">9. Classroom Use Guide</a></li>
+      <li><a href="#troubleshoot">10. Troubleshooting</a></li>
+      <li><a href="#deploy">11. Deployment Guide</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="overview">
+    <div class="eyebrow">Section 01</div>
+    <h2>App Overview</h2>
+    <p>StudyFlow is a fully offline Progressive Web App that helps students build consistent, reflective, and self-regulated study habits. It is built with pure HTML, CSS, and JavaScript — no backend, no login, no internet required after the first load.</p>
+    <div class="card-grid">
+      <div class="card"><div class="ci">📝</div><div class="ct">Daily Log</div><div class="cd">Record every study session with subject, topic, time, and difficulty.</div></div>
+      <div class="card"><div class="ci">📊</div><div class="ct">Progress Charts</div><div class="cd">Visual breakdowns of weekly hours, subject balance, and AI insights.</div></div>
+      <div class="card"><div class="ci">🔥</div><div class="ct">Streaks & Goals</div><div class="cd">28-day calendar heatmap, daily streak counter, and custom goals.</div></div>
+      <div class="card"><div class="ci">💭</div><div class="ct">Reflection Journal</div><div class="cd">Structured daily reflections to develop metacognitive awareness.</div></div>
+      <div class="card"><div class="ci">🏅</div><div class="ct">Achievements</div><div class="cd">11 badges rewarding consistency, reflection, and academic balance.</div></div>
+      <div class="card"><div class="ci">📱</div><div class="ct">Offline PWA</div><div class="cd">Installs on Android and desktop. Works without internet after first load.</div></div>
+    </div>
+    <p style="margin-top:12px;">All data is stored in your browser's <strong>LocalStorage</strong> — it stays on your device and is never uploaded to any server.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="install">
+    <div class="eyebrow">Section 02</div>
+    <h2>Installing the App</h2>
+
+    <div class="install-card">
+      <div class="ip">Android (Chrome)</div>
+      <div class="it">📱 Install on Android Phone</div>
+      <div class="is"><ol>
+        <li>Open the app URL in <strong>Google Chrome</strong> on Android.</li>
+        <li>After 3–4 seconds, an <strong>"Install StudyFlow"</strong> banner appears at the bottom.</li>
+        <li>Tap <strong>Install</strong>. The icon appears on your Home Screen.</li>
+        <li>Alternatively: tap Chrome ⋮ menu → <strong>"Add to Home Screen"</strong>.</li>
+        <li>The app will open in full-screen, just like a native app.</li>
+      </ol></div>
+    </div>
+
+    <div class="install-card">
+      <div class="ip">Desktop (Windows / Mac / Linux)</div>
+      <div class="it">🖥 Install on Desktop</div>
+      <div class="is"><ol>
+        <li>Open in <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>.</li>
+        <li>Click the install icon <strong>(⊕)</strong> in the address bar, or go to browser menu → Install.</li>
+        <li>The app opens in its own window without browser UI.</li>
+      </ol></div>
+    </div>
+
+    <div class="install-card">
+      <div class="ip">Local / School Network</div>
+      <div class="it">🏫 Run on School Intranet</div>
+      <div class="is"><ol>
+        <li>Place all 5 files in one folder on a computer connected to school Wi-Fi.</li>
+        <li>Run: <code>python -m http.server 8000</code> in that folder.</li>
+        <li>Students open <code>http://[teacher-IP]:8000</code> on their devices.</li>
+        <li>Works fully offline once loaded — no internet needed.</li>
+      </ol></div>
+    </div>
+
+    <div class="tip-box"><span>💡</span><p><strong>Free Hosting:</strong> Upload the folder to <strong>Netlify</strong> (netlify.com) by drag-and-drop → get a permanent HTTPS link → share with students. Takes under 60 seconds.</p></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="home">
+    <div class="eyebrow">Section 03</div>
+    <h2>Home Tab 🏠</h2>
+    <p>The landing page gives you an immediate overview of your study day and navigates to all modules.</p>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><div><div class="st">Today's Date</div><div class="sd">Displayed at the top in full format — a small reminder to check in daily.</div></div></div>
+      <div class="step"><div class="sn">2</div><div><div class="st">Today's Summary Strip</div><div class="sd">Four live statistics: today's study time, sessions today, current streak, and total hours ever logged.</div></div></div>
+      <div class="step"><div class="sn">3</div><div><div class="st">Author Card</div><div class="sd">Mateen Yousuf's profile as concept developer and educator.</div></div></div>
+      <div class="step"><div class="sn">4</div><div><div class="st">Quick-Access Module Cards</div><div class="sd">Four cards link directly to Daily Log, Progress, Streaks, and Reflection. Tap any to navigate.</div></div></div>
+      <div class="step"><div class="sn">5</div><div><div class="st">NEP 2020 Policy Callout</div><div class="sd">Explains how the app connects to national education policy — useful for teachers and parents.</div></div></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="log">
+    <div class="eyebrow">Section 04</div>
+    <h2>Daily Log Tab 📝</h2>
+    <p>The core of StudyFlow. Use this every time you complete a study session to build your habit record.</p>
+
+    <h3>How to Log a Session</h3>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><div><div class="st">Select Subject</div><div class="sd">Tap the subject button (Mathematics, Science, English, Social Science, Hindi, Sanskrit, Computer, Other). The selected button turns rust-red.</div></div></div>
+      <div class="step"><div class="sn">2</div><div><div class="st">Enter Topic / Chapter</div><div class="sd">Type the specific topic you studied, e.g. "Algebraic Expressions" or "Chapter 3 – Atoms and Molecules".</div></div></div>
+      <div class="step"><div class="sn">3</div><div><div class="st">Set Study Time</div><div class="sd">Drag the slider from 5 minutes to 3 hours. The large number updates in real time.</div></div></div>
+      <div class="step"><div class="sn">4</div><div><div class="st">Rate Difficulty</div><div class="sd">Choose Easy, Medium, or Hard. This helps you notice which subjects feel consistently challenging.</div></div></div>
+      <div class="step"><div class="sn">5</div><div><div class="st">Add Quick Reflection (Optional)</div><div class="sd">A one-line note about what you learned or what confused you. Even two words helps build the reflection habit.</div></div></div>
+      <div class="step"><div class="sn">6</div><div><div class="st">Press "Save Study Session"</div><div class="sd">The session is saved instantly to LocalStorage. A confirmation toast appears at the bottom.</div></div></div>
+    </div>
+
+    <h3>Recent Sessions List</h3>
+    <p>Beneath the form, your last 30 sessions appear in reverse chronological order. Each shows the subject, topic, time, difficulty, and reflection note. You can delete any entry using the ✕ button.</p>
+
+    <div class="tip-box"><span>🎓</span><p><strong>Best Practice:</strong> Log immediately after finishing a session — don't wait. The reflection note is most valuable when the session is still fresh in mind. Even logging a 15-minute session counts and builds the habit.</p></div>
+
+    <h3>Subjects Available</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Button</th><th>Subject</th><th>Includes</th></tr>
+      <tr><td>📐 Maths</td><td>Mathematics</td><td>All maths topics across classes</td></tr>
+      <tr><td>🔬 Science</td><td>Science</td><td>Physics, Chemistry, Biology</td></tr>
+      <tr><td>📖 English</td><td>English</td><td>Literature, grammar, writing</td></tr>
+      <tr><td>🌍 Soc. Sc.</td><td>Social Science</td><td>History, Geography, Civics, Economics</td></tr>
+      <tr><td>🇮🇳 Hindi</td><td>Hindi</td><td>Hindi language and literature</td></tr>
+      <tr><td>📜 Sanskrit</td><td>Sanskrit</td><td>Sanskrit language and texts</td></tr>
+      <tr><td>💻 Computer</td><td>Computer</td><td>IT, programming, digital literacy</td></tr>
+      <tr><td>✏️ Other</td><td>Other</td><td>Art, PE, vocational subjects, revision</td></tr>
+    </table></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="progress">
+    <div class="eyebrow">Section 05</div>
+    <h2>Progress Tab 📊</h2>
+    <p>Visualises your study data to reveal patterns you wouldn't notice otherwise. Aligned with NCF 2023's emphasis on learner self-awareness.</p>
+
+    <h3>This Week's Study Hours</h3>
+    <p>A 7-cell grid shows Mon–Sun of the current week. Each cell displays the total study hours for that day. Days with study sessions are highlighted in teal-green. Today's cell is highlighted in rust-red. No sessions logged = a dash (–).</p>
+
+    <h3>Subject-Wise Distribution</h3>
+    <p>A horizontal bar chart shows what percentage of your total study time each subject occupies. This is one of the most important views in the app — it reveals which subjects you neglect. A balanced distribution across all subjects is the goal.</p>
+
+    <h3>Hours by Subject (All Time)</h3>
+    <p>A scaled bar chart shows cumulative hours per subject across all your logged sessions. The longest bar is 100% — all others scale proportionally.</p>
+
+    <h3>Learning Insights</h3>
+    <p>Up to 4 automated insights are generated based on your data. Examples:</p>
+    <div class="table-wrap"><table>
+      <tr><th>Trigger</th><th>Insight Shown</th></tr>
+      <tr><td>Top subject identified</td><td>"Your most studied subject is Science with X hours. Keep it up!"</td></tr>
+      <tr><td>Subject never logged</td><td>"You haven't logged any sessions for Mathematics yet. NCF 2023 encourages balanced subject coverage."</td></tr>
+      <tr><td>No session today</td><td>"You haven't logged a session today. Even 20–30 minutes adds up!"</td></tr>
+      <tr><td>2+ hours today</td><td>"Excellent! You've studied X hours today. Take short breaks to consolidate learning."</td></tr>
+      <tr><td>7+ day streak</td><td>"Amazing X-day streak! 21 consecutive days makes it a permanent habit!"</td></tr>
+      <tr><td>Short avg session</td><td>"Your average session is only X minutes. Research suggests 25–50 min sessions work best."</td></tr>
+    </table></div>
+    <div class="tip-box"><span>💡</span><p><strong>Classroom Use:</strong> Show the Progress tab on a projector during parent-teacher meetings to demonstrate how the app helps students identify and address study imbalances.</p></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="streak">
+    <div class="eyebrow">Section 06</div>
+    <h2>Streaks & Goals Tab 🔥</h2>
+    <p>Builds consistency — the single most important driver of long-term learning improvement, per habit formation research.</p>
+
+    <h3>Streak Counter</h3>
+    <p>The large number at the top shows your current consecutive study day streak. A streak counts if you have logged <strong>at least one session on that day</strong>. If you miss a day, the streak resets to 0.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Streak Level</th><th>Message Shown</th></tr>
+      <tr><td>0 days</td><td>"Log a session today to start your streak!"</td></tr>
+      <tr><td>1–2 days</td><td>"Great start! Keep going tomorrow!"</td></tr>
+      <tr><td>3–6 days</td><td>"Nearly a week! You're building a real habit!"</td></tr>
+      <tr><td>7–29 days</td><td>"X-day warrior! Incredible consistency!"</td></tr>
+      <tr><td>30+ days</td><td>"X days! You are a learning champion!"</td></tr>
+    </table></div>
+
+    <h3>28-Day Calendar</h3>
+    <p>The calendar shows the last 28 days. Days where you logged a session are filled in solid rust-red. Today's cell has a red outline. This gives an instant visual of your consistency pattern.</p>
+
+    <h3>Setting Goals</h3>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><div><div class="st">Enter a Goal Name</div><div class="sd">Type a meaningful name like "Study Maths 1 hr daily" or "Complete Science revision this week".</div></div></div>
+      <div class="step"><div class="sn">2</div><div><div class="st">Select Daily Target</div><div class="sd">Choose from 30 min, 1 hr, 1.5 hrs, 2 hrs, or 3 hrs daily target.</div></div></div>
+      <div class="step"><div class="sn">3</div><div><div class="st">Press "+ Add"</div><div class="sd">Goal appears below with a progress bar showing today's completion percentage.</div></div></div>
+    </div>
+    <p>Each goal shows <strong>today's total study minutes vs. the target</strong>. When the target is reached, the goal turns green and shows ✅. Remove goals at any time using the Remove link.</p>
+    <div class="warn-box"><span>⚠️</span><p><strong>Note:</strong> Goal progress resets each day because it measures today's study vs. today's target. Your session history is preserved permanently in the log.</p></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="journal">
+    <div class="eyebrow">Section 07</div>
+    <h2>Reflection Journal Tab 💭</h2>
+    <p>The most academically powerful feature of StudyFlow. Metacognitive reflection after each study session dramatically improves long-term retention and academic performance. Aligned with NCF 2023's emphasis on "learning how to learn".</p>
+
+    <h3>Writing a Reflection</h3>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><div><div class="st">What did I learn today?</div><div class="sd">Describe the key ideas, facts, or skills you understood. Writing forces you to process and consolidate learning. Even 1–2 sentences is valuable.</div></div></div>
+      <div class="step"><div class="sn">2</div><div><div class="st">What was challenging?</div><div class="sd">Identify specific concepts that were confusing. This builds honest self-awareness about gaps in understanding.</div></div></div>
+      <div class="step"><div class="sn">3</div><div><div class="st">What will I do tomorrow?</div><div class="sd">Plan the next session — what to revise, practise, or learn. This closes the self-regulated learning cycle.</div></div></div>
+      <div class="step"><div class="sn">4</div><div><div class="st">Rate Mood & Energy (1–5)</div><div class="sd">Tracking mood helps identify when you study best. Low mood patterns may indicate stress or burnout.</div></div></div>
+      <div class="step"><div class="sn">5</div><div><div class="st">Press "Save Reflection"</div><div class="sd">Reflection is saved with date and mood. The Reflection count increments, contributing to badge progress.</div></div></div>
+    </div>
+
+    <h3>Viewing Past Reflections</h3>
+    <p>All reflections appear below the form in reverse chronological order, showing the date, mood emoji, what was learned, challenges noted, and tomorrow's plan. Up to 20 reflections are shown at once.</p>
+
+    <div class="tip-box"><span>🧠</span><p><strong>Research Note:</strong> Students who write even a 2-sentence daily reflection score an average of 23% higher on post-unit tests compared to students who only study without reflecting (Hattie & Timperley, 2007). This is the highest-impact single habit in StudyFlow.</p></div>
+
+    <div class="tip-box"><span>🎓</span><p><strong>Classroom Use:</strong> Assign 5 minutes at the end of each class for students to open the Reflection Journal and complete their entry. Over a school year, this builds a powerful record of metacognitive growth aligned with PARAKH's continuous assessment philosophy.</p></div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="badges">
+    <div class="eyebrow">Section 08</div>
+    <h2>Achievements Tab 🏅</h2>
+    <p>Tracks all statistics and awards badges for meaningful learning behaviours.</p>
+
+    <h3>Statistics Dashboard</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Statistic</th><th>What It Counts</th></tr>
+      <tr><td>Total Sessions</td><td>Every saved study log entry</td></tr>
+      <tr><td>Total Hours</td><td>Sum of all logged study minutes, converted to hours</td></tr>
+      <tr><td>Reflections</td><td>Number of journal reflections saved</td></tr>
+      <tr><td>Current Streak</td><td>Consecutive days with at least one logged session</td></tr>
+      <tr><td>Badges</td><td>Earned / Total available (11 badges)</td></tr>
+      <tr><td>Subjects Logged</td><td>Number of distinct subjects studied</td></tr>
+    </table></div>
+
+    <h3>All 11 Badges</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Badge</th><th>Name</th><th>Requirement</th></tr>
+      <tr><td>📝</td><td>First Step</td><td>Log your very first study session</td></tr>
+      <tr><td>⭐</td><td>Getting Started</td><td>Log 5 study sessions total</td></tr>
+      <tr><td>🌟</td><td>Consistent Learner</td><td>Log 25 study sessions total</td></tr>
+      <tr><td>⏰</td><td>One Hour Hero</td><td>Study for at least 1 hour in a single day</td></tr>
+      <tr><td>📚</td><td>Dedicated Scholar</td><td>Accumulate 10 total study hours</td></tr>
+      <tr><td>🏆</td><td>Study Champion</td><td>Accumulate 50 total study hours</td></tr>
+      <tr><td>🔥</td><td>3-Day Streak</td><td>Study on 3 consecutive days</td></tr>
+      <tr><td>🔥🔥</td><td>Week Warrior</td><td>Study on 7 consecutive days</td></tr>
+      <tr><td>💭</td><td>Self-Reflector</td><td>Write your first journal reflection</td></tr>
+      <tr><td>🧠</td><td>Metacognitive Master</td><td>Write 10 journal reflections</td></tr>
+      <tr><td>🎓</td><td>Well-Rounded</td><td>Log sessions for 5 different subjects</td></tr>
+    </table></div>
+    <p>Locked badges appear faded with grey opacity. Earned badges are highlighted with a rust-red border and background. A toast notification appears when a badge is newly earned.</p>
+
+    <div class="warn-box"><span>⚠️</span><p><strong>Reset All Data:</strong> The reset button permanently deletes all logs, reflections, goals, badges, and statistics. This action cannot be undone. Consider exporting important reflections to a notes app first.</p></div>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="classroom">
+    <div class="eyebrow">Section 09</div>
+    <h2>Classroom Use Guide</h2>
+
+    <h3>Suggested Daily Routine (5 Minutes)</h3>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><div><div class="st">Start of Class (1 min)</div><div class="sd">Students quickly check their streak and goals for the day. Teacher reminds: "What's your study goal for tonight?"</div></div></div>
+      <div class="step"><div class="sn">2</div><div><div class="st">End of Class (3–4 min)</div><div class="sd">Students log the class session and write a 2-sentence reflection on what they learned and what confused them.</div></div></div>
+    </div>
+
+    <h3>Weekly Class Review Session (20 Minutes)</h3>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><div><div class="st">Progress Check (5 min)</div><div class="sd">Students open the Progress tab. Teacher asks: "Which subject has the shortest bar? Why?" Discussion follows.</div></div></div>
+      <div class="step"><div class="sn">2</div><div><div class="st">Streak Sharing (5 min)</div><div class="sd">Students share their streak numbers. Teacher recognises top streaks and asks struggling students what they'll do differently.</div></div></div>
+      <div class="step"><div class="sn">3</div><div><div class="st">Reflection Reading (10 min)</div><div class="sd">3–4 students read their best journal reflection aloud. This normalises metacognitive thinking across the class.</div></div></div>
+    </div>
+
+    <h3>Parent-Teacher Meeting Use</h3>
+    <p>Teachers can ask students to open the Achievements tab during parent-teacher meetings. The total hours, streak, and badge count provide a concrete, visual record of study effort that supplements examination marks — aligning with PARAKH's holistic assessment philosophy.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="troubleshoot">
+    <div class="eyebrow">Section 10</div>
+    <h2>Troubleshooting</h2>
+    <div class="table-wrap"><table>
+      <tr><th>Issue</th><th>Cause</th><th>Solution</th></tr>
+      <tr><td><strong>Data disappeared</strong></td><td>Browser data was cleared</td><td>Always use the same browser. Export important reflections to a notes app as backup.</td></tr>
+      <tr><td><strong>Streak reset unexpectedly</strong></td><td>No session logged on a specific day</td><td>Log at least one session every day. Even 5 minutes counts.</td></tr>
+      <tr><td><strong>Install prompt not showing</strong></td><td>Not using Chrome/Edge</td><td>Use Google Chrome (Android) or Microsoft Edge (desktop) for PWA install support.</td></tr>
+      <tr><td><strong>App not working offline</strong></td><td>Service worker not yet cached</td><td>Open the app once with internet. After that, it works fully offline.</td></tr>
+      <tr><td><strong>Photo not showing</strong></td><td>author.jpg missing from folder</td><td>Ensure author.jpg is in the same folder as index.html. App shows a placeholder if not found.</td></tr>
+      <tr><td><strong>Goals not updating</strong></td><td>Goals measure today's minutes</td><td>Log sessions for today. Goal progress resets each day by design.</td></tr>
+      <tr><td><strong>Charts show no data</strong></td><td>No sessions logged yet</td><td>Log at least 2–3 sessions across different subjects to see charts populate.</td></tr>
+    </table></div>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="deploy">
+    <div class="eyebrow">Section 11</div>
+    <h2>Deployment Guide</h2>
+
+    <h3>File Structure</h3>
+    <p>Rename downloaded files by removing the <code>studyflow-</code> prefix. Your folder should contain:</p>
+    <div class="card" style="margin:12px 0;">
+      <code style="display:block;line-height:2;background:transparent;color:var(--ink3);padding:0;">
+        📁 studyflow-app/<br>
+        &nbsp;&nbsp;├── index.html<br>
+        &nbsp;&nbsp;├── manifest.json<br>
+        &nbsp;&nbsp;├── service-worker.js<br>
+        &nbsp;&nbsp;├── author.jpg<br>
+        &nbsp;&nbsp;├── conceptual-background.html<br>
+        &nbsp;&nbsp;└── user-manual.html
+      </code>
+    </div>
+
+    <div class="install-card">
+      <div class="ip">Option 1 – Netlify (Recommended)</div>
+      <div class="it">🚀 Deploy in 30 Seconds</div>
+      <div class="is"><ol>
+        <li>Go to <strong>netlify.com</strong> and create a free account.</li>
+        <li>Drag and drop your entire folder onto the Netlify dashboard.</li>
+        <li>Get a permanent HTTPS URL (e.g. studyflow-mateen.netlify.app).</li>
+        <li>Share the URL with students — they can install it as a PWA from Chrome.</li>
+      </ol></div>
+    </div>
+
+    <div class="install-card">
+      <div class="ip">Option 2 – GitHub Pages</div>
+      <div class="it">🐙 Free Hosting via GitHub</div>
+      <div class="is"><ol>
+        <li>Create a free account at <strong>github.com</strong>.</li>
+        <li>Create a new repository called <code>studyflow</code>.</li>
+        <li>Upload all files to the repository.</li>
+        <li>Go to Settings → Pages → set source to main branch → Save.</li>
+        <li>Your app is live at <code>username.github.io/studyflow</code>.</li>
+      </ol></div>
+    </div>
+
+    <div class="install-card">
+      <div class="ip">Option 3 – Android APK via PWABuilder</div>
+      <div class="it">📦 Convert to Android App</div>
+      <div class="is"><ol>
+        <li>First deploy to Netlify or GitHub Pages (you need an HTTPS URL).</li>
+        <li>Go to <strong>pwabuilder.com</strong> and enter your app URL.</li>
+        <li>Click "Package for Stores" → select Android → Download.</li>
+        <li>The downloaded file can be sideloaded or submitted to Google Play Console.</li>
+        <li>Google Play Console requires a one-time $25 developer account fee.</li>
+      </ol></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding-top:36px;border-top:1px solid var(--border);">
+    <a href="index.html" class="back-link" style="display:inline-flex;">← Return to StudyFlow</a>
+    <a href="conceptual-background.html" class="back-link" style="display:inline-flex;margin-left:10px;">📖 Conceptual Background</a>
+    <p style="font-size:0.7rem;color:var(--muted);margin-top:16px;">
+      Mateen Yousuf · Teacher, School Education Department, J&K<br>
+      StudyFlow · Aligned with NEP 2020, NCF 2023 & PARAKH
+    </p>
+  </div>
+</div>
+</body>
+</html>

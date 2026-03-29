@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a1628">
+<meta name="description" content="AI-powered Learning Motivation Booster aligned with NEP 2020 and NCF 2023">
+<title>LearnSpark – Learning Motivation Booster</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="author.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== CSS VARIABLES ===== */
+  :root {
+    --bg: #07111f;
+    --bg2: #0d1e33;
+    --bg3: #112340;
+    --accent: #f5a623;
+    --accent2: #e8734a;
+    --teal: #2dd4bf;
+    --blue: #3b82f6;
+    --purple: #a78bfa;
+    --white: #f0f4ff;
+    --muted: #8899aa;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --radius: 18px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.4);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== ANIMATED BACKGROUND ===== */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 10% 20%, rgba(59,130,246,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 90% 80%, rgba(245,166,35,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(167,139,250,0.05) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,17,31,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .nav-logo {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900;
+    color: #07111f; flex-shrink: 0;
+  }
+
+  .nav-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+  .nav-title span { color: var(--accent); }
+
+  .nav-tabs {
+    display: flex; gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 4px;
+  }
+
+  .nav-tab {
+    padding: 7px 14px; border-radius: 8px; border: none;
+    background: transparent; color: var(--muted);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap;
+  }
+
+  .nav-tab.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #07111f; font-weight: 700;
+  }
+
+  /* ===== SECTIONS ===== */
+  section { display: none; position: relative; z-index: 1; }
+  section.active { display: block; animation: fadeUp 0.4s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== LANDING ===== */
+  .hero {
+    min-height: calc(100vh - 65px);
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center;
+    padding: 60px 24px 40px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 100px; padding: 8px 18px;
+    font-size: 12px; font-weight: 600; color: var(--accent);
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 32px;
+    animation: pulse 3s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.3); }
+    50%      { box-shadow: 0 0 0 8px rgba(245,166,35,0); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 8vw, 72px);
+    font-weight: 900; line-height: 1.1;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--white) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 2.5vw, 19px);
+    color: var(--muted); max-width: 600px; line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .hero-policies {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .policy-tag {
+    background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.25);
+    color: var(--teal); border-radius: 100px; padding: 6px 14px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  .hero-cta {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    margin-bottom: 60px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #07111f; font-weight: 700; font-size: 15px;
+    padding: 14px 28px; border: none; border-radius: 12px;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245,166,35,0.35); }
+
+  .btn-secondary {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--white); font-size: 15px; font-weight: 500;
+    padding: 14px 28px; border-radius: 12px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Author Card */
+  .author-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 20px 28px;
+    max-width: 460px; margin: 0 auto;
+  }
+
+  .author-photo {
+    width: 72px; height: 72px; border-radius: 50%;
+    object-fit: cover; object-position: top;
+    border: 3px solid var(--accent); flex-shrink: 0;
+  }
+
+  .author-info h3 { font-weight: 700; font-size: 17px; margin-bottom: 3px; }
+  .author-info p { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+  /* ===== STATS ===== */
+  .stats-row {
+    display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+    padding: 24px; max-width: 900px; margin: 0 auto;
+  }
+
+  .stat-box {
+    flex: 1; min-width: 130px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+    text-align: center;
+  }
+
+  .stat-num { font-size: 32px; font-weight: 900; color: var(--accent); display: block; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== SECTION WRAPPER ===== */
+  .section-wrap { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+
+  .section-header { margin-bottom: 32px; text-align: center; }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 40px); font-weight: 900;
+    margin-bottom: 10px;
+  }
+  .section-header p { color: var(--muted); font-size: 15px; max-width: 560px; margin: 0 auto; }
+
+  /* ===== CARDS ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px 24px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245,166,35,0.3);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .card-icon { font-size: 36px; margin-bottom: 14px; display: block; }
+  .card-title { font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+  .card-desc { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+  .card-tag {
+    display: inline-block; margin-top: 14px;
+    background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.2);
+    color: var(--accent); font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px; text-transform: uppercase;
+  }
+
+  /* ===== CHALLENGES ===== */
+  .challenge-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .challenge-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+  .challenge-icon {
+    width: 50px; height: 50px; border-radius: 14px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+  }
+
+  .challenge-title { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+  .challenge-subject { font-size: 13px; color: var(--teal); font-weight: 600; }
+
+  .challenge-desc { color: var(--muted); font-size: 14px; line-height: 1.65; margin-bottom: 20px; }
+
+  .challenge-steps { counter-reset: step; list-style: none; }
+  .challenge-steps li {
+    counter-increment: step;
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 10px; font-size: 14px; color: #c5d0e0;
+  }
+  .challenge-steps li::before {
+    content: counter(step);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #07111f; font-weight: 800; font-size: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  .progress-bar-wrap { background: rgba(255,255,255,0.08); border-radius: 100px; height: 6px; margin: 18px 0 8px; }
+  .progress-bar { height: 6px; border-radius: 100px; background: linear-gradient(90deg, var(--teal), var(--blue)); transition: width 0.4s; }
+  .progress-label { font-size: 12px; color: var(--muted); text-align: right; }
+
+  .challenge-btn {
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    color: #07111f; font-weight: 700; font-size: 14px;
+    padding: 11px 22px; border: none; border-radius: 10px;
+    cursor: pointer; transition: transform 0.2s;
+  }
+  .challenge-btn:hover { transform: translateY(-2px); }
+
+  /* ===== CURIOSITY LAB ===== */
+  .curiosity-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;
+  }
+
+  .curiosity-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 18px;
+    cursor: pointer; transition: all 0.2s; text-align: center;
+  }
+
+  .curiosity-card:hover {
+    border-color: rgba(167,139,250,0.4);
+    transform: translateY(-3px);
+    background: rgba(167,139,250,0.07);
+  }
+
+  .curiosity-emoji { font-size: 44px; margin-bottom: 12px; display: block; }
+  .curiosity-q { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+  .curiosity-hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .curiosity-answer {
+    display: none; background: rgba(167,139,250,0.08);
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 12px; padding: 16px; margin-top: 12px;
+    font-size: 13px; color: #c5d0e0; line-height: 1.6; text-align: left;
+  }
+  .curiosity-card.open .curiosity-answer { display: block; }
+  .curiosity-card.open { border-color: rgba(167,139,250,0.4); }
+
+  /* ===== PATHWAYS ===== */
+  .pathway-card {
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: 20px; padding: 28px;
+    cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+  }
+
+  .pathway-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    opacity: 0; transition: opacity 0.2s;
+  }
+
+  .pathway-card:hover { transform: translateY(-4px); }
+  .pathway-card:hover::before { opacity: 1; }
+  .pathway-card.tech::before { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+  .pathway-card.env::before  { background: linear-gradient(90deg, var(--teal), #22c55e); }
+  .pathway-card.biz::before  { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .pathway-card.arts::before { background: linear-gradient(90deg, var(--purple), #ec4899); }
+
+  .pathway-icon { font-size: 40px; margin-bottom: 14px; }
+  .pathway-title { font-weight: 800; font-size: 20px; margin-bottom: 8px; }
+  .pathway-desc { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+  .pathway-modules { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pathway-module {
+    background: rgba(255,255,255,0.06); border-radius: 8px;
+    padding: 5px 12px; font-size: 12px; color: #c5d0e0;
+  }
+
+  .pathway-enroll {
+    margin-top: 20px;
+    background: transparent; border: 1px solid var(--accent);
+    color: var(--accent); font-weight: 700; font-size: 13px;
+    padding: 10px 20px; border-radius: 10px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pathway-enroll:hover { background: var(--accent); color: #07111f; }
+
+  /* ===== TRACKER ===== */
+  .tracker-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px;
+  }
+
+  .tracker-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px;
+  }
+
+  .tracker-box h3 { font-size: 14px; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .tracker-num { font-size: 48px; font-weight: 900; line-height: 1; }
+  .tracker-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  .badges-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .badge {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 18px;
+  }
+
+  .badge-icon { font-size: 28px; }
+  .badge-name { font-weight: 700; font-size: 14px; }
+  .badge-desc { font-size: 12px; color: var(--muted); }
+
+  .badge.earned { border-color: rgba(245,166,35,0.4); background: rgba(245,166,35,0.06); }
+  .badge.locked { opacity: 0.45; filter: grayscale(1); }
+
+  .notes-area {
+    width: 100%; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6;
+    resize: vertical; min-height: 120px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .notes-area:focus { border-color: var(--accent); }
+
+  .save-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #07111f; font-weight: 700; padding: 11px 22px;
+    border: none; border-radius: 10px; cursor: pointer;
+    margin-top: 12px; font-size: 14px;
+  }
+
+  /* ===== TEACHER DASHBOARD ===== */
+  .dashboard-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+
+  .dashboard-stat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px;
+    text-align: center;
+  }
+
+  .dashboard-stat .icon { font-size: 32px; margin-bottom: 8px; }
+  .dashboard-stat .num { font-size: 36px; font-weight: 900; color: var(--teal); }
+  .dashboard-stat .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .activity-list { list-style: none; }
+  .activity-item {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .activity-item:hover { border-color: rgba(45,212,191,0.3); }
+
+  .activity-icon { font-size: 24px; }
+  .activity-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+  .activity-meta { font-size: 12px; color: var(--muted); }
+  .activity-badge { margin-left: auto; background: rgba(45,212,191,0.12); color: var(--teal); border-radius: 100px; padding: 4px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+
+  /* ===== MICRO-LEARNING ===== */
+  .micro-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden; margin-bottom: 20px;
+  }
+
+  .micro-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .micro-num {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px;
+  }
+
+  .micro-title { font-weight: 700; font-size: 17px; margin-bottom: 2px; }
+  .micro-time { font-size: 12px; color: var(--muted); }
+
+  .micro-content { padding: 24px 28px; }
+  .micro-content p { color: #c5d0e0; font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+
+  .highlight-box {
+    background: rgba(245,166,35,0.07); border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 18px;
+    font-size: 14px; color: #e0c070; line-height: 1.6; margin-bottom: 16px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .nav-tabs { display: none; }
+    .tracker-grid { grid-template-columns: 1fr; }
+    .hero { padding: 40px 16px 24px; }
+    .author-card { flex-direction: column; text-align: center; padding: 20px; }
+  }
+
+  .mobile-tabs {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(7,17,31,0.96); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border); padding: 8px;
+    z-index: 100; gap: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .mobile-tabs { display: flex; }
+    body { padding-bottom: 72px; }
+  }
+
+  .mob-tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 8px 4px; border: none; background: transparent;
+    color: var(--muted); cursor: pointer; border-radius: 10px;
+    font-size: 10px; transition: all 0.2s;
+  }
+  .mob-tab .icon { font-size: 20px; }
+  .mob-tab.active { color: var(--accent); }
+
+  /* Install Banner */
+  #install-banner {
+    display: none; position: fixed; bottom: 80px; left: 16px; right: 16px;
+    background: var(--bg2); border: 1px solid var(--accent);
+    border-radius: 16px; padding: 16px 18px;
+    z-index: 200; flex-direction: column; gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  #install-banner.show { display: flex; }
+  #install-banner p { font-size: 14px; line-height: 1.5; }
+  .banner-btns { display: flex; gap: 10px; }
+  .banner-btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; }
+  .banner-btn.yes { background: var(--accent); color: #07111f; }
+  .banner-btn.no  { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">✦</div>
+    <div class="nav-title">Learn<span>Spark</span></div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('home')">🏠 Home</button>
+    <button class="nav-tab" onclick="showSection('connections')">🌍 Real Life</button>
+    <button class="nav-tab" onclick="showSection('challenges')">⚡ Challenges</button>
+    <button class="nav-tab" onclick="showSection('curiosity')">🔭 Curiosity</button>
+    <button class="nav-tab" onclick="showSection('pathways')">🗺️ Pathways</button>
+    <button class="nav-tab" onclick="showSection('tracker')">🏆 My Progress</button>
+    <button class="nav-tab" onclick="showSection('teacher')">📊 Teacher</button>
+    <button class="nav-tab" onclick="showSection('micro')">⚡ Micro-Learn</button>
+  </div>
+</nav>
+
+<!-- Mobile Tab Bar -->
+<div class="mobile-tabs">
+  <button class="mob-tab active" onclick="showSection('home')"><span class="icon">🏠</span>Home</button>
+  <button class="mob-tab" onclick="showSection('connections')"><span class="icon">🌍</span>Real Life</button>
+  <button class="mob-tab" onclick="showSection('challenges')"><span class="icon">⚡</span>Challenges</button>
+  <button class="mob-tab" onclick="showSection('curiosity')"><span class="icon">🔭</span>Curiosity</button>
+  <button class="mob-tab" onclick="showSection('pathways')"><span class="icon">🗺️</span>Pathways</button>
+  <button class="mob-tab" onclick="showSection('tracker')"><span class="icon">🏆</span>Progress</button>
+  <button class="mob-tab" onclick="showSection('teacher')"><span class="icon">📊</span>Teacher</button>
+</div>
+
+<!-- Install Banner -->
+<div id="install-banner">
+  <p>📲 Install <strong>LearnSpark</strong> on your device for offline access — works without internet!</p>
+  <div class="banner-btns">
+    <button class="banner-btn yes" id="install-btn">Install App</button>
+    <button class="banner-btn no" onclick="document.getElementById('install-banner').classList.remove('show')">Later</button>
+  </div>
+</div>
+
+<!-- ===== HOME / LANDING ===== -->
+<section id="home" class="active">
+  <div class="hero">
+    <div class="hero-badge">✦ NEP 2020 & NCF 2023 Aligned</div>
+    <h1>Make Learning<br>Come Alive.</h1>
+    <p class="hero-sub">An AI-powered Motivation Booster that transforms classrooms into discovery environments — making every subject relevant, engaging, and inspiring.</p>
+    
+    <div class="hero-policies">
+      <span class="policy-tag">📘 NEP 2020</span>
+      <span class="policy-tag">📗 NCF 2023</span>
+      <span class="policy-tag">📊 PARAKH</span>
+      <span class="policy-tag">📚 NCERT</span>
+      <span class="policy-tag">🎯 Competency-Based</span>
+    </div>
+
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="showSection('challenges')">⚡ Start a Challenge</button>
+      <button class="btn-secondary" onclick="showSection('curiosity')">🔭 Explore Curiosity Lab</button>
+    </div>
+
+    <div class="author-card">
+      <img src="author.jpg" alt="Mateen Yousuf" class="author-photo">
+      <div class="author-info">
+        <h3>Mateen Yousuf</h3>
+        <p>Teacher – School Education Department, J&K<br>Concept Developer, LearnSpark</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; padding: 8px 24px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <a href="about.html" style="color:var(--teal); font-size:13px; font-weight:600; text-decoration:none; background:var(--card); border:1px solid var(--border); padding:8px 18px; border-radius:100px;">📋 Conceptual Background</a>
+    <a href="manual.html" style="color:var(--purple); font-size:13px; font-weight:600; text-decoration:none; background:var(--card); border:1px solid var(--border); padding:8px 18px; border-radius:100px;">📖 User Manual</a>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-num" id="stat-challenges">0</span>
+      <div class="stat-label">Challenges Completed</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="stat-curiosity">0</span>
+      <div class="stat-label">Topics Explored</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="stat-pathways">0</span>
+      <div class="stat-label">Pathways Enrolled</div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="stat-badges">0</span>
+      <div class="stat-label">Badges Earned</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REAL LIFE CONNECTIONS ===== -->
+<section id="connections">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>🌍 Real-Life Connections</h2>
+      <p>Discover how school subjects are alive in the world around you — aligned with NCF 2023's emphasis on meaningful learning.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card" onclick="markExplored('math-budget')">
+        <span class="card-icon">🛒</span>
+        <div class="card-title">Mathematics in Shopping</div>
+        <div class="card-desc">How do shopkeepers calculate discounts? How does compound interest work on bank loans? Mathematics governs every financial decision you make.</div>
+        <span class="card-tag">Mathematics</span>
+      </div>
+      <div class="card" onclick="markExplored('sci-energy')">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">Science of Energy</div>
+        <div class="card-desc">Solar panels on your roof, wind turbines in valleys — these are physics in action. Understanding energy helps you make sustainable choices.</div>
+        <span class="card-tag">Physics</span>
+      </div>
+      <div class="card" onclick="markExplored('chem-food')">
+        <span class="card-icon">🍎</span>
+        <div class="card-title">Chemistry in Your Food</div>
+        <div class="card-desc">Why does bread rise? What makes milk sour? Every meal involves chemical reactions. Chemistry explains how your body digests and uses nutrients.</div>
+        <span class="card-tag">Chemistry</span>
+      </div>
+      <div class="card" onclick="markExplored('bio-health')">
+        <span class="card-icon">🫀</span>
+        <div class="card-title">Biology & Your Health</div>
+        <div class="card-desc">How does your immune system fight infections? Why do you need sleep? Biology is the science of your own life, happening right now inside you.</div>
+        <span class="card-tag">Biology</span>
+      </div>
+      <div class="card" onclick="markExplored('geo-climate')">
+        <span class="card-icon">🌏</span>
+        <div class="card-title">Geography & Climate Change</div>
+        <div class="card-desc">Glaciers in the Himalayas are melting. Monsoon patterns are shifting. Geography explains why your region experiences the weather it does.</div>
+        <span class="card-tag">Geography</span>
+      </div>
+      <div class="card" onclick="markExplored('hist-today')">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">History Shapes Today</div>
+        <div class="card-desc">Why do borders exist where they do? How did partition shape J&K? History is not the past — it is the explanation for the present.</div>
+        <span class="card-tag">History</span>
+      </div>
+      <div class="card" onclick="markExplored('lang-comm')">
+        <span class="card-icon">🗣️</span>
+        <div class="card-title">Language as Power</div>
+        <div class="card-desc">The ability to write clearly, argue convincingly, and communicate ideas is the single most powerful skill for any career or social role.</div>
+        <span class="card-tag">English / Hindi</span>
+      </div>
+      <div class="card" onclick="markExplored('eco-biz')">
+        <span class="card-icon">📈</span>
+        <div class="card-title">Economics Around You</div>
+        <div class="card-desc">Why are prices rising? Why are some regions richer than others? Economics explains the invisible forces that shape every community.</div>
+        <span class="card-tag">Economics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHALLENGES ===== -->
+<section id="challenges">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>⚡ Learning Challenges</h2>
+      <p>Apply your knowledge through problem-solving missions. Each challenge develops competencies assessed under PARAKH's framework.</p>
+    </div>
+
+    <!-- Challenge 1 -->
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div class="challenge-icon" style="background: rgba(59,130,246,0.15);">🌱</div>
+        <div>
+          <div class="challenge-title">The Plastic-Free School Mission</div>
+          <div class="challenge-subject">Environmental Science + Mathematics</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        Your school generates 5 kg of plastic waste every week. Using concepts from science and mathematics, design a realistic plan to reduce this by 80% within one month.
+      </div>
+      <ol class="challenge-steps">
+        <li>Survey your school: identify the top 3 sources of plastic waste</li>
+        <li>Calculate: 80% of 5 kg = ? How much must be eliminated?</li>
+        <li>Research biodegradable alternatives for each source</li>
+        <li>Design a 4-week action plan with measurable targets</li>
+        <li>Present your plan to the class with data and visuals</li>
+      </ol>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="c1-bar" style="width:0%"></div></div>
+      <div class="progress-label" id="c1-label">Not started</div>
+      <button class="challenge-btn" onclick="progressChallenge('c1')">Mark Step Complete ✓</button>
+    </div>
+
+    <!-- Challenge 2 -->
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div class="challenge-icon" style="background: rgba(245,166,35,0.15);">💰</div>
+        <div>
+          <div class="challenge-title">Family Budget Planner</div>
+          <div class="challenge-subject">Mathematics + Life Skills</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        Given a monthly income of ₹15,000, create a realistic family budget that meets all essential needs while saving at least 10% for emergencies.
+      </div>
+      <ol class="challenge-steps">
+        <li>List all essential expenses: food, rent, utilities, education, transport</li>
+        <li>Assign estimated amounts to each category</li>
+        <li>Calculate total expenses — ensure they don't exceed ₹13,500</li>
+        <li>Identify areas where costs can be reduced</li>
+        <li>Present your budget as a pie chart or table</li>
+      </ol>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="c2-bar" style="width:0%"></div></div>
+      <div class="progress-label" id="c2-label">Not started</div>
+      <button class="challenge-btn" onclick="progressChallenge('c2')">Mark Step Complete ✓</button>
+    </div>
+
+    <!-- Challenge 3 -->
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div class="challenge-icon" style="background: rgba(45,212,191,0.15);">🌡️</div>
+        <div>
+          <div class="challenge-title">Climate Scientist for a Day</div>
+          <div class="challenge-subject">Science + Geography</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        Investigate the causes and effects of climate change in Jammu & Kashmir specifically. Use scientific concepts to explain what you observe in your local environment.
+      </div>
+      <ol class="challenge-steps">
+        <li>Record temperature observations for 5 consecutive days</li>
+        <li>Research how Himalayan glaciers have changed in 30 years</li>
+        <li>Connect greenhouse gas science to local weather patterns</li>
+        <li>Identify 3 visible effects of climate change in J&K</li>
+        <li>Propose 2 local actions that could make a measurable difference</li>
+      </ol>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="c3-bar" style="width:0%"></div></div>
+      <div class="progress-label" id="c3-label">Not started</div>
+      <button class="challenge-btn" onclick="progressChallenge('c3')">Mark Step Complete ✓</button>
+    </div>
+
+    <!-- Challenge 4 -->
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div class="challenge-icon" style="background: rgba(167,139,250,0.15);">📱</div>
+        <div>
+          <div class="challenge-title">Tech Inventor Challenge</div>
+          <div class="challenge-subject">Science + Technology + Creative Thinking</div>
+        </div>
+      </div>
+      <div class="challenge-desc">
+        Identify one real problem in your community and design a simple technological solution. You don't need to build it — just design it using scientific principles.
+      </div>
+      <ol class="challenge-steps">
+        <li>Observe: what problem affects your neighbourhood or school most?</li>
+        <li>Research: what technology currently exists to address similar problems?</li>
+        <li>Design: sketch your solution with labelled parts</li>
+        <li>Explain: what scientific principles does your design use?</li>
+        <li>Present: prepare a 2-minute pitch explaining your invention</li>
+      </ol>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="c4-bar" style="width:0%"></div></div>
+      <div class="progress-label" id="c4-label">Not started</div>
+      <button class="challenge-btn" onclick="progressChallenge('c4')">Mark Step Complete ✓</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CURIOSITY LAB ===== -->
+<section id="curiosity">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>🔭 Curiosity Exploration Lab</h2>
+      <p>Ask big questions. Explore surprising answers. This is how real scientists and thinkers work — driven by curiosity, not exams.</p>
+    </div>
+
+    <div class="curiosity-grid">
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">✈️</span>
+        <div class="curiosity-q">Why do airplanes fly?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">Airplane wings are shaped so that air moves faster over the top than the bottom. Faster-moving air creates lower pressure (Bernoulli's principle), and this pressure difference generates upward force called LIFT. Combine that with engine thrust, and 500 tonnes of metal rises into the sky — pure physics!</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">📱</span>
+        <div class="curiosity-q">How do smartphones work?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">A smartphone is billions of tiny transistors etched onto silicon chips smaller than your fingernail. They process information as 0s and 1s (binary). Radio waves carry signals between phones. Touchscreens detect the electrical conductivity of your finger. It's applied physics, chemistry, and mathematics working together at incredible speed.</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">🌏</span>
+        <div class="curiosity-q">Why do seasons change?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">Seasons happen because Earth is tilted 23.5° on its axis. As Earth orbits the Sun, the Northern Hemisphere tilts toward the Sun (summer) or away from it (winter). It's NOT about distance from the Sun — actually, Earth is closest to the Sun in January, when the Northern Hemisphere has winter!</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">🌊</span>
+        <div class="curiosity-q">Why is the ocean salty?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">Rain water dissolves tiny amounts of minerals from rocks as it flows to the sea. This has been happening for 3.8 billion years. The water evaporates from the ocean (as fresh water vapour) but the salt stays behind — concentrating over billions of years into the salty oceans we have today.</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">🧠</span>
+        <div class="curiosity-q">How does memory work?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">Your brain has ~86 billion neurons, each connected to thousands of others. When you learn something, neurons fire together, strengthening their connections (synapses). Repetition makes connections stronger — this is why studying works! Sleep is crucial: your brain consolidates memories while you rest, which is why sleep before exams matters more than cramming.</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">🌋</span>
+        <div class="curiosity-q">Why do volcanoes erupt?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">Deep inside Earth, rock is so hot it melts into liquid called magma. This magma is less dense than solid rock, so it rises — like oil in water. When pressure builds enough to crack the surface, magma bursts out as lava. The same plate tectonics that cause earthquakes also fuel volcanoes.</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">💊</span>
+        <div class="curiosity-q">How do medicines work?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">Medicines are molecules designed to interact with specific proteins in your body. Painkillers like aspirin block enzymes that produce pain-signalling chemicals. Antibiotics interfere with bacterial cell processes but leave human cells unharmed. Vaccines train your immune system to recognise pathogens before you encounter them. It's molecular biology at work!</div>
+      </div>
+
+      <div class="curiosity-card" onclick="toggleCuriosity(this)">
+        <span class="curiosity-emoji">🌌</span>
+        <div class="curiosity-q">How big is the universe?</div>
+        <div class="curiosity-hint">Tap to explore →</div>
+        <div class="curiosity-answer">The observable universe is 93 billion light-years across. One light-year is 9.46 trillion kilometres. Our galaxy — the Milky Way — contains 200-400 billion stars. And there are estimated to be 2 trillion galaxies in the observable universe. The numbers are so large that mathematics is the only language capable of describing them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PATHWAYS ===== -->
+<section id="pathways">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>🗺️ Interest-Based Learning Pathways</h2>
+      <p>Choose your passion. Every pathway connects school subjects to real careers and real-world impact — true to NEP 2020's vision of personalised learning.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="pathway-card tech">
+        <div class="pathway-icon">💻</div>
+        <div class="pathway-title">Technology & Innovation</div>
+        <div class="pathway-desc">From programming logic to artificial intelligence — explore how technology is built and how it's reshaping every industry.</div>
+        <div class="pathway-modules">
+          <span class="pathway-module">📐 Mathematics</span>
+          <span class="pathway-module">⚡ Physics</span>
+          <span class="pathway-module">💻 Computing</span>
+          <span class="pathway-module">🔬 Science</span>
+        </div>
+        <button class="pathway-enroll" onclick="enrollPathway('tech')">Enroll in Pathway →</button>
+      </div>
+
+      <div class="pathway-card env">
+        <div class="pathway-icon">🌿</div>
+        <div class="pathway-title">Environment & Sustainability</div>
+        <div class="pathway-desc">Explore climate science, ecosystems, and sustainable development. Learn how communities can adapt and protect the natural world.</div>
+        <div class="pathway-modules">
+          <span class="pathway-module">🌍 Geography</span>
+          <span class="pathway-module">🌱 Biology</span>
+          <span class="pathway-module">⚗️ Chemistry</span>
+          <span class="pathway-module">📊 Mathematics</span>
+        </div>
+        <button class="pathway-enroll" onclick="enrollPathway('env')">Enroll in Pathway →</button>
+      </div>
+
+      <div class="pathway-card biz">
+        <div class="pathway-icon">📊</div>
+        <div class="pathway-title">Business & Economics</div>
+        <div class="pathway-desc">Understand markets, entrepreneurship, and financial systems. Learn how businesses are created and how economies grow.</div>
+        <div class="pathway-modules">
+          <span class="pathway-module">📈 Economics</span>
+          <span class="pathway-module">📐 Mathematics</span>
+          <span class="pathway-module">📝 Language</span>
+          <span class="pathway-module">🏛️ History</span>
+        </div>
+        <button class="pathway-enroll" onclick="enrollPathway('biz')">Enroll in Pathway →</button>
+      </div>
+
+      <div class="pathway-card arts">
+        <div class="pathway-icon">🎨</div>
+        <div class="pathway-title">Creative Arts & Communication</div>
+        <div class="pathway-desc">Develop storytelling, design, and expressive skills. Explore how arts, literature, and media shape culture and society.</div>
+        <div class="pathway-modules">
+          <span class="pathway-module">📖 Literature</span>
+          <span class="pathway-module">🎭 Art</span>
+          <span class="pathway-module">📱 Media</span>
+          <span class="pathway-module">📝 Language</span>
+        </div>
+        <button class="pathway-enroll" onclick="enrollPathway('arts')">Enroll in Pathway →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MY PROGRESS / TRACKER ===== -->
+<section id="tracker">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>🏆 My Learning Progress</h2>
+      <p>Track your achievements, earn badges, and record your learning reflections — building a sense of growth and accomplishment.</p>
+    </div>
+
+    <div class="tracker-grid">
+      <div class="tracker-box">
+        <h3>Challenges Completed</h3>
+        <div class="tracker-num" id="t-challenges" style="color: var(--accent)">0</div>
+        <div class="tracker-sub">out of 4 available</div>
+      </div>
+      <div class="tracker-box">
+        <h3>Curiosity Topics Explored</h3>
+        <div class="tracker-num" id="t-curiosity" style="color: var(--teal)">0</div>
+        <div class="tracker-sub">out of 8 topics</div>
+      </div>
+      <div class="tracker-box">
+        <h3>Pathways Enrolled</h3>
+        <div class="tracker-num" id="t-pathways" style="color: var(--purple)">0</div>
+        <div class="tracker-sub">out of 4 pathways</div>
+      </div>
+      <div class="tracker-box">
+        <h3>Connections Discovered</h3>
+        <div class="tracker-num" id="t-connections" style="color: var(--blue)">0</div>
+        <div class="tracker-sub">out of 8 topics</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 16px; font-size: 18px;">🎖️ Badges</h3>
+    <div class="badges-row" id="badges-row">
+      <div class="badge locked" id="badge-curious">
+        <span class="badge-icon">🔭</span>
+        <div><div class="badge-name">Curiosity Explorer</div><div class="badge-desc">Explore 3+ curiosity topics</div></div>
+      </div>
+      <div class="badge locked" id="badge-solver">
+        <span class="badge-icon">⚡</span>
+        <div><div class="badge-name">Problem Solver</div><div class="badge-desc">Complete 2+ challenges</div></div>
+      </div>
+      <div class="badge locked" id="badge-champion">
+        <span class="badge-icon">🏆</span>
+        <div><div class="badge-name">Learning Champion</div><div class="badge-desc">Complete all 4 challenges</div></div>
+      </div>
+      <div class="badge locked" id="badge-pathfinder">
+        <span class="badge-icon">🗺️</span>
+        <div><div class="badge-name">Pathfinder</div><div class="badge-desc">Enroll in 2+ pathways</div></div>
+      </div>
+    </div>
+
+    <h3 style="margin: 28px 0 12px; font-size: 18px;">📝 My Learning Notes</h3>
+    <textarea class="notes-area" id="notes-area" placeholder="Write your reflections, questions, or ideas here..."></textarea>
+    <button class="save-btn" onclick="saveNotes()">💾 Save Notes</button>
+    <div id="notes-saved" style="font-size: 13px; color: var(--teal); margin-top: 8px; display: none;">✓ Notes saved to your device!</div>
+  </div>
+</section>
+
+<!-- ===== TEACHER DASHBOARD ===== -->
+<section id="teacher">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>📊 Teacher Engagement Dashboard</h2>
+      <p>Monitor student curiosity patterns, participation data, and assign exploration tasks — supporting NEP 2020's vision of teacher as facilitator.</p>
+    </div>
+
+    <div class="author-card" style="margin-bottom: 32px;">
+      <img src="author.jpg" alt="Mateen Yousuf" class="author-photo">
+      <div class="author-info">
+        <h3>Mateen Yousuf</h3>
+        <p>Teacher – School Education Department, J&K<br>Concept Developer, LearnSpark</p>
+      </div>
+    </div>
+
+    <div class="dashboard-row">
+      <div class="dashboard-stat">
+        <div class="icon">👥</div>
+        <div class="num">32</div>
+        <div class="label">Students Active</div>
+      </div>
+      <div class="dashboard-stat">
+        <div class="icon">⚡</div>
+        <div class="num" id="dash-challenges">0</div>
+        <div class="label">Challenges Completed</div>
+      </div>
+      <div class="dashboard-stat">
+        <div class="icon">🔭</div>
+        <div class="num" id="dash-curiosity">0</div>
+        <div class="label">Curiosity Explorations</div>
+      </div>
+      <div class="dashboard-stat">
+        <div class="icon">🗺️</div>
+        <div class="num" id="dash-pathways">0</div>
+        <div class="label">Pathways Enrolled</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 16px; font-size: 18px;">📋 Suggested Classroom Activities</h3>
+    <ul class="activity-list">
+      <li class="activity-item">
+        <span class="activity-icon">🌱</span>
+        <div>
+          <div class="activity-title">Real-Life Connections Round</div>
+          <div class="activity-meta">Ask students: "Where did you see today's lesson in real life this week?"</div>
+        </div>
+        <span class="activity-badge">5 min warm-up</span>
+      </li>
+      <li class="activity-item">
+        <span class="activity-icon">🔭</span>
+        <div>
+          <div class="activity-title">Curiosity Question Wall</div>
+          <div class="activity-meta">Let students post questions they are genuinely curious about — then explore one each week</div>
+        </div>
+        <span class="activity-badge">Weekly ritual</span>
+      </li>
+      <li class="activity-item">
+        <span class="activity-icon">⚡</span>
+        <div>
+          <div class="activity-title">Challenge Presentations</div>
+          <div class="activity-meta">Students present their challenge solutions to classmates — builds communication alongside knowledge</div>
+        </div>
+        <span class="activity-badge">15 min</span>
+      </li>
+      <li class="activity-item">
+        <span class="activity-icon">🗺️</span>
+        <div>
+          <div class="activity-title">Pathway Showcases</div>
+          <div class="activity-meta">Students enrolled in pathways briefly share what they're exploring — peer inspiration</div>
+        </div>
+        <span class="activity-badge">Monthly</span>
+      </li>
+      <li class="activity-item">
+        <span class="activity-icon">📝</span>
+        <div>
+          <div class="activity-title">Learning Reflection Journals</div>
+          <div class="activity-meta">Use the Notes feature for weekly reflections — builds metacognitive awareness aligned with NCF 2023</div>
+        </div>
+        <span class="activity-badge">Ongoing</span>
+      </li>
+    </ul>
+
+    <h3 style="margin: 28px 0 12px; font-size: 18px;">📌 Policy Alignment Guide</h3>
+    <div class="cards-grid" style="margin-top: 0;">
+      <div class="card" style="cursor: default;">
+        <span class="card-icon">📘</span>
+        <div class="card-title">NEP 2020</div>
+        <div class="card-desc">Joyful learning, experiential education, and relevance of knowledge to real life. All modules are designed around these core principles.</div>
+      </div>
+      <div class="card" style="cursor: default;">
+        <span class="card-icon">📗</span>
+        <div class="card-title">NCF 2023</div>
+        <div class="card-desc">Learning must be meaningful and connected to students' lived experiences. Real-Life Connections and Challenges modules directly implement this.</div>
+      </div>
+      <div class="card" style="cursor: default;">
+        <span class="card-icon">📊</span>
+        <div class="card-title">PARAKH</div>
+        <div class="card-desc">Competency-based assessments require application and problem-solving. Challenges develop exactly these skills — students learn by doing.</div>
+      </div>
+      <div class="card" style="cursor: default;">
+        <span class="card-icon">📚</span>
+        <div class="card-title">NCERT Framework</div>
+        <div class="card-desc">Curiosity-based learning and meaningful classroom participation are NCERT priorities. The Curiosity Lab directly builds these dispositions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MICRO LEARNING ===== -->
+<section id="micro">
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>⚡ Micro-Learning Experiences</h2>
+      <p>Short, focused learning bursts that maintain attention. Each takes 3–5 minutes and delivers one powerful insight — aligning with modern learning psychology.</p>
+    </div>
+
+    <div class="micro-card">
+      <div class="micro-header">
+        <div class="micro-num">1</div>
+        <div>
+          <div class="micro-title">Why Curiosity Makes You Smarter</div>
+          <div class="micro-time">⏱ 3 min read • Learning Psychology</div>
+        </div>
+      </div>
+      <div class="micro-content">
+        <p>Neuroscientists at UC Davis discovered that when you feel curious about something, your brain releases dopamine — the same chemical released during pleasurable experiences. This dopamine flood doesn't just make you feel good; it physically improves your brain's ability to form new memories.</p>
+        <div class="highlight-box">
+          When curiosity is activated, people remember information 30% more effectively — even unrelated information presented at the same time.
+        </div>
+        <p>This explains why subjects you find interesting feel effortless to learn, while subjects you find boring require forcing. The secret isn't talent — it's finding a question you genuinely want to answer. This is precisely why NEP 2020 emphasises curiosity-driven learning over rote memorisation.</p>
+      </div>
+    </div>
+
+    <div class="micro-card">
+      <div class="micro-header">
+        <div class="micro-num" style="background: linear-gradient(135deg, var(--teal), #22c55e);">2</div>
+        <div>
+          <div class="micro-title">The Power of Connecting Knowledge</div>
+          <div class="micro-time">⏱ 4 min read • NCF 2023 Insight</div>
+        </div>
+      </div>
+      <div class="micro-content">
+        <p>Albert Einstein was not just a physicist. He played violin obsessively and credited music with helping him think through physics problems. He said: "Imagination is more important than knowledge." The most innovative thinkers consistently connect knowledge across domains.</p>
+        <div class="highlight-box">
+          NCF 2023 calls this "integrated learning" — recognising that real-world problems don't respect subject boundaries.
+        </div>
+        <p>When you study budgeting in mathematics class, you're also doing economics. When you study ecosystems in biology, you're also doing geography and chemistry. The connections between subjects aren't just interesting — they're where the most important insights live. A motivated learner sees every lesson as a piece of a larger puzzle about how the world works.</p>
+      </div>
+    </div>
+
+    <div class="micro-card">
+      <div class="micro-header">
+        <div class="micro-num" style="background: linear-gradient(135deg, var(--accent), var(--accent2));">3</div>
+        <div>
+          <div class="micro-title">Growth Mindset: The Science of Effort</div>
+          <div class="micro-time">⏱ 3 min read • Psychology</div>
+        </div>
+      </div>
+      <div class="micro-content">
+        <p>Stanford psychologist Carol Dweck spent decades studying why some students thrive after setbacks while others give up. She discovered it comes down to one belief: whether you think intelligence is fixed or can grow.</p>
+        <div class="highlight-box">
+          Students with a "growth mindset" who believe abilities develop through effort consistently outperform those who believe talent is fixed — regardless of actual starting ability.
+        </div>
+        <p>The students who say "I'm bad at mathematics" often have exactly the same initial ability as those who become great at it. The difference is whether they believe trying harder is worth it. Every time you persist through a difficult problem, your brain literally builds new neural pathways. Struggle is not a sign of weakness — it is the physical process of getting smarter.</p>
+      </div>
+    </div>
+
+    <div class="micro-card">
+      <div class="micro-header">
+        <div class="micro-num" style="background: linear-gradient(135deg, var(--purple), #ec4899);">4</div>
+        <div>
+          <div class="micro-title">Real Learning vs Exam Learning</div>
+          <div class="micro-time">⏱ 4 min read • Education Philosophy</div>
+        </div>
+      </div>
+      <div class="micro-content">
+        <p>There are two types of studying. The first type is exam learning: memorising facts, formulas, and definitions just long enough to reproduce them in an exam hall. Research shows this type of knowledge vanishes within weeks. The second type is real learning: understanding why something is true, how it connects to things you already know, and how you might use it.</p>
+        <div class="highlight-box">
+          PARAKH and NCF 2023 are specifically designed to move Indian education from the first type to the second — assessing understanding and application, not just recall.
+        </div>
+        <p>The irony is that students who pursue real understanding typically perform better on exams too — because genuine understanding allows you to reconstruct answers even when you don't remember the exact words. This app is built on that philosophy: build genuine interest, real understanding follows naturally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== STATE MANAGEMENT =====
+let state = JSON.parse(localStorage.getItem('learnspark-state') || '{}');
+state.challenges = state.challenges || {};
+state.curiosity  = state.curiosity  || [];
+state.pathways   = state.pathways   || [];
+state.connections= state.connections|| [];
+state.notes      = state.notes      || '';
+
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  // match desktop tab
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    if (t.getAttribute('onclick')?.includes(id)) t.classList.add('active');
+  });
+  document.querySelectorAll('.mob-tab').forEach(t => {
+    if (t.getAttribute('onclick')?.includes(id)) t.classList.add('active');
+  });
+
+  if (id === 'tracker' || id === 'home') updateStats();
+  if (id === 'teacher') updateDashboard();
+  window.scrollTo(0,0);
+}
+
+// ===== CHALLENGES =====
+const challengeSteps = { c1: 0, c2: 0, c3: 0, c4: 0 };
+
+function progressChallenge(id) {
+  if (!state.challenges[id]) state.challenges[id] = 0;
+  if (state.challenges[id] >= 5) { 
+    alert('✅ Challenge already completed! Well done.'); return; 
+  }
+  state.challenges[id]++;
+  const pct = (state.challenges[id] / 5) * 100;
+  document.getElementById(id + '-bar').style.width = pct + '%';
+  const labels = ['Not started','Step 1 done','Step 2 done','Step 3 done','Step 4 done','✅ Completed!'];
+  document.getElementById(id + '-label').textContent = labels[state.challenges[id]];
+  saveState();
+  if (state.challenges[id] === 5) {
+    setTimeout(() => alert('🎉 Challenge Completed! You earned progress toward the Problem Solver badge!'), 100);
+  }
+}
+
+// ===== CURIOSITY LAB =====
+function toggleCuriosity(card) {
+  card.classList.toggle('open');
+  const q = card.querySelector('.curiosity-q').textContent;
+  if (card.classList.contains('open') && !state.curiosity.includes(q)) {
+    state.curiosity.push(q);
+    saveState();
+  }
+}
+
+// ===== CONNECTIONS =====
+function markExplored(id) {
+  if (!state.connections.includes(id)) {
+    state.connections.push(id);
+    saveState();
+  }
+}
+
+// ===== PATHWAYS =====
+function enrollPathway(id) {
+  if (!state.pathways.includes(id)) {
+    state.pathways.push(id);
+    saveState();
+    alert('✅ Enrolled! This pathway is now active in your learning journey.');
+  } else {
+    alert('You are already enrolled in this pathway!');
+  }
+}
+
+// ===== NOTES =====
+function saveNotes() {
+  state.notes = document.getElementById('notes-area').value;
+  saveState();
+  const el = document.getElementById('notes-saved');
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+// ===== STATS =====
+function completedChallenges() {
+  return Object.values(state.challenges).filter(v => v >= 5).length;
+}
+
+function updateStats() {
+  const cc = completedChallenges();
+  const cq = state.curiosity.length;
+  const cp = state.pathways.length;
+  const cn = state.connections.length;
+
+  // home stats
+  const sc = document.getElementById('stat-challenges');
+  const sq = document.getElementById('stat-curiosity');
+  const sp = document.getElementById('stat-pathways');
+  const sb = document.getElementById('stat-badges');
+  if (sc) sc.textContent = cc;
+  if (sq) sq.textContent = cq;
+  if (sp) sp.textContent = cp;
+  
+  // badges
+  let badges = 0;
+  if (cq >= 3) { document.getElementById('badge-curious')?.classList.replace('locked','earned'); badges++; }
+  if (cc >= 2) { document.getElementById('badge-solver')?.classList.replace('locked','earned'); badges++; }
+  if (cc >= 4) { document.getElementById('badge-champion')?.classList.replace('locked','earned'); badges++; }
+  if (cp >= 2) { document.getElementById('badge-pathfinder')?.classList.replace('locked','earned'); badges++; }
+  if (sb) sb.textContent = badges;
+
+  // tracker page
+  const tc = document.getElementById('t-challenges');
+  const tq = document.getElementById('t-curiosity');
+  const tp = document.getElementById('t-pathways');
+  const tn = document.getElementById('t-connections');
+  if (tc) tc.textContent = cc;
+  if (tq) tq.textContent = cq;
+  if (tp) tp.textContent = cp;
+  if (tn) tn.textContent = cn;
+}
+
+function updateDashboard() {
+  const dc = document.getElementById('dash-challenges');
+  const dq = document.getElementById('dash-curiosity');
+  const dp = document.getElementById('dash-pathways');
+  if (dc) dc.textContent = completedChallenges();
+  if (dq) dq.textContent = state.curiosity.length;
+  if (dp) dp.textContent = state.pathways.length;
+}
+
+// ===== SAVE STATE =====
+function saveState() {
+  localStorage.setItem('learnspark-state', JSON.stringify(state));
+  updateStats();
+}
+
+// ===== INIT =====
+function init() {
+  // Restore challenge progress bars
+  ['c1','c2','c3','c4'].forEach(id => {
+    if (state.challenges[id]) {
+      const pct = (state.challenges[id] / 5) * 100;
+      const bar = document.getElementById(id + '-bar');
+      if (bar) bar.style.width = pct + '%';
+      const labels = ['Not started','Step 1 done','Step 2 done','Step 3 done','Step 4 done','✅ Completed!'];
+      const lbl = document.getElementById(id + '-label');
+      if (lbl) lbl.textContent = labels[state.challenges[id]];
+    }
+  });
+
+  // Restore notes
+  const na = document.getElementById('notes-area');
+  if (na && state.notes) na.value = state.notes;
+
+  updateStats();
+}
+
+init();
+
+// ===== PWA SERVICE WORKER =====
+// Only registers on real hosted servers — silently skipped in preview sandboxes
+if ('serviceWorker' in navigator && !location.hostname.includes('claudeusercontent')) {
+  navigator.serviceWorker.register('service-worker.js').catch(() => {});
+}
+
+// ===== INSTALL PROMPT =====
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').classList.add('show');
+});
+
+document.getElementById('install-btn').addEventListener('click', () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      document.getElementById('install-banner').classList.remove('show');
+      deferredPrompt = null;
+    });
+  }
+});
+</script>
+</body>
+</html>

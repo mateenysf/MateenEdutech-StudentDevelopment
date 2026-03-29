@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f7f3ed">
+<meta name="description" content="StudyFlow – Study Habit Tracker. NEP 2020 & NCF 2023 Aligned. By Mateen Yousuf, Teacher SED J&K.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json" onerror="this.remove()">
+<title>StudyFlow – Small Daily Efforts. Big Learning Results.</title>
+<style>
+/* =====================================================
+   STUDYFLOW – Study Habit Tracker PWA
+   Author: Mateen Yousuf, Teacher – SED, J&K
+   NEP 2020 · NCF 2023 · PARAKH · NCERT Aligned
+   Aesthetic: Warm paper / editorial / light theme
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --paper:    #f7f3ed;
+  --paper2:   #ede8df;
+  --paper3:   #e2dbd0;
+  --ink:      #1a1612;
+  --ink2:     #3a342c;
+  --ink3:     #5c5248;
+  --muted:    #9e9080;
+  --rust:     #c4522a;
+  --rust-lt:  #f4ddd3;
+  --teal:     #2d7d6e;
+  --teal-lt:  #d0eae6;
+  --gold:     #c9860a;
+  --gold-lt:  #faecd0;
+  --violet:   #5e4ea0;
+  --violet-lt:#e8e4f5;
+  --sky:      #2a6fa0;
+  --sky-lt:   #d5e8f4;
+  --border:   rgba(26,22,18,0.1);
+  --shadow:   0 4px 24px rgba(26,22,18,0.1);
+  --r:        14px;
+  --ff:       'Fraunces', Georgia, serif;
+  --fb:       'DM Sans', 'Segoe UI', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--fb);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* subtle paper texture */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  display: flex; align-items:center; gap:8px;
+  padding: 12px 20px;
+  background: rgba(247,243,237,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--ff);
+  font-size: 1.35rem;
+  color: var(--rust);
+  flex-shrink: 0;
+}
+.nav-logo span { color: var(--ink); }
+
+.nav-tabs {
+  display: flex; gap: 4px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; flex: 1;
+}
+.nav-tabs::-webkit-scrollbar { display:none; }
+
+.nav-tab {
+  padding: 7px 14px;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  background: transparent;
+  color: var(--ink3);
+  font-family: var(--fb);
+  font-size: 0.76rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.nav-tab:hover:not(.active) {
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+/* ── PAGES ── */
+.page { display:none; padding: 74px 0 70px; min-height:100vh; position:relative; z-index:1; }
+.page.active { display:block; animation: pageIn 0.4s ease both; }
+@keyframes pageIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+.container { max-width:880px; margin:0 auto; padding:0 18px; }
+
+/* ── SHARED TEXT ── */
+.eyebrow {
+  font-size:0.66rem; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--rust); margin-bottom:6px;
+}
+.sec-title {
+  font-family:var(--ff);
+  font-size: clamp(1.5rem,4vw,2.2rem);
+  color:var(--ink); margin-bottom:10px; line-height:1.2;
+}
+.sec-desc {
+  font-size:0.87rem; color:var(--ink3); line-height:1.7;
+  max-width:600px; margin-bottom:24px;
+}
+
+/* ── CARDS / SURFACES ── */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+}
+
+/* ══════════════════════════════════
+   LANDING PAGE
+══════════════════════════════════ */
+.hero {
+  padding: 44px 18px 28px;
+  max-width: 880px; margin: 0 auto;
+}
+
+.hero-date {
+  font-size:0.72rem; color:var(--muted); font-weight:500;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-family: var(--ff);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  line-height: 1.08; letter-spacing: -1px;
+  margin-bottom: 14px; color: var(--ink);
+}
+.hero h1 em { color: var(--rust); font-style: italic; }
+
+.hero-sub {
+  font-size: 1rem; color: var(--ink3);
+  max-width: 540px; line-height: 1.7; margin-bottom: 18px;
+}
+
+.pill-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
+.pill {
+  padding: 5px 13px; border-radius: 50px;
+  font-size: 0.68rem; font-weight:700; letter-spacing:1px;
+  border:1px solid;
+}
+.p-rust { background:var(--rust-lt); border-color:rgba(196,82,42,0.25); color:var(--rust); }
+.p-teal { background:var(--teal-lt); border-color:rgba(45,125,110,0.25); color:var(--teal); }
+.p-gold { background:var(--gold-lt); border-color:rgba(201,134,10,0.25); color:var(--gold); }
+
+/* AUTHOR CARD */
+.author-card {
+  display: inline-flex; align-items:center; gap:16px;
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 22px; margin-bottom: 36px;
+}
+.author-photo {
+  width:62px; height:62px; border-radius:50%;
+  border: 2px solid var(--rust);
+  object-fit:cover; flex-shrink:0;
+}
+.a-name { font-family:var(--ff); font-size:1rem; color:var(--ink); margin-bottom:3px; }
+.a-role { font-size:0.73rem; color:var(--rust); font-weight:600; }
+.a-sub  { font-size:0.68rem; color:var(--muted); margin-top:2px; }
+
+/* Today's Summary Strip */
+.today-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+  gap: 12px; margin-bottom: 32px;
+}
+.today-stat {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 16px;
+  text-align: center;
+  position: relative; overflow:hidden;
+}
+.today-stat::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background: var(--stat-color, var(--rust));
+}
+.ts-num {
+  font-family: var(--ff);
+  font-size: 2rem; line-height:1;
+  color: var(--ink); margin-bottom:4px;
+}
+.ts-label { font-size:0.7rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+
+/* QUICK START GRID */
+.qs-grid {
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap:12px; margin-bottom:28px;
+}
+.qs-card {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:22px 18px;
+  cursor:pointer;
+  transition: all 0.25s;
+  position:relative; overflow:hidden;
+}
+.qs-card::after {
+  content:'→';
+  position:absolute; bottom:16px; right:16px;
+  color:var(--card-color, var(--rust)); font-size:1rem;
+  opacity:0.5;
+}
+.qs-card:hover {
+  transform:translateY(-3px);
+  box-shadow: 0 12px 32px rgba(26,22,18,0.12);
+  border-color: var(--card-color, var(--rust));
+}
+.qs-icon { font-size:2rem; margin-bottom:12px; display:block; }
+.qs-title { font-family:var(--ff); font-size:0.95rem; margin-bottom:5px; }
+.qs-desc  { font-size:0.74rem; color:var(--muted); line-height:1.5; }
+
+/* NEP callout */
+.nep-strip {
+  background: var(--teal-lt);
+  border:1px solid rgba(45,125,110,0.2);
+  border-radius:var(--r);
+  padding:20px 24px;
+  margin-bottom:24px;
+}
+.nep-strip-label {
+  font-size:0.66rem; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--teal); margin-bottom:8px;
+}
+.nep-strip p { font-size:0.86rem; color:var(--ink3); line-height:1.7; }
+
+/* ══════════════════════════════════
+   DAILY LOG PAGE
+══════════════════════════════════ */
+.log-form {
+  background:#fff; border:1px solid var(--border);
+  border-radius:20px; padding:28px 26px;
+  margin-bottom:24px;
+}
+
+.form-row { margin-bottom:18px; }
+.form-label {
+  display:block;
+  font-size:0.72rem; font-weight:700; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--ink3);
+  margin-bottom:8px;
+}
+
+.subject-grid {
+  display:flex; flex-wrap:wrap; gap:8px;
+}
+.subject-btn {
+  padding:8px 16px;
+  border:1px solid var(--border);
+  border-radius:50px;
+  background:transparent;
+  color:var(--ink3);
+  font-family:var(--fb);
+  font-size:0.8rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+}
+.subject-btn.active {
+  background:var(--rust); border-color:var(--rust);
+  color:#fff;
+}
+
+.time-slider-wrap { position:relative; }
+.time-slider {
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:6px;
+  background:var(--paper3);
+  border-radius:3px; outline:none;
+  cursor:pointer;
+}
+.time-slider::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:22px; height:22px;
+  border-radius:50%;
+  background:var(--rust);
+  border:3px solid #fff;
+  box-shadow:0 2px 8px rgba(196,82,42,0.3);
+  cursor:pointer;
+}
+.time-display {
+  font-family:var(--ff);
+  font-size:1.8rem;
+  color:var(--rust);
+  text-align:center;
+  margin-top:10px;
+}
+
+.diff-row { display:flex; gap:8px; flex-wrap:wrap; }
+.diff-btn {
+  padding:8px 16px;
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  background:transparent;
+  color:var(--ink3);
+  font-size:0.78rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+}
+.diff-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; }
+
+.text-input {
+  width:100%;
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:12px 16px;
+  color:var(--ink);
+  font-family:var(--fb);
+  font-size:0.9rem;
+  transition:border-color 0.2s;
+}
+.text-input:focus { outline:none; border-color:var(--rust); }
+.text-input::placeholder { color:var(--muted); }
+
+.textarea-input {
+  width:100%;
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:12px 16px;
+  color:var(--ink);
+  font-family:var(--fb);
+  font-size:0.88rem;
+  resize:vertical; min-height:80px;
+  transition:border-color 0.2s;
+  line-height:1.6;
+}
+.textarea-input:focus { outline:none; border-color:var(--rust); }
+.textarea-input::placeholder { color:var(--muted); }
+
+.log-submit-btn {
+  display:block; width:100%;
+  padding:15px;
+  background:var(--ink);
+  border:none; border-radius:var(--r);
+  color:var(--paper);
+  font-family:var(--ff);
+  font-size:1.05rem; font-weight:600;
+  cursor:pointer; transition:all 0.25s;
+  letter-spacing:0.3px;
+}
+.log-submit-btn:hover {
+  background:var(--rust);
+  transform:translateY(-1px);
+}
+
+/* Log History */
+.log-history { margin-top:28px; }
+.log-entry {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px 20px;
+  margin-bottom:10px;
+  display:flex; gap:16px; align-items:flex-start;
+}
+.log-dot {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; flex-shrink:0;
+  font-weight:700;
+}
+.log-body { flex:1; }
+.log-subject {
+  font-family:var(--ff); font-size:0.95rem;
+  margin-bottom:2px; color:var(--ink);
+}
+.log-meta { font-size:0.74rem; color:var(--muted); }
+.log-reflection {
+  font-size:0.8rem; color:var(--ink3); margin-top:5px;
+  font-style:italic; line-height:1.5;
+}
+.log-del {
+  background:transparent; border:none;
+  color:rgba(196,82,42,0.4); font-size:0.9rem;
+  cursor:pointer; padding:4px;
+}
+
+/* ══════════════════════════════════
+   PROGRESS / CHARTS PAGE
+══════════════════════════════════ */
+.chart-section { margin-bottom:28px; }
+.chart-title {
+  font-family:var(--ff); font-size:1rem;
+  margin-bottom:14px; color:var(--ink);
+}
+
+/* Bar Chart */
+.bar-chart {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:20px;
+}
+.bar-row {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:10px;
+}
+.bar-label { font-size:0.78rem; color:var(--ink3); width:80px; flex-shrink:0; font-weight:600; }
+.bar-track {
+  flex:1; height:10px; background:var(--paper2);
+  border-radius:5px; overflow:hidden;
+}
+.bar-fill {
+  height:100%; border-radius:5px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.bar-val { font-size:0.74rem; color:var(--muted); width:40px; text-align:right; flex-shrink:0; }
+
+/* Weekly grid */
+.week-grid {
+  display:grid; grid-template-columns:repeat(7,1fr); gap:6px;
+}
+.day-cell {
+  background:#fff; border:1px solid var(--border);
+  border-radius:8px; padding:10px 6px;
+  text-align:center;
+}
+.day-name { font-size:0.62rem; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:4px; }
+.day-hours {
+  font-family:var(--ff); font-size:1.1rem;
+  color:var(--ink); line-height:1;
+}
+.day-cell.has-study { border-color:var(--teal); background:var(--teal-lt); }
+.day-cell.today-cell { border-color:var(--rust); background:var(--rust-lt); }
+
+/* Subject pie (CSS) */
+.subj-breakdown {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:20px;
+}
+.subj-row {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:10px;
+}
+.subj-color { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.subj-name { font-size:0.82rem; flex:1; }
+.subj-pct { font-size:0.78rem; color:var(--muted); font-weight:600; }
+
+/* Insights */
+.insight-card {
+  background: var(--gold-lt);
+  border:1px solid rgba(201,134,10,0.2);
+  border-radius:var(--r);
+  padding:16px 20px;
+  display:flex; gap:12px; align-items:flex-start;
+  margin-bottom:10px;
+}
+.insight-icon { font-size:1.4rem; flex-shrink:0; }
+.insight-text { font-size:0.84rem; color:var(--ink3); line-height:1.6; }
+
+/* ══════════════════════════════════
+   STREAK PAGE
+══════════════════════════════════ */
+.streak-hero {
+  background: linear-gradient(135deg, var(--rust) 0%, #a83818 100%);
+  border-radius:20px;
+  padding:36px 28px;
+  text-align:center;
+  color:#fff;
+  margin-bottom:24px;
+  position:relative; overflow:hidden;
+}
+.streak-hero::before {
+  content:'🔥';
+  position:absolute; font-size:120px;
+  opacity:0.08; top:-20px; right:-20px;
+}
+.streak-num {
+  font-family:var(--ff);
+  font-size:5rem; line-height:1;
+  margin-bottom:6px;
+}
+.streak-label {
+  font-size:0.8rem; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; opacity:0.8;
+}
+.streak-sub {
+  font-size:0.84rem; opacity:0.7; margin-top:8px;
+}
+
+/* Streak calendar */
+.streak-calendar {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:20px;
+  margin-bottom:20px;
+}
+.cal-title {
+  font-size:0.7rem; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--muted);
+  margin-bottom:14px;
+}
+.cal-grid {
+  display:grid; grid-template-columns:repeat(7,1fr); gap:5px;
+}
+.cal-day {
+  aspect-ratio:1;
+  border-radius:6px;
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.7rem; color:var(--muted);
+  transition:all 0.2s;
+}
+.cal-day.studied { background:var(--rust); border-color:var(--rust); color:#fff; font-weight:700; }
+.cal-day.today { outline:2px solid var(--rust); }
+
+/* Goals */
+.goal-card {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:18px 20px;
+  margin-bottom:10px;
+}
+.goal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.goal-name { font-family:var(--ff); font-size:0.95rem; color:var(--ink); }
+.goal-pct { font-size:0.8rem; color:var(--rust); font-weight:700; }
+.goal-bar { height:7px; background:var(--paper2); border-radius:4px; overflow:hidden; }
+.goal-fill { height:100%; background:var(--rust); border-radius:4px; transition:width 0.6s; }
+.goal-sub { font-size:0.72rem; color:var(--muted); margin-top:6px; }
+
+/* Add goal form */
+.add-goal-form {
+  background:var(--paper2); border:1px solid var(--border);
+  border-radius:var(--r); padding:18px;
+  margin-bottom:20px;
+}
+.goal-form-row {
+  display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end;
+}
+
+/* ══════════════════════════════════
+   REFLECTION JOURNAL
+══════════════════════════════════ */
+.reflection-entry {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:20px;
+  margin-bottom:12px;
+}
+.re-date {
+  font-size:0.7rem; font-weight:700; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--muted); margin-bottom:6px;
+}
+.re-title { font-family:var(--ff); font-size:1rem; color:var(--ink); margin-bottom:8px; }
+.re-body { font-size:0.84rem; color:var(--ink3); line-height:1.7; }
+.re-tags { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.re-tag {
+  padding:3px 10px; border-radius:50px;
+  font-size:0.68rem; font-weight:700;
+  background:var(--paper2); color:var(--muted);
+  border:1px solid var(--border);
+}
+
+/* ══════════════════════════════════
+   BADGES / GAMIFICATION
+══════════════════════════════════ */
+.badge-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+  gap:12px; margin-bottom:24px;
+}
+.badge-card {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:18px; text-align:center;
+  transition:all 0.3s;
+}
+.badge-card.earned {
+  border-color:var(--rust);
+  background:var(--rust-lt);
+}
+.badge-card.locked { opacity:0.4; }
+.badge-emoji { font-size:2rem; margin-bottom:8px; }
+.badge-name { font-size:0.78rem; font-weight:700; color:var(--ink); margin-bottom:3px; }
+.badge-req  { font-size:0.68rem; color:var(--muted); }
+
+/* Stats grid */
+.stats-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:10px; margin-bottom:24px;
+}
+.stat-box {
+  background:#fff; border:1px solid var(--border);
+  border-radius:var(--r); padding:18px 14px; text-align:center;
+}
+.stat-box-num {
+  font-family:var(--ff); font-size:2rem; color:var(--rust); line-height:1;
+  margin-bottom:4px;
+}
+.stat-box-label { font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+
+/* ══════════════════════════════════
+   TOAST + FOOTER
+══════════════════════════════════ */
+.toast {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--ink); color:var(--paper);
+  padding:11px 22px; border-radius:50px;
+  font-weight:600; font-size:0.82rem;
+  z-index:1000; white-space:nowrap;
+  transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+.doc-footer {
+  position:fixed; bottom:0; left:0; right:0; z-index:50;
+  background:rgba(247,243,237,0.92);
+  backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+  padding:8px 20px;
+  display:flex; justify-content:center; gap:24px;
+}
+.doc-link {
+  font-size:0.7rem; color:var(--muted); text-decoration:none;
+  font-weight:600; transition:color 0.2s;
+}
+.doc-link:hover { color:var(--rust); }
+
+/* install banner */
+.install-banner {
+  position:fixed; bottom:0; left:0; right:0;
+  background:#fff; border-top:1px solid var(--border);
+  padding:14px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  z-index:300; transform:translateY(100%); transition:transform 0.4s;
+}
+.install-banner.show { transform:translateY(0); }
+.inst-text { font-size:0.82rem; color:var(--ink3); }
+.inst-text strong { color:var(--ink); display:block; margin-bottom:2px; }
+.inst-btns { display:flex; gap:8px; flex-shrink:0; }
+.inst-yes { padding:9px 18px; border-radius:50px; background:var(--ink); border:none; color:var(--paper); font-weight:700; font-size:0.8rem; cursor:pointer; }
+.inst-no  { padding:9px 18px; border-radius:50px; background:transparent; border:1px solid var(--border); color:var(--muted); font-size:0.8rem; cursor:pointer; }
+
+/* ── MISC ── */
+.sec-btn {
+  padding:9px 18px; border:1px solid var(--border);
+  border-radius:var(--r); background:transparent;
+  color:var(--ink3); font-family:var(--fb);
+  font-size:0.8rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s; margin:3px;
+}
+.sec-btn:hover { border-color:var(--rust); color:var(--rust); }
+
+select.text-input { cursor:pointer; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--paper); }
+::-webkit-scrollbar-thumb { background:var(--paper3); border-radius:3px; }
+
+@media(max-width:600px) {
+  nav { padding:10px 12px; }
+  .nav-logo { font-size:1.1rem; }
+  .hero { padding:32px 14px 22px; }
+  .container { padding:0 14px; }
+  .log-form { padding:20px 16px; }
+  .goal-form-row { grid-template-columns:1fr; }
+  .week-grid { grid-template-columns:repeat(7,1fr); }
+  .streak-num { font-size:3.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <div class="nav-logo">Study<span>Flow</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
+    <button class="nav-tab" onclick="showPage('log')">📝 Daily Log</button>
+    <button class="nav-tab" onclick="showPage('progress')">📊 Progress</button>
+    <button class="nav-tab" onclick="showPage('streak')">🔥 Streaks & Goals</button>
+    <button class="nav-tab" onclick="showPage('journal')">💭 Reflection</button>
+    <button class="nav-tab" onclick="showPage('badges')">🏅 Achievements</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-date" id="heroDate"></div>
+
+    <h1>Small Daily<br><em>Efforts.</em><br>Big Learning<br>Results.</h1>
+
+    <p class="hero-sub">A self-regulated study habit tracker aligned with NEP 2020 and NCF 2023 — helping you plan, record, reflect, and grow as a learner.</p>
+
+    <div class="pill-row">
+      <span class="pill p-rust">NEP 2020</span>
+      <span class="pill p-teal">NCF 2023</span>
+      <span class="pill p-rust">PARAKH</span>
+      <span class="pill p-teal">NCERT Competencies</span>
+      <span class="pill p-gold">Self-Regulated Learning</span>
+      <span class="pill p-gold">Offline PWA</span>
+    </div>
+
+    <div class="author-card">
+      <img class="author-photo" src="author.jpg" alt="Mateen Yousuf"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div style="display:none;width:62px;height:62px;border-radius:50%;border:2px solid var(--rust);background:var(--paper2);align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">👨‍🏫</div>
+      <div>
+        <div class="a-name">Mateen Yousuf</div>
+        <div class="a-role">Teacher – School Education Department, J&K</div>
+        <div class="a-sub">Concept Developer · StudyFlow PWA</div>
+      </div>
+    </div>
+
+    <!-- Today's Summary -->
+    <div class="today-strip" id="todayStrip"></div>
+
+    <!-- Quick Nav -->
+    <div class="qs-grid">
+      <div class="qs-card" style="--card-color:var(--rust)" onclick="showPage('log')">
+        <span class="qs-icon">📝</span>
+        <div class="qs-title">Daily Log</div>
+        <div class="qs-desc">Record today's study session — subject, time, topic, and reflection</div>
+      </div>
+      <div class="qs-card" style="--card-color:var(--teal)" onclick="showPage('progress')">
+        <span class="qs-icon">📊</span>
+        <div class="qs-title">Progress Charts</div>
+        <div class="qs-desc">Visualise your study hours, subject balance, and weekly trends</div>
+      </div>
+      <div class="qs-card" style="--card-color:var(--rust)" onclick="showPage('streak')">
+        <span class="qs-icon">🔥</span>
+        <div class="qs-title">Streaks & Goals</div>
+        <div class="qs-desc">Track your consistency streak and set daily or weekly goals</div>
+      </div>
+      <div class="qs-card" style="--card-color:var(--violet)" onclick="showPage('journal')">
+        <span class="qs-icon">💭</span>
+        <div class="qs-title">Reflection Journal</div>
+        <div class="qs-desc">Write daily reflections to strengthen metacognitive awareness</div>
+      </div>
+    </div>
+
+    <div class="nep-strip">
+      <div class="nep-strip-label">Policy Alignment</div>
+      <p><strong>NEP 2020</strong> and <strong>NCF 2023</strong> call for students to become <em>self-regulated, lifelong learners</em> — able to plan, monitor, and reflect on their own learning. StudyFlow operationalises this vision through daily habit tracking, reflective journaling, and progress visualisation. The app develops the metacognitive and self-management competencies assessed by <strong>PARAKH</strong> and promoted by <strong>NCERT</strong>'s 21st-century skill frameworks.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: DAILY LOG
+══════════════════════════════════ -->
+<div class="page" id="page-log">
+  <div class="container" style="padding-top:28px;">
+    <div class="eyebrow">Module 01</div>
+    <h2 class="sec-title">📝 Daily Study Log</h2>
+    <p class="sec-desc">Record each study session. Consistent logging builds the self-monitoring habit that NEP 2020 identifies as central to lifelong learning.</p>
+
+    <div class="log-form">
+      <!-- Subject -->
+      <div class="form-row">
+        <label class="form-label">Subject</label>
+        <div class="subject-grid" id="subjectGrid">
+          <button class="subject-btn" onclick="selectSubject(this,'Mathematics')">📐 Maths</button>
+          <button class="subject-btn" onclick="selectSubject(this,'Science')">🔬 Science</button>
+          <button class="subject-btn" onclick="selectSubject(this,'English')">📖 English</button>
+          <button class="subject-btn" onclick="selectSubject(this,'Social Science')">🌍 Soc. Sc.</button>
+          <button class="subject-btn" onclick="selectSubject(this,'Hindi')">🇮🇳 Hindi</button>
+          <button class="subject-btn" onclick="selectSubject(this,'Sanskrit')">📜 Sanskrit</button>
+          <button class="subject-btn" onclick="selectSubject(this,'Computer')">💻 Computer</button>
+          <button class="subject-btn" onclick="selectSubject(this,'Other')">✏️ Other</button>
+        </div>
+      </div>
+
+      <!-- Topic -->
+      <div class="form-row">
+        <label class="form-label">Topic / Chapter</label>
+        <input type="text" class="text-input" id="topicInput" placeholder="e.g. Algebraic Expressions, Chapter 3 …">
+      </div>
+
+      <!-- Time -->
+      <div class="form-row">
+        <label class="form-label">Study Time</label>
+        <input type="range" class="time-slider" id="timeSlider" min="5" max="180" step="5" value="30" oninput="updateTime(this.value)">
+        <div class="time-display" id="timeDisplay">30 min</div>
+      </div>
+
+      <!-- Difficulty -->
+      <div class="form-row">
+        <label class="form-label">How was the difficulty?</label>
+        <div class="diff-row">
+          <button class="diff-btn" onclick="selectDiff(this,'Easy')">😊 Easy</button>
+          <button class="diff-btn active" onclick="selectDiff(this,'Medium')">😐 Medium</button>
+          <button class="diff-btn" onclick="selectDiff(this,'Hard')">😰 Hard</button>
+        </div>
+      </div>
+
+      <!-- Quick Reflection -->
+      <div class="form-row">
+        <label class="form-label">Quick Reflection (optional)</label>
+        <textarea class="textarea-input" id="quickReflection" placeholder="What did you learn? What was confusing? What will you revise?"></textarea>
+      </div>
+
+      <button class="log-submit-btn" onclick="submitLog()">✓ Save Study Session</button>
+    </div>
+
+    <!-- Log History -->
+    <div class="log-history">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Recent Sessions</div>
+      <div id="logHistoryList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: PROGRESS
+══════════════════════════════════ -->
+<div class="page" id="page-progress">
+  <div class="container" style="padding-top:28px;">
+    <div class="eyebrow">Module 02</div>
+    <h2 class="sec-title">📊 Progress Charts</h2>
+    <p class="sec-desc">Visualise your study patterns. NCF 2023 emphasises learner agency — seeing your own progress is the first step to improving it.</p>
+
+    <!-- Weekly hours grid -->
+    <div class="chart-section">
+      <div class="chart-title">This Week's Study Hours</div>
+      <div class="week-grid" id="weekGrid"></div>
+    </div>
+
+    <!-- Subject breakdown -->
+    <div class="chart-section">
+      <div class="chart-title">Subject-Wise Distribution</div>
+      <div class="subj-breakdown" id="subjBreakdown"></div>
+    </div>
+
+    <!-- Bar chart: subject hours -->
+    <div class="chart-section">
+      <div class="chart-title">Hours by Subject (All Time)</div>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+
+    <!-- AI Insights -->
+    <div class="chart-section">
+      <div class="chart-title">💡 Learning Insights</div>
+      <div id="insightsSection"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: STREAKS & GOALS
+══════════════════════════════════ -->
+<div class="page" id="page-streak">
+  <div class="container" style="padding-top:28px;">
+    <div class="eyebrow">Module 03</div>
+    <h2 class="sec-title">🔥 Streaks & Goals</h2>
+    <p class="sec-desc">Consistency is the engine of learning. Track your daily study streak and set goals to stay on track with NEP 2020's vision of disciplined, self-directed learners.</p>
+
+    <!-- Streak Hero -->
+    <div class="streak-hero" id="streakHero">
+      <div class="streak-num" id="streakNum">0</div>
+      <div class="streak-label">Day Streak 🔥</div>
+      <div class="streak-sub" id="streakSub">Log your first study session to start your streak!</div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="streak-calendar">
+      <div class="cal-title">Last 28 Days</div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+    <!-- Goals -->
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Study Goals</div>
+
+    <!-- Add goal -->
+    <div class="add-goal-form">
+      <div class="form-label" style="margin-bottom:10px;">Add New Goal</div>
+      <div class="goal-form-row">
+        <div>
+          <input type="text" class="text-input" id="goalName" placeholder="e.g. Study Maths 5 hrs this week">
+        </div>
+        <div>
+          <select class="text-input" id="goalTarget">
+            <option value="30">30 min/day</option>
+            <option value="60" selected>1 hr/day</option>
+            <option value="90">1.5 hrs/day</option>
+            <option value="120">2 hrs/day</option>
+            <option value="180">3 hrs/day</option>
+          </select>
+        </div>
+        <div>
+          <button class="log-submit-btn" style="padding:11px 20px;" onclick="addGoal()">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="goalsList"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: REFLECTION JOURNAL
+══════════════════════════════════ -->
+<div class="page" id="page-journal">
+  <div class="container" style="padding-top:28px;">
+    <div class="eyebrow">Module 04</div>
+    <h2 class="sec-title">💭 Reflection Journal</h2>
+    <p class="sec-desc">Metacognitive reflection — thinking about your own thinking — is the single most effective learning strategy according to NCF 2023 and modern learning science.</p>
+
+    <!-- New reflection -->
+    <div class="log-form" style="margin-bottom:24px;">
+      <div class="form-row">
+        <label class="form-label">What did I learn today?</label>
+        <textarea class="textarea-input" id="reflLearn" placeholder="Describe the key concepts, facts, or skills you understood today..."></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">What was challenging?</label>
+        <textarea class="textarea-input" id="reflHard" placeholder="Which concepts were confusing? Where did you get stuck?"></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">What will I do tomorrow?</label>
+        <textarea class="textarea-input" id="reflTomorrow" placeholder="What will you revise, practise, or study tomorrow?"></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">My Mood & Energy (1-5)</label>
+        <div class="diff-row">
+          <button class="diff-btn" onclick="selectMood(this,1)">😴 1</button>
+          <button class="diff-btn" onclick="selectMood(this,2)">😐 2</button>
+          <button class="diff-btn active" onclick="selectMood(this,3)">🙂 3</button>
+          <button class="diff-btn" onclick="selectMood(this,4)">😊 4</button>
+          <button class="diff-btn" onclick="selectMood(this,5)">🤩 5</button>
+        </div>
+      </div>
+      <button class="log-submit-btn" onclick="saveReflection()">💭 Save Reflection</button>
+    </div>
+
+    <!-- Journal entries -->
+    <div id="journalList"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: ACHIEVEMENTS
+══════════════════════════════════ -->
+<div class="page" id="page-badges">
+  <div class="container" style="padding-top:28px;">
+    <div class="eyebrow">Your Learning Journey</div>
+    <h2 class="sec-title">🏅 Achievements</h2>
+    <p class="sec-desc">Badges reward the habits that matter — consistency, reflection, and self-improvement. Aligned with PARAKH's continuous learning philosophy.</p>
+
+    <div class="author-card" style="margin-bottom:24px;">
+      <img class="author-photo" src="author.jpg" alt="Mateen Yousuf" onerror="this.style.display='none'">
+      <div>
+        <div class="a-name">Mateen Yousuf</div>
+        <div class="a-role">Teacher – School Education Department, J&K</div>
+        <div class="a-sub">StudyFlow · NEP 2020 & NCF 2023 Aligned</div>
+      </div>
+    </div>
+
+    <div class="stats-grid" id="achStatsGrid"></div>
+    <div class="badge-grid" id="badgeGrid"></div>
+    <div style="text-align:center;margin-top:20px;">
+      <button class="sec-btn" onclick="resetAll()" style="color:rgba(196,82,42,0.7);border-color:rgba(196,82,42,0.2);">⚠ Reset All Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST + INSTALL + FOOTER -->
+<div class="toast" id="toast"></div>
+
+<div class="install-banner" id="installBanner">
+  <div class="inst-text">
+    <strong>Install StudyFlow</strong>
+    Works offline · Track every day
+  </div>
+  <div class="inst-btns">
+    <button class="inst-yes" onclick="installApp()">Install</button>
+    <button class="inst-no"  onclick="closeInstall()">Later</button>
+  </div>
+</div>
+
+<div class="doc-footer">
+  <a href="conceptual-background.html" class="doc-link">📖 Conceptual Background</a>
+  <a href="user-manual.html" class="doc-link">📘 User Manual</a>
+</div>
+
+<script>
+/* =====================================================
+   STUDYFLOW – COMPLETE JAVASCRIPT
+   Author: Mateen Yousuf, Teacher – SED, J&K
+   NEP 2020 · NCF 2023 · PARAKH Aligned
+   ===================================================== */
+
+// ── SERVICE WORKER (inline blob fallback) ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {
+      try {
+        const sw = `const C='studyflow-v1';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./'])).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(self.clients.claim())});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('./'))))})`;
+        const url = URL.createObjectURL(new Blob([sw],{type:'application/javascript'}));
+        navigator.serviceWorker.register(url,{scope:'./'}).then(()=>URL.revokeObjectURL(url)).catch(()=>{});
+      } catch(e){}
+    });
+  });
+}
+
+// ── INSTALL PROMPT ──
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  setTimeout(() => document.getElementById('installBanner').classList.add('show'), 4000);
+});
+function installApp() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt=null; } closeInstall(); }
+function closeInstall() { document.getElementById('installBanner').classList.remove('show'); }
+
+// ── TOAST ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ── DATE HELPERS ──
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function fmtDate(str) {
+  const d = new Date(str);
+  return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+function dayName(str) {
+  const d = new Date(str);
+  return d.toLocaleDateString('en-IN', { weekday:'short' }).slice(0,2);
+}
+
+// ── NAV ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const idx = ['home','log','progress','streak','journal','badges'].indexOf(id);
+  document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 'home')     renderHomeSummary();
+  if (id === 'progress') renderProgress();
+  if (id === 'streak')   renderStreak();
+  if (id === 'journal')  renderJournal();
+  if (id === 'badges')   renderAchievements();
+}
+
+// ══════════════════════════════════
+// DATA LAYER  (all via localStorage)
+// ══════════════════════════════════
+function getLogs()       { return JSON.parse(localStorage.getItem('sf_logs')       || '[]'); }
+function getGoals()      { return JSON.parse(localStorage.getItem('sf_goals')      || '[]'); }
+function getReflections(){ return JSON.parse(localStorage.getItem('sf_reflections')|| '[]'); }
+function getBadges()     { return JSON.parse(localStorage.getItem('sf_badges')     || '[]'); }
+function getStats()      { return JSON.parse(localStorage.getItem('sf_stats')      || JSON.stringify({ totalSessions:0, totalMinutes:0, reflections:0, longestStreak:0 })); }
+
+function saveLogs(d)       { localStorage.setItem('sf_logs', JSON.stringify(d)); }
+function saveGoals(d)      { localStorage.setItem('sf_goals', JSON.stringify(d)); }
+function saveReflections(d){ localStorage.setItem('sf_reflections', JSON.stringify(d)); }
+function saveBadges(d)     { localStorage.setItem('sf_badges', JSON.stringify(d)); }
+function saveStats(d)      { localStorage.setItem('sf_stats', JSON.stringify(d)); }
+
+// ══════════════════════════════════
+// FORM STATE
+// ══════════════════════════════════
+let selectedSubject = '';
+let selectedDiff    = 'Medium';
+let selectedMood    = 3;
+
+function selectSubject(btn, sub) {
+  document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedSubject = sub;
+}
+function selectDiff(btn, d) {
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedDiff = d;
+}
+function selectMood(btn, m) {
+  document.querySelectorAll('#page-journal .diff-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedMood = m;
+}
+function updateTime(val) {
+  const h = Math.floor(val/60);
+  const m = val % 60;
+  document.getElementById('timeDisplay').textContent =
+    h > 0 ? h + 'h ' + (m>0?m+'m':'') : val + ' min';
+}
+
+// ══════════════════════════════════
+// SUBMIT LOG
+// ══════════════════════════════════
+function submitLog() {
+  if (!selectedSubject) { toast('⚠ Please select a subject!'); return; }
+  const topic    = document.getElementById('topicInput').value.trim();
+  const minutes  = parseInt(document.getElementById('timeSlider').value);
+  const note     = document.getElementById('quickReflection').value.trim();
+  if (!topic) { toast('⚠ Please enter a topic!'); return; }
+
+  const logs = getLogs();
+  const entry = {
+    id: Date.now(),
+    date: todayStr(),
+    subject: selectedSubject,
+    topic, minutes,
+    difficulty: selectedDiff,
+    note
+  };
+  logs.unshift(entry);
+  if (logs.length > 200) logs.pop();
+  saveLogs(logs);
+
+  // Update stats
+  const stats = getStats();
+  stats.totalSessions = (stats.totalSessions||0) + 1;
+  stats.totalMinutes  = (stats.totalMinutes||0) + minutes;
+  saveStats(stats);
+
+  checkBadges();
+  renderLogHistory();
+  renderHomeSummary();
+  toast('✅ Session logged! ' + minutes + ' min of ' + selectedSubject);
+
+  // Reset form
+  document.getElementById('topicInput').value = '';
+  document.getElementById('quickReflection').value = '';
+  document.getElementById('timeSlider').value = 30;
+  updateTime(30);
+  document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+  selectedSubject = '';
+}
+
+// ══════════════════════════════════
+// RENDER LOG HISTORY
+// ══════════════════════════════════
+const SUBJECT_COLORS = {
+  'Mathematics':'#c4522a','Science':'#2d7d6e','English':'#5e4ea0','Social Science':'#2a6fa0',
+  'Hindi':'#c9860a','Sanskrit':'#7a5c2a','Computer':'#3a7a3a','Other':'#888'
+};
+
+function renderLogHistory() {
+  const logs  = getLogs().slice(0, 30);
+  const el    = document.getElementById('logHistoryList');
+  if (!logs.length) {
+    el.innerHTML = '<div style="font-size:0.82rem;color:var(--muted);padding:10px 0;">No sessions logged yet. Start your first session above!</div>';
+    return;
+  }
+  el.innerHTML = logs.map(l => {
+    const col = SUBJECT_COLORS[l.subject] || '#888';
+    const h   = Math.floor(l.minutes/60), m = l.minutes%60;
+    const tStr = h>0 ? h+'h '+(m>0?m+'m':'') : l.minutes+'m';
+    return `<div class="log-entry">
+      <div class="log-dot" style="background:${col}22;color:${col}">${l.subject.slice(0,1)}</div>
+      <div class="log-body">
+        <div class="log-subject">${l.subject} – ${l.topic}</div>
+        <div class="log-meta">${fmtDate(l.date)} · ${tStr} · ${l.difficulty||'Medium'}</div>
+        ${l.note ? `<div class="log-reflection">"${l.note}"</div>` : ''}
+      </div>
+      <button class="log-del" onclick="deleteLog(${l.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function deleteLog(id) {
+  let logs = getLogs().filter(l => l.id !== id);
+  saveLogs(logs);
+  renderLogHistory();
+  renderHomeSummary();
+  toast('🗑 Session removed');
+}
+
+// ══════════════════════════════════
+// HOME SUMMARY
+// ══════════════════════════════════
+function renderHomeSummary() {
+  // Date
+  const now = new Date();
+  document.getElementById('heroDate').textContent =
+    now.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  const logs  = getLogs();
+  const today = todayStr();
+  const todayLogs = logs.filter(l => l.date === today);
+  const todayMins = todayLogs.reduce((s,l) => s+l.minutes, 0);
+
+  // Streak
+  const streak = calcStreak(logs);
+  const totalMins = logs.reduce((s,l) => s+l.minutes, 0);
+  const totalHrs  = (totalMins/60).toFixed(1);
+
+  const strip = document.getElementById('todayStrip');
+  strip.innerHTML = [
+    { label:"Today's Study", val: todayMins > 0 ? Math.floor(todayMins/60)+'h '+(todayMins%60)+'m' : '0 min', color:'var(--rust)' },
+    { label:'Sessions Today', val: todayLogs.length, color:'var(--teal)' },
+    { label:'Current Streak', val: streak+'🔥', color:'var(--rust)' },
+    { label:'Total Hours', val: totalHrs+'h', color:'var(--gold)' },
+  ].map(s => `
+    <div class="today-stat" style="--stat-color:${s.color}">
+      <div class="ts-num">${s.val}</div>
+      <div class="ts-label">${s.label}</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════
+// PROGRESS CHARTS
+// ══════════════════════════════════
+function renderProgress() {
+  const logs = getLogs();
+
+  // ── Weekly grid ──
+  const weekEl  = document.getElementById('weekGrid');
+  const today   = new Date();
+  const weekData = [];
+  for (let i=6; i>=0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const ds = d.toISOString().slice(0,10);
+    const mins = logs.filter(l => l.date === ds).reduce((s,l) => s+l.minutes, 0);
+    weekData.push({ date:ds, day: d.toLocaleDateString('en-IN',{weekday:'short'}).slice(0,2), mins });
+  }
+  weekEl.innerHTML = weekData.map(d => {
+    const h = (d.mins/60).toFixed(1);
+    const cls = d.date === todayStr() ? 'day-cell today-cell' : d.mins>0 ? 'day-cell has-study' : 'day-cell';
+    return `<div class="${cls}"><div class="day-name">${d.day}</div><div class="day-hours">${d.mins>0?h:'–'}</div></div>`;
+  }).join('');
+
+  // ── Subject Breakdown ──
+  const subjTotals = {};
+  logs.forEach(l => { subjTotals[l.subject] = (subjTotals[l.subject]||0) + l.minutes; });
+  const total = Object.values(subjTotals).reduce((a,b)=>a+b,0)||1;
+  const colors = Object.values(SUBJECT_COLORS);
+  const subjEl = document.getElementById('subjBreakdown');
+  const entries = Object.entries(subjTotals).sort((a,b)=>b[1]-a[1]);
+  if (!entries.length) {
+    subjEl.innerHTML = '<div style="font-size:0.82rem;color:var(--muted);">Log some sessions to see your subject balance.</div>';
+  } else {
+    subjEl.innerHTML = entries.map(([s,m],i) => {
+      const pct = Math.round(m/total*100);
+      const col = SUBJECT_COLORS[s] || colors[i%colors.length];
+      return `<div class="subj-row">
+        <div class="subj-color" style="background:${col}"></div>
+        <div class="subj-name">${s}</div>
+        <div style="flex:2;margin:0 10px;height:8px;background:var(--paper2);border-radius:4px;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;background:${col};border-radius:4px;"></div>
+        </div>
+        <div class="subj-pct">${pct}%</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Bar chart ──
+  const barEl = document.getElementById('barChart');
+  const maxMins = Math.max(...Object.values(subjTotals), 1);
+  if (!entries.length) {
+    barEl.innerHTML = '<div style="font-size:0.82rem;color:var(--muted);">No data yet.</div>';
+  } else {
+    barEl.innerHTML = entries.map(([s,m]) => {
+      const h = (m/60).toFixed(1);
+      const pct = m/maxMins*100;
+      const col = SUBJECT_COLORS[s] || '#888';
+      return `<div class="bar-row">
+        <div class="bar-label">${s.split(' ')[0]}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}"></div></div>
+        <div class="bar-val">${h}h</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Insights ──
+  const insEl = document.getElementById('insightsSection');
+  const insights = generateInsights(logs);
+  insEl.innerHTML = insights.map(i => `
+    <div class="insight-card">
+      <div class="insight-icon">${i.icon}</div>
+      <div class="insight-text">${i.text}</div>
+    </div>
+  `).join('');
+}
+
+function generateInsights(logs) {
+  const insights = [];
+  if (!logs.length) {
+    return [{ icon:'📊', text:'Start logging your study sessions to receive personalised insights about your learning patterns.' }];
+  }
+
+  // Most studied subject
+  const subjTotals = {};
+  logs.forEach(l => { subjTotals[l.subject] = (subjTotals[l.subject]||0) + l.minutes; });
+  const top = Object.entries(subjTotals).sort((a,b)=>b[1]-a[1])[0];
+  insights.push({ icon:'⭐', text:`Your most studied subject is <strong>${top[0]}</strong> with ${(top[1]/60).toFixed(1)} hours total. Keep up the strong effort!` });
+
+  // Neglected subject
+  const all = ['Mathematics','Science','English','Social Science','Hindi'];
+  const missing = all.filter(s => !subjTotals[s]);
+  if (missing.length) insights.push({ icon:'⚠️', text:`You haven't logged any sessions for <strong>${missing.slice(0,2).join(', ')}</strong> yet. A balanced study plan across all subjects aligns with NCF 2023's holistic learning approach.` });
+
+  // Today
+  const todayMins = logs.filter(l=>l.date===todayStr()).reduce((s,l)=>s+l.minutes,0);
+  if (todayMins === 0) insights.push({ icon:'📅', text:`You haven't logged a study session today. Even <strong>20-30 minutes</strong> of focused study every day adds up to over 120 hours in a year!` });
+  else if (todayMins >= 120) insights.push({ icon:'🏆', text:`Excellent! You've studied <strong>${(todayMins/60).toFixed(1)} hours today</strong>. Make sure to also take short breaks to consolidate what you've learned.` });
+
+  // Streak
+  const streak = calcStreak(logs);
+  if (streak >= 7) insights.push({ icon:'🔥', text:`Amazing ${streak}-day streak! Habit science shows that <strong>21 consecutive days</strong> of an activity can make it a long-term habit. You're well on your way!` });
+
+  // Avg session
+  const avgMin = logs.reduce((s,l)=>s+l.minutes,0) / logs.length;
+  if (avgMin < 20) insights.push({ icon:'⏱', text:`Your average session length is only <strong>${Math.round(avgMin)} minutes</strong>. Research suggests study sessions of <strong>25-50 minutes</strong> (Pomodoro technique) are most effective for memory consolidation.` });
+
+  return insights.slice(0,4);
+}
+
+// ══════════════════════════════════
+// STREAK & GOALS
+// ══════════════════════════════════
+function calcStreak(logs) {
+  if (!logs.length) return 0;
+  const days = [...new Set(logs.map(l => l.date))].sort().reverse();
+  if (days[0] !== todayStr()) {
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    if (days[0] !== yesterday.toISOString().slice(0,10)) return 0;
+  }
+  let streak = 1;
+  for (let i=1; i<days.length; i++) {
+    const prev = new Date(days[i-1]);
+    const curr = new Date(days[i]);
+    const diff = (prev - curr) / (1000*60*60*24);
+    if (diff === 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function renderStreak() {
+  const logs   = getLogs();
+  const streak = calcStreak(logs);
+
+  document.getElementById('streakNum').textContent = streak;
+  const sub = streak === 0
+    ? 'Log a session today to start your streak!'
+    : streak < 3 ? 'Great start! Keep going tomorrow!'
+    : streak < 7 ? '🔥 ' + streak + ' days strong — nearly a week!'
+    : streak < 30 ? '🏆 ' + streak + '-day warrior! Incredible consistency!'
+    : '🌟 ' + streak + ' days! You are a learning champion!';
+  document.getElementById('streakSub').textContent = sub;
+
+  // Calendar: last 28 days
+  const calEl = document.getElementById('calGrid');
+  const today = new Date();
+  const studiedDays = new Set(logs.map(l => l.date));
+  let calHtml = '';
+  for (let i=27; i>=0; i--) {
+    const d = new Date(today); d.setDate(today.getDate()-i);
+    const ds = d.toISOString().slice(0,10);
+    const dd = d.getDate();
+    const cls = ds === todayStr() ? 'cal-day today' : studiedDays.has(ds) ? 'cal-day studied' : 'cal-day';
+    calHtml += `<div class="${cls}" title="${ds}">${dd}</div>`;
+  }
+  calEl.innerHTML = calHtml;
+
+  renderGoals();
+}
+
+function addGoal() {
+  const name   = document.getElementById('goalName').value.trim();
+  const target = parseInt(document.getElementById('goalTarget').value);
+  if (!name) { toast('⚠ Enter a goal name!'); return; }
+  const goals = getGoals();
+  goals.push({ id:Date.now(), name, target, created:todayStr() });
+  saveGoals(goals);
+  document.getElementById('goalName').value = '';
+  renderGoals();
+  toast('✅ Goal added!');
+}
+
+function renderGoals() {
+  const goals = getGoals();
+  const logs  = getLogs();
+  const el    = document.getElementById('goalsList');
+
+  if (!goals.length) {
+    el.innerHTML = '<div style="font-size:0.82rem;color:var(--muted);padding:10px 0;">No goals set yet. Add a goal above to track your progress!</div>';
+    return;
+  }
+
+  const today = new Date();
+  el.innerHTML = goals.map(g => {
+    // Calculate today's total minutes
+    const todayMins = logs.filter(l => l.date === todayStr()).reduce((s,l) => s+l.minutes, 0);
+    const pct = Math.min(100, Math.round(todayMins / g.target * 100));
+    const done = todayMins >= g.target;
+    return `<div class="goal-card">
+      <div class="goal-header">
+        <div class="goal-name">${done?'✅ ':''}${g.name}</div>
+        <div class="goal-pct">${pct}%</div>
+      </div>
+      <div class="goal-bar"><div class="goal-fill" style="width:${pct}%;${done?'background:var(--teal)':''}"></div></div>
+      <div class="goal-sub">Today: ${todayMins}min / ${g.target}min target · <a href="#" onclick="deleteGoal(${g.id})" style="color:var(--muted);font-size:0.68rem;">Remove</a></div>
+    </div>`;
+  }).join('');
+}
+
+function deleteGoal(id) {
+  saveGoals(getGoals().filter(g => g.id !== id));
+  renderGoals();
+  toast('🗑 Goal removed');
+}
+
+// ══════════════════════════════════
+// REFLECTION JOURNAL
+// ══════════════════════════════════
+function saveReflection() {
+  const learn    = document.getElementById('reflLearn').value.trim();
+  const hard     = document.getElementById('reflHard').value.trim();
+  const tomorrow = document.getElementById('reflTomorrow').value.trim();
+  if (!learn) { toast('⚠ Please write what you learned!'); return; }
+
+  const refs = getReflections();
+  refs.unshift({
+    id:Date.now(), date:todayStr(),
+    learn, hard, tomorrow,
+    mood: selectedMood
+  });
+  if (refs.length > 100) refs.pop();
+  saveReflections(refs);
+
+  // Stats
+  const s = getStats(); s.reflections = (s.reflections||0)+1; saveStats(s);
+
+  checkBadges();
+  renderJournal();
+  toast('💭 Reflection saved!');
+  document.getElementById('reflLearn').value = '';
+  document.getElementById('reflHard').value  = '';
+  document.getElementById('reflTomorrow').value = '';
+}
+
+const MOODS = ['','😴','😐','🙂','😊','🤩'];
+
+function renderJournal() {
+  const refs = getReflections();
+  const el   = document.getElementById('journalList');
+  if (!refs.length) {
+    el.innerHTML = '<div style="font-size:0.82rem;color:var(--muted);">No reflections yet. Write your first one above!</div>';
+    return;
+  }
+  el.innerHTML = refs.slice(0,20).map(r => `
+    <div class="reflection-entry">
+      <div class="re-date">${fmtDate(r.date)} · Mood: ${MOODS[r.mood||3]}</div>
+      <div style="font-family:var(--ff);font-size:0.9rem;color:var(--ink);margin-bottom:6px;">✨ ${r.learn}</div>
+      ${r.hard ? `<div style="font-size:0.8rem;color:var(--ink3);margin-bottom:4px;">💡 <em>Challenge:</em> ${r.hard}</div>` : ''}
+      ${r.tomorrow ? `<div style="font-size:0.8rem;color:var(--teal);">📅 <em>Tomorrow:</em> ${r.tomorrow}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════
+// BADGES
+// ══════════════════════════════════
+const BADGE_DEFS = [
+  { id:'first_log',   emoji:'📝', name:'First Step',         req:'Log 1 session',             check:s=>s.totalSessions>=1 },
+  { id:'5sessions',   emoji:'⭐', name:'Getting Started',    req:'Log 5 sessions',             check:s=>s.totalSessions>=5 },
+  { id:'25sessions',  emoji:'🌟', name:'Consistent Learner', req:'Log 25 sessions',            check:s=>s.totalSessions>=25 },
+  { id:'1hr_day',     emoji:'⏰', name:'One Hour Hero',      req:'Study 1 hr in a day',        check:()=>{const l=getLogs();const d={};l.forEach(e=>{d[e.date]=(d[e.date]||0)+e.minutes});return Object.values(d).some(v=>v>=60)} },
+  { id:'10hrs_total', emoji:'📚', name:'Dedicated Scholar',  req:'10 total study hours',       check:s=>s.totalMinutes>=600 },
+  { id:'50hrs_total', emoji:'🏆', name:'Study Champion',     req:'50 total study hours',       check:s=>s.totalMinutes>=3000 },
+  { id:'3day_streak', emoji:'🔥', name:'3-Day Streak',       req:'Study 3 days in a row',      check:()=>calcStreak(getLogs())>=3 },
+  { id:'7day_streak', emoji:'🔥🔥','name':'Week Warrior',    req:'Study 7 days in a row',      check:()=>calcStreak(getLogs())>=7 },
+  { id:'reflect1',    emoji:'💭', name:'Self-Reflector',     req:'Write 1 reflection',         check:s=>s.reflections>=1 },
+  { id:'reflect10',   emoji:'🧠', name:'Metacognitive Master',req:'Write 10 reflections',      check:s=>s.reflections>=10 },
+  { id:'5subjects',   emoji:'🎓', name:'Well-Rounded',       req:'Log 5 different subjects',   check:()=>{const s=new Set(getLogs().map(l=>l.subject));return s.size>=5} },
+];
+
+function checkBadges() {
+  const earned = getBadges();
+  const stats  = getStats();
+  let newOnes  = [];
+  BADGE_DEFS.forEach(b => {
+    if (!earned.includes(b.id) && b.check(stats)) {
+      earned.push(b.id);
+      newOnes.push(b.name);
+    }
+  });
+  saveBadges(earned);
+  newOnes.forEach((n,i) => setTimeout(() => toast('🏅 Badge: ' + n), i * 800));
+}
+
+function renderAchievements() {
+  const logs   = getLogs();
+  const stats  = getStats();
+  const earned = getBadges();
+  const streak = calcStreak(logs);
+
+  document.getElementById('achStatsGrid').innerHTML = [
+    { label:'Total Sessions', val: stats.totalSessions||0 },
+    { label:'Total Hours',    val: ((stats.totalMinutes||0)/60).toFixed(1)+'h' },
+    { label:'Reflections',    val: stats.reflections||0 },
+    { label:'Current Streak', val: streak+'🔥' },
+    { label:'Badges',         val: earned.length+'/'+BADGE_DEFS.length },
+    { label:'Subjects Logged',val: new Set(logs.map(l=>l.subject)).size },
+  ].map(s => `<div class="stat-box"><div class="stat-box-num">${s.val}</div><div class="stat-box-label">${s.label}</div></div>`).join('');
+
+  document.getElementById('badgeGrid').innerHTML = BADGE_DEFS.map(b => `
+    <div class="badge-card ${earned.includes(b.id)?'earned':'locked'}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-req">${b.req}</div>
+    </div>
+  `).join('');
+}
+
+function resetAll() {
+  if (!confirm('Reset all logs, goals, reflections, badges and progress?')) return;
+  ['sf_logs','sf_goals','sf_reflections','sf_badges','sf_stats'].forEach(k => localStorage.removeItem(k));
+  renderHomeSummary(); renderLogHistory(); renderAchievements();
+  toast('✅ All data reset');
+}
+
+// ══════════════════════════════════
+// INIT
+// ══════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderHomeSummary();
+  renderLogHistory();
+  updateTime(30);
+});
+</script>
+</body>
+</html>

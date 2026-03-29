@@ -1,0 +1,27 @@
+{
+  "name": "StudyFlow – Study Planner & Habit Builder",
+  "short_name": "StudyFlow",
+  "description": "NEP 2020 & NCF 2023 aligned Study Planner, Focus Timer, and Habit Builder for self-regulated learning. By Mateen Yousuf, Teacher, SED J&K.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1117",
+  "theme_color": "#f0a500",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "prefer_related_applications": false
+}
